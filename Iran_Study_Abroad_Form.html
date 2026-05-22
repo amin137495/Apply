@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Abroad Advisor — Iran → Italy & Germany</title>
+<style>
+  :root {
+    --blue:    #1F497D;
+    --blue-lt: #EBF1F7;
+    --blue-md: #2E74B5;
+    --green:   #006000;
+    --green-lt:#E8F5E8;
+    --red:     #C00000;
+    --red-lt:  #FFF0F0;
+    --amber:   #C06000;
+    --amber-lt:#FFF9E6;
+    --grey:    #595959;
+    --grey-lt: #F5F5F5;
+    --white:   #FFFFFF;
+    --radius:  10px;
+    --shadow:  0 4px 20px rgba(0,0,0,.10);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #e8f0f7 0%, #f5f8ff 100%);
+    min-height: 100vh;
+    color: #222;
+    padding: 20px;
+  }
+
+  /* ── Shell ── */
+  .shell {
+    max-width: 820px;
+    margin: 0 auto;
+  }
+  .header {
+    text-align: center;
+    padding: 32px 24px 24px;
+    background: var(--blue);
+    border-radius: var(--radius) var(--radius) 0 0;
+    color: #fff;
+  }
+  .header h1 { font-size: 1.6rem; font-weight: 700; margin-bottom: 6px; }
+  .header p  { font-size: .92rem; opacity: .85; }
+  .flags { font-size: 1.8rem; margin-bottom: 10px; }
+
+  /* ── Progress ── */
+  .progress-wrap {
+    background: rgba(255,255,255,.15);
+    border-radius: 20px;
+    height: 6px;
+    margin-top: 18px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: #7ec8f7;
+    border-radius: 20px;
+    transition: width .4s ease;
+  }
+  .progress-label {
+    font-size: .78rem;
+    opacity: .75;
+    margin-top: 6px;
+    letter-spacing: .03em;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--white);
+    border-radius: 0 0 var(--radius) var(--radius);
+    box-shadow: var(--shadow);
+    padding: 36px 40px 40px;
+  }
+
+  /* ── Steps ── */
+  .step { display: none; animation: fadeIn .35s ease; }
+  .step.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  .step-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .step-sub {
+    font-size: .88rem;
+    color: var(--grey);
+    margin-bottom: 22px;
+    line-height: 1.55;
+  }
+
+  /* ── Option Cards ── */
+  .options { display: grid; gap: 12px; }
+  .options.cols2 { grid-template-columns: 1fr 1fr; }
+  .options.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  .opt {
+    border: 2px solid #D8E6F3;
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: all .2s;
+    position: relative;
+    background: var(--white);
+  }
+  .opt:hover { border-color: var(--blue-md); background: var(--blue-lt); }
+  .opt.selected { border-color: var(--blue-md); background: var(--blue-lt); }
+  .opt.selected::after {
+    content: '✓';
+    position: absolute;
+    top: 8px; right: 10px;
+    color: var(--blue-md);
+    font-weight: 700;
+    font-size: .9rem;
+  }
+  .opt-icon { font-size: 1.5rem; margin-bottom: 6px; display: block; }
+  .opt-title { font-weight: 600; font-size: .95rem; color: #222; }
+  .opt-desc  { font-size: .78rem; color: var(--grey); margin-top: 3px; line-height: 1.4; }
+
+  /* multi-select hint */
+  .multi-hint {
+    font-size: .78rem;
+    color: var(--amber);
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+
+  /* ── Text / Number inputs ── */
+  .field { margin-bottom: 18px; }
+  .field label { display: block; font-weight: 600; font-size: .88rem; margin-bottom: 6px; color: #333; }
+  .field input, .field select {
+    width: 100%;
+    border: 2px solid #D8E6F3;
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: .93rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .field input:focus, .field select:focus { border-color: var(--blue-md); }
+  .field .hint { font-size: .76rem; color: var(--grey); margin-top: 4px; }
+
+  /* slider */
+  .slider-wrap { display: flex; align-items: center; gap: 12px; }
+  .slider-wrap input[type=range] { flex: 1; accent-color: var(--blue-md); }
+  .slider-val {
+    min-width: 48px;
+    text-align: center;
+    font-weight: 700;
+    color: var(--blue);
+    font-size: 1rem;
+    background: var(--blue-lt);
+    border-radius: 6px;
+    padding: 4px 8px;
+  }
+
+  /* ── Buttons ── */
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: 32px; }
+  .btn {
+    padding: 11px 28px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    font-size: .93rem;
+    font-weight: 600;
+    transition: all .2s;
+  }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-md); }
+  .btn-secondary { background: var(--grey-lt); color: #444; }
+  .btn-secondary:hover { background: #e0e0e0; }
+  .btn-green { background: var(--green); color: #fff; }
+  .btn-green:hover { background: #008000; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ── RESULTS ── */
+  #results { display: none; }
+  .result-header {
+    background: linear-gradient(120deg, var(--blue) 0%, var(--blue-md) 100%);
+    border-radius: 8px;
+    color: #fff;
+    padding: 24px 28px;
+    margin-bottom: 24px;
+  }
+  .result-header h2 { font-size: 1.3rem; margin-bottom: 6px; }
+  .result-header p  { font-size: .88rem; opacity: .85; }
+
+  .profile-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .chip {
+    background: rgba(255,255,255,.22);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: .78rem;
+    font-weight: 600;
+  }
+
+  .result-section {
+    border-radius: 8px;
+    border: 1px solid #e0e8f2;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .result-section-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 18px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 700;
+    font-size: .97rem;
+    background: var(--blue-lt);
+    color: var(--blue);
+    border-bottom: 1px solid #d0dcea;
+  }
+  .result-section-head .arrow {
+    margin-left: auto;
+    font-size: .8rem;
+    transition: transform .25s;
+  }
+  .result-section-head.open .arrow { transform: rotate(180deg); }
+  .result-section-body { padding: 18px; display: none; }
+  .result-section-body.open { display: block; }
+
+  /* country blocks inside results */
+  .country-block {
+    border-left: 4px solid var(--blue-md);
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    border-radius: 0 6px 6px 0;
+    background: #fafcff;
+  }
+  .country-block.italy  { border-color: var(--red);   background: var(--red-lt); }
+  .country-block.germany{ border-color: var(--green); background: var(--green-lt); }
+  .country-block h4 { font-size: .97rem; font-weight: 700; margin-bottom: 8px; }
+
+  ul.result-list { list-style: none; padding: 0; }
+  ul.result-list li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+    font-size: .88rem;
+    line-height: 1.5;
+    border-bottom: 1px solid #eef2f8;
+  }
+  ul.result-list li:last-child { border-bottom: none; }
+  ul.result-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--blue-md);
+    font-size: .75rem;
+    top: 7px;
+  }
+  ul.result-list li strong { color: #222; }
+
+  .tag {
+    display: inline-block;
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: .72rem;
+    font-weight: 700;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .tag-green  { background: #d4edda; color: #155724; }
+  .tag-amber  { background: #fff3cd; color: #856404; }
+  .tag-red    { background: #f8d7da; color: #721c24; }
+  .tag-blue   { background: #cce5ff; color: #004085; }
+
+  .alert-box {
+    border-radius: 7px;
+    padding: 12px 16px;
+    font-size: .85rem;
+    margin-bottom: 12px;
+    line-height: 1.55;
+  }
+  .alert-amber { background: var(--amber-lt); border-left: 4px solid var(--amber); color: #5c3a00; }
+  .alert-blue  { background: var(--blue-lt);  border-left: 4px solid var(--blue-md); color: #0d2d5e; }
+  .alert-green { background: var(--green-lt); border-left: 4px solid var(--green); color: #003300; }
+
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 9px; top: 0; bottom: 0;
+    width: 2px;
+    background: #c8d8ec;
+  }
+  .tl-item { position: relative; margin-bottom: 16px; }
+  .tl-dot {
+    position: absolute;
+    left: -28px;
+    top: 3px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 3px solid var(--blue-lt);
+    font-size: .6rem;
+    color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+  .tl-title { font-weight: 700; font-size: .9rem; color: var(--blue); margin-bottom: 3px; }
+  .tl-body  { font-size: .83rem; color: #444; line-height: 1.5; }
+
+  .print-btn {
+    text-align: center;
+    margin-top: 28px;
+  }
+
+  /* ── Responsive ── */
+  @media(max-width:580px){
+    .card { padding: 24px 18px; }
+    .options.cols2, .options.cols3 { grid-template-columns: 1fr; }
+    .nav { flex-direction: column; gap: 10px; }
+    .btn { width: 100%; text-align: center; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .nav, .print-btn, .header .progress-wrap, .progress-label { display: none; }
+    .result-section-body { display: block !important; }
+    .shell { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="flags">🇮🇷 → 🇮🇹 🇩🇪</div>
+    <h1>Study Abroad Advisor</h1>
+    <p>Step-by-step questionnaire for Iranian students planning to study in Italy or Germany</p>
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">Step 0 of 9</div>
+  </div>
+
+  <!-- CARD -->
+  <div class="card">
+
+    <!-- ═══════════════════════════════════════════════
+         STEPS
+    ═══════════════════════════════════════════════ -->
+
+    <!-- STEP 1: Country -->
+    <div class="step active" id="step1">
+      <div class="step-title">Which country are you targeting?</div>
+      <div class="step-sub">You can choose one or both. We will tailor your results accordingly.</div>
+      <div class="options cols3" id="q_country">
+        <div class="opt" data-val="italy" onclick="toggle(this,'q_country',true)">
+          <span class="opt-icon">🇮🇹</span>
+          <div class="opt-title">Italy</div>
+          <div class="opt-desc">Strong medicine & engineering; English programmes available</div>
+        </div>
+        <div class="opt" data-val="germany" onclick="toggle(this,'q_country',true)">
+          <span class="opt-icon">🇩🇪</span>
+          <div class="opt-title">Germany</div>
+          <div class="opt-desc">Free tuition; world-class engineering & research</div>
+        </div>
+        <div class="opt" data-val="both" onclick="toggle(this,'q_country',false)">
+          <span class="opt-icon">🌍</span>
+          <div class="opt-title">Both / Not sure yet</div>
+          <div class="opt-desc">Show me options for both and I'll decide</div>
+        </div>
+      </div>
+      <div class="nav">
+        <span></span>
+        <button class="btn btn-primary" onclick="next(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Education level -->
+    <div class="step" id="step2">
+      <div class="step-title">What is your current education level?</div>
+      <div class="step-sub">This determines which programmes you are eligible to apply for.</div>
+      <div class="options cols2" id="q_level">
+        <div class="opt" data-val="highschool" onclick="toggle(this,'q_level',false)">
+          <span class="opt-icon">🏫</span>
+          <div class="opt-title">High School Diploma (Diplom)</div>
+          <div class="opt-desc">I have my Iranian Konkur diploma — looking for a Bachelor's degree abroad</div>
+        </div>
+        <div class="opt" data-val="bachelor" onclick="toggle(this,'q_level',false)">
+          <span class="opt-icon">🎓</span>
+          <div class="opt-title">Bachelor's Degree</div>
+          <div class="opt-desc">I hold a Karshenasi (B.Sc./B.A.) — looking for a Master's or PhD</div>
+        </div>
+        <div class="opt" data-val="master" onclick="toggle(this,'q_level',false)">
+          <span class="opt-icon">🔬</span>
+          <div class="opt-title">Master's Degree</div>
+          <div class="opt-desc">I hold an Arshad and want to pursue a PhD or Postdoc</div>
+        </div>
+        <div class="opt" data-val="phd" onclick="toggle(this,'q_level',false)">
+          <span class="opt-icon">📚</span>
+          <div class="opt-title">PhD / Already enrolled</div>
+          <div class="opt-desc">Looking for postdoc, research position, or transfer</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(2)">← Back</button>
+        <button class="btn btn-primary" onclick="next(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Field -->
+    <div class="step" id="step3">
+      <div class="step-title">What field do you want to study?</div>
+      <div class="step-sub">Choose the one that best matches your interest.</div>
+      <div class="multi-hint">💡 You may select multiple fields</div>
+      <div class="options cols2" id="q_field">
+        <div class="opt" data-val="medicine" onclick="toggle(this,'q_field',true)">
+          <span class="opt-icon">⚕️</span>
+          <div class="opt-title">Medicine / Dentistry</div>
+          <div class="opt-desc">MD, Dentistry, Pharmacy, Medical Sciences</div>
+        </div>
+        <div class="opt" data-val="engineering" onclick="toggle(this,'q_field',true)">
+          <span class="opt-icon">⚙️</span>
+          <div class="opt-title">Engineering & Technology</div>
+          <div class="opt-desc">Mechanical, Civil, CS, Electrical, Chemical, Aerospace…</div>
+        </div>
+        <div class="opt" data-val="science" onclick="toggle(this,'q_field',true)">
+          <span class="opt-icon">🧪</span>
+          <div class="opt-title">Natural Sciences</div>
+          <div class="opt-desc">Biology, Chemistry, Physics, Maths, Environmental Science</div>
+        </div>
+        <div class="opt" data-val="business" onclick="toggle(this,'q_field',true)">
+          <span class="opt-icon">📊</span>
+          <div class="opt-title">Business & Economics</div>
+          <div class="opt-desc">Management, Finance, Economics, MBA</div>
+        </div>
+        <div class="opt" data-val="arts" onclick="toggle(this,'q_field',true)">
+          <span class="opt-icon">🎨</span>
+          <div class="opt-title">Arts, Design & Architecture</div>
+          <div class="opt-desc">Industrial Design, Architecture, Fine Arts, Fashion</div>
+        </div>
+        <div class="opt" data-val="humanities" onclick="toggle(this,'q_field',true)">
+          <span class="opt-icon">📖</span>
+          <div class="opt-title">Humanities & Social Sciences</div>
+          <div class="opt-desc">Law, Psychology, Sociology, History, Linguistics</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(3)">← Back</button>
+        <button class="btn btn-primary" onclick="next(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: English level -->
+    <div class="step" id="step4">
+      <div class="step-title">What is your English language level?</div>
+      <div class="step-sub">This affects which programmes you can apply to directly.</div>
+      <div class="options" id="q_english">
+        <div class="opt" data-val="none" onclick="toggle(this,'q_english',false)">
+          <div class="opt-title">No test yet / Not taken</div>
+          <div class="opt-desc">I haven't taken IELTS or TOEFL yet</div>
+        </div>
+        <div class="opt" data-val="low" onclick="toggle(this,'q_english',false)">
+          <div class="opt-title">IELTS below 5.5 / TOEFL below 70</div>
+          <div class="opt-desc">Basic level — need to improve before applying</div>
+        </div>
+        <div class="opt" data-val="mid" onclick="toggle(this,'q_english',false)">
+          <div class="opt-title">IELTS 5.5–6.0 / TOEFL 72–79</div>
+          <div class="opt-desc">Sufficient for some Italian undergraduate programmes</div>
+        </div>
+        <div class="opt" data-val="good" onclick="toggle(this,'q_english',false)">
+          <div class="opt-title">IELTS 6.0–6.5 / TOEFL 80–87</div>
+          <div class="opt-desc">Meets most Master's requirements in Italy and Germany</div>
+        </div>
+        <div class="opt" data-val="strong" onclick="toggle(this,'q_english',false)">
+          <div class="opt-title">IELTS 6.5+ / TOEFL 88+</div>
+          <div class="opt-desc">Strong — meets all programmes in both countries</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(4)">← Back</button>
+        <button class="btn btn-primary" onclick="next(4)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: German/Italian -->
+    <div class="step" id="step5">
+      <div class="step-title">Do you speak German or Italian?</div>
+      <div class="step-sub">This significantly expands your programme options — especially for Germany.</div>
+      <div class="field">
+        <label>German language level</label>
+        <select id="q_german">
+          <option value="none">None / A1</option>
+          <option value="a2">A2 — very basic</option>
+          <option value="b1">B1 — intermediate</option>
+          <option value="b2">B2 — upper-intermediate (minimum for German-language study)</option>
+          <option value="c1">C1 — advanced (required for Medicine in Germany)</option>
+          <option value="c2">C2 — near-native</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Italian language level</label>
+        <select id="q_italian">
+          <option value="none">None / A1</option>
+          <option value="a2">A2 — very basic</option>
+          <option value="b1">B1 — intermediate</option>
+          <option value="b2">B2 — upper-intermediate (minimum for Italian-language study)</option>
+          <option value="c1">C1 — advanced</option>
+        </select>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(5)">← Back</button>
+        <button class="btn btn-primary" onclick="next(5)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 6: GPA -->
+    <div class="step" id="step6">
+      <div class="step-title">What is your academic GPA?</div>
+      <div class="step-sub">Use the Iranian scale (out of 20). This affects scholarship eligibility and programme access.</div>
+      <div class="field">
+        <label>Your GPA / Final grade average (out of 20)</label>
+        <div class="slider-wrap">
+          <input type="range" min="10" max="20" step="0.25" value="16"
+            id="q_gpa_slider" oninput="document.getElementById('gpa_display').textContent=parseFloat(this.value).toFixed(2)">
+          <div class="slider-val" id="gpa_display">16.00</div>
+        </div>
+        <div class="hint">Drag the slider. If you have a diploma GPA and a university GPA, use your university GPA.</div>
+      </div>
+      <div class="field">
+        <label>Which qualification does this GPA refer to?</label>
+        <select id="q_gpa_type">
+          <option value="diploma">High school diploma (Diplom)</option>
+          <option value="bachelor">Bachelor's degree (Karshenasi)</option>
+          <option value="master">Master's degree (Arshad)</option>
+        </select>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(6)">← Back</button>
+        <button class="btn btn-primary" onclick="next(6)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 7: Scholarship need -->
+    <div class="step" id="step7">
+      <div class="step-title">Do you need financial support?</div>
+      <div class="step-sub">This helps us highlight the most relevant scholarships and low-cost options for you.</div>
+      <div class="options" id="q_scholarship">
+        <div class="opt" data-val="full" onclick="toggle(this,'q_scholarship',false)">
+          <span class="opt-icon">🏆</span>
+          <div class="opt-title">Yes — I need a full scholarship</div>
+          <div class="opt-desc">I cannot fund my studies without external support</div>
+        </div>
+        <div class="opt" data-val="partial" onclick="toggle(this,'q_scholarship',false)">
+          <span class="opt-icon">💼</span>
+          <div class="opt-title">Partial support would help</div>
+          <div class="opt-desc">I can cover some costs but a scholarship would make a big difference</div>
+        </div>
+        <div class="opt" data-val="self" onclick="toggle(this,'q_scholarship',false)">
+          <span class="opt-icon">✅</span>
+          <div class="opt-title">No — I am self-funded</div>
+          <div class="opt-desc">I or my family can cover all study and living expenses</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(7)">← Back</button>
+        <button class="btn btn-primary" onclick="next(7)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 8: Timeline -->
+    <div class="step" id="step8">
+      <div class="step-title">When do you plan to start?</div>
+      <div class="step-sub">This affects which intake you should target and how urgently you need to begin your preparations.</div>
+      <div class="options cols2" id="q_timeline">
+        <div class="opt" data-val="asap" onclick="toggle(this,'q_timeline',false)">
+          <span class="opt-icon">⚡</span>
+          <div class="opt-title">As soon as possible</div>
+          <div class="opt-desc">I want to start within the next 6–9 months</div>
+        </div>
+        <div class="opt" data-val="next_year" onclick="toggle(this,'q_timeline',false)">
+          <span class="opt-icon">📅</span>
+          <div class="opt-title">Next academic year</div>
+          <div class="opt-desc">I have 10–16 months to prepare</div>
+        </div>
+        <div class="opt" data-val="two_years" onclick="toggle(this,'q_timeline',false)">
+          <span class="opt-icon">🗓️</span>
+          <div class="opt-title">In 1.5–2 years</div>
+          <div class="opt-desc">I have plenty of time to prepare thoroughly</div>
+        </div>
+        <div class="opt" data-val="exploring" onclick="toggle(this,'q_timeline',false)">
+          <span class="opt-icon">🔍</span>
+          <div class="opt-title">Just exploring for now</div>
+          <div class="opt-desc">No fixed timeline — I'm still in the research stage</div>
+        </div>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(8)">← Back</button>
+        <button class="btn btn-primary" onclick="next(8)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 9: Name (optional) -->
+    <div class="step" id="step9">
+      <div class="step-title">Almost done! A few last details.</div>
+      <div class="step-sub">Optional — used only to personalise your report.</div>
+      <div class="field">
+        <label>Your name (optional)</label>
+        <input type="text" id="q_name" placeholder="e.g. Ali Ahmadi">
+      </div>
+      <div class="field">
+        <label>Sub-field or specialisation you're interested in (optional)</label>
+        <input type="text" id="q_subfield" placeholder="e.g. Software Engineering, Cardiology, Industrial Design…">
+      </div>
+      <div class="field">
+        <label>Anything else we should know?</label>
+        <select id="q_extra">
+          <option value="none">Nothing specific</option>
+          <option value="research">I want a research-focused programme</option>
+          <option value="industry">I prefer industry / practical training</option>
+          <option value="permanent">I'm hoping to stay and work in Europe long-term</option>
+          <option value="return">I plan to return to Iran after graduating</option>
+        </select>
+      </div>
+      <div class="nav">
+        <button class="btn btn-secondary" onclick="prev(9)">← Back</button>
+        <button class="btn btn-green" onclick="generateResults()">🎯 Generate My Report</button>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════
+         RESULTS
+    ═══════════════════════════════════════════════ -->
+    <div id="results">
+
+      <div class="result-header">
+        <h2 id="res_name">Your Personalised Study Abroad Report</h2>
+        <p id="res_tagline">Based on your answers — Iran → Italy & Germany</p>
+        <div class="profile-chips" id="profile_chips"></div>
+      </div>
+
+      <!-- 1. Eligibility & Overview -->
+      <div class="result-section">
+        <div class="result-section-head open" onclick="toggleSection(this)">
+          <span>📋</span> <span>Eligibility Overview</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body open" id="res_eligibility"></div>
+      </div>
+
+      <!-- 2. Programmes & Universities -->
+      <div class="result-section">
+        <div class="result-section-head open" onclick="toggleSection(this)">
+          <span>🏫</span> <span>Recommended Universities & Programmes</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body open" id="res_universities"></div>
+      </div>
+
+      <!-- 3. Required Tests & Exams -->
+      <div class="result-section">
+        <div class="result-section-head" onclick="toggleSection(this)">
+          <span>📝</span> <span>Required Tests & Exams</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body" id="res_tests"></div>
+      </div>
+
+      <!-- 4. Scholarships -->
+      <div class="result-section">
+        <div class="result-section-head" onclick="toggleSection(this)">
+          <span>🏆</span> <span>Scholarships & Funding</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body" id="res_scholarships"></div>
+      </div>
+
+      <!-- 5. Embassy & Visa Route -->
+      <div class="result-section">
+        <div class="result-section-head" onclick="toggleSection(this)">
+          <span>🛂</span> <span>Embassy Status & Visa Route</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body" id="res_visa"></div>
+      </div>
+
+      <!-- 6. Document Checklist -->
+      <div class="result-section">
+        <div class="result-section-head" onclick="toggleSection(this)">
+          <span>📁</span> <span>Document Checklist</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body" id="res_documents"></div>
+      </div>
+
+      <!-- 7. Action Plan / Timeline -->
+      <div class="result-section">
+        <div class="result-section-head" onclick="toggleSection(this)">
+          <span>🗓️</span> <span>Your Step-by-Step Action Plan</span>
+          <span class="arrow">▼</span>
+        </div>
+        <div class="result-section-body" id="res_timeline"></div>
+      </div>
+
+      <div class="print-btn">
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        &nbsp;
+        <button class="btn btn-primary" onclick="restart()">↩ Start Over</button>
+      </div>
+
+    </div><!-- /results -->
+
+  </div><!-- /card -->
+</div><!-- /shell -->
+
+<script>
+// ─── State ────────────────────────────────────────────────────────────────────
+const TOTAL = 9;
+let currentStep = 1;
+const answers = {};
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+function showStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById('step' + n);
+  if (el) el.classList.add('active');
+  const pct = Math.round(((n-1)/TOTAL)*100);
+  document.getElementById('progressBar').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `Step ${n} of ${TOTAL}`;
+}
+
+function getSelected(groupId) {
+  return [...document.querySelectorAll(`#${groupId} .opt.selected`)].map(o => o.dataset.val);
+}
+
+function next(step) {
+  // collect answer
+  if (step === 1) {
+    const sel = getSelected('q_country');
+    if (!sel.length) { alert('Please select an option.'); return; }
+    answers.country = sel[0] === 'both' ? ['italy','germany'] : sel;
+  } else if (step === 2) {
+    const sel = getSelected('q_level');
+    if (!sel.length) { alert('Please select your education level.'); return; }
+    answers.level = sel[0];
+  } else if (step === 3) {
+    const sel = getSelected('q_field');
+    if (!sel.length) { alert('Please select at least one field.'); return; }
+    answers.fields = sel;
+  } else if (step === 4) {
+    const sel = getSelected('q_english');
+    if (!sel.length) { alert('Please select your English level.'); return; }
+    answers.english = sel[0];
+  } else if (step === 5) {
+    answers.german  = document.getElementById('q_german').value;
+    answers.italian = document.getElementById('q_italian').value;
+  } else if (step === 6) {
+    answers.gpa      = parseFloat(document.getElementById('q_gpa_slider').value);
+    answers.gpa_type = document.getElementById('q_gpa_type').value;
+  } else if (step === 7) {
+    const sel = getSelected('q_scholarship');
+    if (!sel.length) { alert('Please select an option.'); return; }
+    answers.scholarship = sel[0];
+  } else if (step === 8) {
+    const sel = getSelected('q_timeline');
+    if (!sel.length) { alert('Please select your timeline.'); return; }
+    answers.timeline = sel[0];
+  }
+  currentStep = step + 1;
+  showStep(currentStep);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function prev(step) {
+  currentStep = step - 1;
+  showStep(currentStep);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function toggle(el, groupId, multi) {
+  if (!multi) {
+    document.querySelectorAll(`#${groupId} .opt`).forEach(o => o.classList.remove('selected'));
+  }
+  el.classList.toggle('selected');
+}
+
+function toggleSection(head) {
+  head.classList.toggle('open');
+  const body = head.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function restart() {
+  document.querySelectorAll('.opt').forEach(o => o.classList.remove('selected'));
+  document.getElementById('q_name').value = '';
+  document.getElementById('q_subfield').value = '';
+  document.getElementById('q_gpa_slider').value = 16;
+  document.getElementById('gpa_display').textContent = '16.00';
+  document.getElementById('results').style.display = 'none';
+  document.querySelector('.header').style.display = '';
+  document.querySelector('.card').querySelectorAll('.step, #results').forEach(s => {
+    s.style.display = '';
+    s.classList.remove('active');
+  });
+  currentStep = 1;
+  showStep(1);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ─── RESULT GENERATION ────────────────────────────────────────────────────────
+function generateResults() {
+  answers.name     = document.getElementById('q_name').value.trim() || 'Student';
+  answers.subfield = document.getElementById('q_subfield').value.trim();
+  answers.extra    = document.getElementById('q_extra').value;
+
+  // hide steps
+  document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
+  document.getElementById('progressBar').style.width = '100%';
+  document.getElementById('progressLabel').textContent = 'Report Ready ✓';
+
+  buildResults();
+  document.getElementById('results').style.display = 'block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// helpers
+const levelLabel = {
+  highschool: 'High School Graduate (seeking Bachelor\'s)',
+  bachelor:   'Bachelor\'s Graduate (seeking Master\'s / PhD)',
+  master:     'Master\'s Graduate (seeking PhD / Postdoc)',
+  phd:        'PhD Holder (seeking Postdoc / Research)'
+};
+const englishLabel = {
+  none: 'No English test yet', low: 'IELTS < 5.5',
+  mid: 'IELTS 5.5–6.0', good: 'IELTS 6.0–6.5', strong: 'IELTS 6.5+'
+};
+const schLabel = {
+  full: 'Needs Full Scholarship', partial: 'Partial Funding', self: 'Self-Funded'
+};
+const timeLabel = {
+  asap: 'Start ASAP (< 9 months)', next_year: 'Next Academic Year',
+  two_years: '1.5–2 Years', exploring: 'Exploring / No Fixed Date'
+};
+
+function hasItaly()   { return answers.country.includes('italy'); }
+function hasGermany() { return answers.country.includes('germany'); }
+function isUG()  { return answers.level === 'highschool'; }
+function isPG()  { return ['bachelor','master','phd'].includes(answers.level); }
+function isPhD() { return ['master','phd'].includes(answers.level); }
+function hasMed()    { return answers.fields.includes('medicine'); }
+function hasEng()    { return answers.fields.includes('engineering'); }
+function gpa()       { return answers.gpa; }
+
+function tag(text, type) {
+  return `<span class="tag tag-${type}">${text}</span>`;
+}
+function alert_box(text, type='blue') {
+  return `<div class="alert-box alert-${type}">${text}</div>`;
+}
+function li(text) { return `<li>${text}</li>`; }
+function ul(items) { return `<ul class="result-list">${items.map(li).join('')}</ul>`; }
+function countryBlock(flag, title, cls, html) {
+  return `<div class="country-block ${cls}"><h4>${flag} ${title}</h4>${html}</div>`;
+}
+
+// ─── BUILD EACH SECTION ───────────────────────────────────────────────────────
+function buildResults() {
+  const a = answers;
+  const name = a.name;
+
+  // Profile header
+  document.getElementById('res_name').textContent =
+    name !== 'Student' ? `${name}'s Study Abroad Report` : 'Your Personalised Study Abroad Report';
+  document.getElementById('res_tagline').textContent =
+    `${levelLabel[a.level]} | ${a.fields.map(f=>f.charAt(0).toUpperCase()+f.slice(1)).join(', ')} | ${englishLabel[a.english]}`;
+
+  const chips = [
+    a.country.map(c => c === 'italy' ? '🇮🇹 Italy' : '🇩🇪 Germany').join(' + '),
+    levelLabel[a.level].split(' (')[0],
+    englishLabel[a.english],
+    `GPA ${gpa().toFixed(2)}/20`,
+    schLabel[a.scholarship],
+    timeLabel[a.timeline]
+  ];
+  document.getElementById('profile_chips').innerHTML =
+    chips.map(c => `<span class="chip">${c}</span>`).join('');
+
+  // ── 1. Eligibility ─────────────────────────────────────────────────────────
+  let elig = '';
+
+  if (hasItaly()) {
+    let italyStatus = '';
+    const engOk = ['mid','good','strong'].includes(a.english);
+    const italianOk = ['b2','c1'].includes(a.italian);
+
+    if (isUG()) {
+      italyStatus = `
+        <strong>Bachelor's programmes</strong> — ${engOk || italianOk ? tag('Eligible','green') : tag('Language prep needed','amber')}<br>
+        ${engOk ? '✅ English level sufficient for English-language Bachelor\'s' : '⚠️ IELTS 5.5+ required for English-language programmes'}<br>
+        ${italianOk ? '✅ Italian level sufficient for Italian-language programmes' : ''}
+        ${hasMed() ? '<br>⚕️ Medicine: IMAT exam required (competitive — September each year)' : ''}
+      `;
+    } else if (a.level === 'bachelor') {
+      const engMeet = ['good','strong'].includes(a.english);
+      italyStatus = `
+        <strong>Master's programmes</strong> — ${engMeet || italianOk ? tag('Eligible','green') : tag('IELTS upgrade needed','amber')}<br>
+        ${engMeet ? '✅ IELTS 6.0–6.5 sufficient for most Master\'s' : '⚠️ IELTS 6.0+ required for English Master\'s'}
+        ${gpa() >= 16 ? '<br>✅ GPA ≥ 16/20 — competitive for top universities' : '<br>⚠️ GPA below 16 may limit choices at top universities'}
+      `;
+    } else if (isPhD()) {
+      italyStatus = `
+        <strong>PhD (Dottorato)</strong> — ${tag('Eligible','green')}<br>
+        ✅ Funded PhD positions available via CINECA national competition<br>
+        ✅ Most PhD supervisors accept English applicants
+      `;
+    }
+    elig += countryBlock('🇮🇹','Italy','italy', italyStatus);
+  }
+
+  if (hasGermany()) {
+    let deStatus = '';
+    const gerOk  = ['b2','c1','c2'].includes(a.german);
+    const engStr  = ['good','strong'].includes(a.english);
+    if (isUG()) {
+      deStatus = `
+        <strong>Bachelor's programmes</strong> — ${gerOk ? tag('Eligible (German-taught)','green') : tag('German required','amber')}<br>
+        ${gerOk ? '✅ German level meets Bachelor\'s requirement' : '⚠️ Most German Bachelor\'s are taught in German — you need B2+'}<br>
+        ⚠️ APS Certificate is <strong>mandatory</strong> — apply immediately
+        ${hasMed() ? '<br>⚕️ Medicine NC is extremely competitive — GPA equivalent of 17.5+/20 needed' : ''}
+      `;
+    } else if (a.level === 'bachelor') {
+      deStatus = `
+        <strong>Master's programmes</strong> — ${engStr || gerOk ? tag('Eligible','green') : tag('Language upgrade needed','amber')}<br>
+        ${engStr ? '✅ IELTS 6.5+ — qualifies for English-taught Master\'s' : '⚠️ IELTS 6.5+ or German B2 required'}
+        ${gpa() >= 15 ? '<br>✅ GPA competitive for German universities' : '<br>⚠️ GPA below 15 — check specific programme requirements'}
+        <br>⚠️ APS Certificate mandatory — arrange via German Embassy Yerevan
+      `;
+    } else if (isPhD()) {
+      deStatus = `
+        <strong>PhD / Promotion</strong> — ${tag('Excellent opportunity','green')}<br>
+        ✅ Paid research position (Wissenschaftlicher Mitarbeiter) — no tuition<br>
+        ✅ Most supervisors accept English-speaking PhD candidates<br>
+        ✅ Salary €1,500–€2,500/month net
+      `;
+    }
+    elig += countryBlock('🇩🇪','Germany','germany', deStatus);
+  }
+
+  // Overall rating
+  const englishGood = ['good','strong'].includes(a.english);
+  const gpaGood = gpa() >= 15;
+  if (englishGood && gpaGood) {
+    elig = alert_box('🟢 <strong>Strong Profile:</strong> Your English level and GPA make you competitive for top programmes in both countries. Focus on documents and entrance exams.', 'green') + elig;
+  } else if (!englishGood && a.english !== 'none') {
+    elig = alert_box('🟡 <strong>Language is your priority:</strong> Improving your IELTS to 6.0+ (Italy) or 6.5+ (Germany) will unlock significantly more programmes and scholarships.', 'amber') + elig;
+  } else if (a.english === 'none') {
+    elig = alert_box('🔴 <strong>Take an English test first:</strong> Nearly all international programmes require IELTS or TOEFL. This should be your first concrete step.', 'amber') + elig;
+  }
+  document.getElementById('res_eligibility').innerHTML = elig;
+
+  // ── 2. Universities ─────────────────────────────────────────────────────────
+  let unis = '';
+
+  if (hasItaly()) {
+    let italyUnis = [];
+    const isEng = answers.fields.includes('engineering');
+    const isMed = answers.fields.includes('medicine');
+    const isArt = answers.fields.includes('arts');
+    const isSci = answers.fields.includes('science');
+    const isBus = answers.fields.includes('business');
+
+    if (isMed) {
+      italyUnis.push('<strong>Medicine (IMAT — English):</strong>');
+      italyUnis.push('Università di Bologna (UNIBO) — most international students; strong reputation');
+      italyUnis.push('Università di Pavia — excellent clinical training, smaller cohort');
+      italyUnis.push('Sapienza Università di Roma — large campus, very competitive IMAT score needed');
+      italyUnis.push('Università di Padova — historic, prestigious, strong research');
+      italyUnis.push('Università di Milano (Statale) — central Milan location');
+      italyUnis.push('Università Federico II Napoli — southern Italy, lower living costs');
+    }
+    if (isEng) {
+      italyUnis.push('<strong>Engineering:</strong>');
+      italyUnis.push('Politecnico di Milano — #1 in Italy; globally ranked ~140 Engineering & Technology; 100+ English programmes');
+      italyUnis.push('Politecnico di Torino — strong Aerospace, Automotive, Mechanical');
+      italyUnis.push('Università di Bologna — broad engineering portfolio, many English options');
+      italyUnis.push('Sapienza Università di Roma — large electrical & civil engineering departments');
+      italyUnis.push('Università di Padova — strong ICT, Mechatronics, Bioengineering');
+    }
+    if (isArt) {
+      italyUnis.push('<strong>Design & Architecture:</strong>');
+      italyUnis.push('Politecnico di Milano — world-famous for Industrial Design and Architecture');
+      italyUnis.push('IUAV Venezia — leading Architecture school in Venice');
+      italyUnis.push('Domus Academy (private) — postgrad design; taught in English');
+    }
+    if (isSci || isBus || answers.fields.includes('humanities')) {
+      italyUnis.push('<strong>Sciences, Business & Humanities:</strong>');
+      italyUnis.push('Università di Bologna — comprehensive; top-ranked in Italy');
+      italyUnis.push('Università di Padova — strong natural sciences and social sciences');
+      italyUnis.push('Bocconi University (private) — best business school in Italy; excellent English MBA/MSc');
+      italyUnis.push('Università Cattolica del Sacro Cuore — private; strong in Humanities and Medicine');
+    }
+    if (!italyUnis.length) {
+      italyUnis.push('Università di Bologna — oldest university in the world, comprehensive');
+      italyUnis.push('Sapienza Università di Roma — largest European university');
+      italyUnis.push('Università di Padova — broad academic range');
+    }
+    unis += countryBlock('🇮🇹','Italy','italy', ul(italyUnis));
+  }
+
+  if (hasGermany()) {
+    let deUnis = [];
+    const isEng = answers.fields.includes('engineering');
+    const isMed = answers.fields.includes('medicine');
+    const isSci = answers.fields.includes('science');
+    const isBus = answers.fields.includes('business');
+    const isCS  = answers.subfield.toLowerCase().includes('computer') || answers.subfield.toLowerCase().includes('software');
+
+    if (isMed) {
+      deUnis.push('<strong>Medicine (German language C1 required):</strong>');
+      deUnis.push('Ruprecht-Karls-Universität Heidelberg — one of Germany\'s top medical faculties');
+      deUnis.push('LMU München (Ludwig Maximilian) — very high NC required');
+      deUnis.push('Charité – Universitätsmedizin Berlin — Europe\'s largest university hospital, attached to FU & HU Berlin');
+      deUnis.push('Universität Freiburg — strong research, beautiful city');
+      deUnis.push('⚠️ Realistic path: Study medicine in English (Italy/Hungary) → transfer specialisation to Germany');
+    }
+    if (isEng) {
+      deUnis.push('<strong>Engineering:</strong>');
+      deUnis.push('RWTH Aachen University — Germany\'s #1 technical university; top 100 globally; strong English Master\'s');
+      deUnis.push('Technische Universität München (TUM) — QS top 50 globally; excellent English programmes');
+      deUnis.push('Karlsruhe Institute of Technology (KIT) — known as "Germany\'s MIT"');
+      deUnis.push('TU Berlin — strong Computer Science, Transport, Aerospace');
+      deUnis.push('Universität Stuttgart — close automotive industry links (Mercedes, Porsche)');
+      deUnis.push('Technische Universität Dresden — strong in Microelectronics and Materials');
+    }
+    if (isSci) {
+      deUnis.push('<strong>Natural Sciences:</strong>');
+      deUnis.push('LMU München — top natural sciences, many English Master\'s');
+      deUnis.push('Heidelberg University — Germany\'s oldest; exceptional in Life Sciences');
+      deUnis.push('Freie Universität Berlin — strong in Biochemistry, Chemistry, Environment');
+    }
+    if (isBus) {
+      deUnis.push('<strong>Business & Economics:</strong>');
+      deUnis.push('WHU – Otto Beisheim School of Management (private) — top German business school');
+      deUnis.push('Mannheim Business School — highest-ranked public business programme');
+      deUnis.push('Frankfurt School of Finance & Management — strong finance and banking track');
+    }
+    if (!deUnis.length) {
+      deUnis.push('LMU München — Germany\'s #1 research university');
+      deUnis.push('Heidelberg University — oldest German university, strong in all fields');
+      deUnis.push('Freie Universität Berlin — comprehensive, internationally oriented');
+      deUnis.push('Humboldt-Universität zu Berlin — excellent for research and humanities');
+    }
+    unis += countryBlock('🇩🇪','Germany','germany', ul(deUnis));
+  }
+
+  unis += alert_box('💡 Use <strong>DAAD university search</strong> (daad.de) and <strong>Mastersportal.eu</strong> to find English-language programmes and filter by field, tuition, and IELTS requirement.','blue');
+  document.getElementById('res_universities').innerHTML = unis;
+
+  // ── 3. Tests ───────────────────────────────────────────────────────────────
+  let tests = '';
+
+  if (hasItaly()) {
+    let italyTests = [];
+    const isMed = answers.fields.includes('medicine');
+    const isEng = answers.fields.includes('engineering');
+    if (isMed && isUG()) {
+      italyTests.push(`<strong>IMAT (International Medical Admissions Test)</strong> ${tag('Required for Medicine','red')}<br>
+        Date: September each year | Duration: 100 min, 60 questions<br>
+        Topics: Critical Thinking, Biology, Chemistry, Physics & Maths<br>
+        Register: May–July via Universitaly.it | Fee: ~€150<br>
+        📚 Prep: Cambridge Assessment official materials, imat.it, 6–12 months recommended`);
+    }
+    if (isEng && isUG()) {
+      italyTests.push(`<strong>TOLC-I</strong> ${tag('Required for Engineering (most universities)','amber')}<br>
+        Topics: Maths, Logic, Basic Sciences | Can be taken online (CISIA platform)<br>
+        Register: cisia.it | Multiple sittings per year`);
+    }
+    const engLevel = a.english;
+    if (['none','low'].includes(engLevel)) {
+      italyTests.push(`<strong>IELTS / TOEFL</strong> ${tag('Required','red')}<br>
+        Target: IELTS 5.5 (UG English) or 6.0–6.5 (Master's)<br>
+        Book at: britishcouncil.ir / idp.com`);
+    }
+    if (!['b2','c1'].includes(a.italian) && a.italian !== 'none') {
+      italyTests.push(`<strong>Italian Language Certificate</strong> ${tag('If pursuing Italian-language programme','amber')}<br>
+        Options: CILS, CELI, PLIDA, or DELI — minimum B2 required<br>
+        Institutions: Università per Stranieri di Perugia, Siena`);
+    }
+    if (!italyTests.length) {
+      italyTests.push('Your English level meets most Italian programme requirements ✅');
+      italyTests.push('Keep your IELTS certificate valid (2-year validity)');
+    }
+    tests += countryBlock('🇮🇹','Italy — Required Tests','italy', ul(italyTests));
+  }
+
+  if (hasGermany()) {
+    let deTests = [];
+    deTests.push(`<strong>APS Certificate</strong> ${tag('MANDATORY for all Iranians','red')}<br>
+      Verifies authenticity of Iranian academic qualifications<br>
+      Apply: Via German Embassy Yerevan (Tehran office closed since Feb 2026)<br>
+      Cost: ~€75 | Processing: 6–10 weeks | Does not expire<br>
+      📋 Bring: Certified translations of all diplomas, passport copy, application form`);
+
+    if (!['good','strong'].includes(a.english) && !['b2','c1','c2'].includes(a.german)) {
+      deTests.push(`<strong>IELTS / TOEFL</strong> ${tag('Required for English programmes','red')}<br>
+        Target: IELTS 6.5+ or TOEFL 88+ for most German Master's<br>
+        Book: britishcouncil.ir / idp.com`);
+    }
+    if (!['b2','c1','c2'].includes(a.german) && (isUG() || answers.fields.includes('medicine'))) {
+      deTests.push(`<strong>TestDaF or DSH</strong> ${tag('Required for German-language programmes','amber')}<br>
+        Target: TestDaF level 4 in all 4 sections (reading, listening, writing, speaking)<br>
+        Goethe-Institut Tehran: goethe.de/iran | Also offered abroad<br>
+        For Medicine specifically: C1 (DSH-2) is the absolute minimum`);
+    }
+    if (answers.fields.includes('medicine') && isUG()) {
+      deTests.push(`<strong>TMS or HAM-Nat</strong> ${tag('Strongly recommended for Medicine','amber')}<br>
+        Medical aptitude tests that can compensate for a lower NC score<br>
+        TMS: medtest.de | HAM-Nat: offered at specific universities`);
+    }
+    if (!deTests.length) deTests.push('No additional test gaps identified based on your profile ✅');
+    tests += countryBlock('🇩🇪','Germany — Required Tests','germany', ul(deTests));
+  }
+
+  document.getElementById('res_tests').innerHTML = tests;
+
+  // ── 4. Scholarships ────────────────────────────────────────────────────────
+  let schol = '';
+
+  const needsFull    = a.scholarship === 'full';
+  const needsPartial = a.scholarship === 'partial';
+  const gpaHigh = gpa() >= 16;
+
+  if (hasItaly()) {
+    let italySchol = [];
+    italySchol.push(`<strong>MAECI Italian Government Scholarship</strong> ${gpaHigh ? tag('You may qualify','green') : tag('Check criteria','amber')}<br>
+      1,000+ scholarships/year | Covers tuition + €900/month living allowance<br>
+      Apply: universitaly.it | Deadline: usually March–April each year<br>
+      Open to: All levels (UG, Master's, PhD, language courses)`);
+    italySchol.push(`<strong>DSU (Diritto allo Studio Universitario)</strong> ${tag('Income-based','blue')}<br>
+      Monthly grant €300–€600 + free university accommodation<br>
+      Apply after enrolling at your university | Based on family income (ISEE)`);
+    if (isPG()) {
+      italySchol.push(`<strong>PhD Stipend (Dottorato)</strong> ${tag('Fully funded','green')}<br>
+        ~€1,200/month net for 3 years — apply via CINECA (cineca.it)<br>
+        No tuition fees | Most positions are open to international applicants`);
+    }
+    italySchol.push(`<strong>University-Specific Scholarships</strong><br>
+      Bologna: Unibo Study Grants for International Students<br>
+      Politecnico di Milano: Merit-based grants (check polimi.it/en/education/fees-and-scholarships)<br>
+      Padova: Excellence Scholarships for International Students`);
+    schol += countryBlock('🇮🇹','Italy Scholarships','italy', ul(italySchol));
+  }
+
+  if (hasGermany()) {
+    let deSchol = [];
+    deSchol.push(`<strong>DAAD Scholarship</strong> ${gpaHigh ? tag('Strong candidate','green') : tag('Competitive — apply anyway','amber')}<br>
+      Germany's largest scholarship body | Covers Master's, PhD, Postdoc<br>
+      Monthly stipend €850–€1,200 + health insurance + travel allowance<br>
+      Apply: daad.de | Deadlines: Oct–Nov for following year<br>
+      Language: English or German depending on programme`);
+
+    if (isPG()) {
+      deSchol.push(`<strong>Political Foundation Scholarships</strong> ${tag('Up to €1,200/month','green')}<br>
+        Konrad Adenauer Stiftung (kas.de) — centre-right values<br>
+        Friedrich Ebert Stiftung (fes.de) — social-democratic<br>
+        Heinrich Böll Stiftung (boell.de) — green/environment<br>
+        Rosa Luxemburg Stiftung — progressive/left<br>
+        All open to international students regardless of political affiliation`);
+      deSchol.push(`<strong>PhD Position as Wissenschaftlicher Mitarbeiter</strong> ${tag('Funded position','green')}<br>
+        Salary €1,500–€2,500/month | No tuition | Health insurance included<br>
+        Apply directly to professors or via university graduate schools`);
+    }
+    deSchol.push(`<strong>Alexander von Humboldt Foundation</strong> ${isPhD() ? tag('Relevant for you','green') : tag('Postdoc level','blue')}<br>
+      For postdoctoral researchers | Up to €2,670/month + benefits<br>
+      Apply: humboldt-foundation.de`);
+    deSchol.push(`<strong>Blocked Account (Sperrkonto)</strong> ${tag('Not a scholarship — your own money','blue')}<br>
+      €11,208 required for student visa | Providers: Fintiba, Expatrio, Deutsche Bank<br>
+      You withdraw ~€935/month while studying — the money stays yours`);
+    schol += countryBlock('🇩🇪','Germany Scholarships & Funding','germany', ul(deSchol));
+  }
+
+  if (needsFull) {
+    schol = alert_box('🏆 <strong>Full scholarship needed:</strong> Focus on DAAD (Germany), MAECI (Italy), and PhD positions first. These are your best routes to full funding. Start applications 12–14 months before your intended start date.','green') + schol;
+  }
+  document.getElementById('res_scholarships').innerHTML = schol;
+
+  // ── 5. Embassy & Visa ──────────────────────────────────────────────────────
+  let visa = '';
+  visa += alert_box('⚠️ <strong>German Embassy Tehran:</strong> Completely closed since February 2026. All German visa processing for Iranians has been officially rerouted to <strong>Yerevan, Armenia</strong>.','amber');
+  visa += alert_box('ℹ️ <strong>Italian Embassy Tehran:</strong> Partially operational (was temporarily suspended June 2025, has since reopened for students). However, the <strong>Italian Embassy in Yerevan</strong> is fully open and is a reliable alternative.','blue');
+
+  visa += `
+  <h4 style="margin:18px 0 10px; color:var(--blue)">🇦🇲 Yerevan, Armenia — Your Visa Hub</h4>
+  ${ul([
+    '<strong>Iranians enter Armenia VISA-FREE</strong> for up to 90 days — no pre-approval needed, just your passport',
+    'Both the German Embassy and Italian Embassy in Yerevan are fully operational',
+    'German Embassy Yerevan appointment: service2.diplo.de (select Yerevan → National Visa D)',
+    'Italian Embassy Yerevan: amb.jerevan@cert.esteri.it | ambjerevan.esteri.it',
+    'TLScontact VAC Yerevan (German): visas-de.tlscontact.com/en-us/country/am/vac/amEVN2de',
+  ])}
+  <h4 style="margin:18px 0 10px; color:var(--blue)">✈️ Getting to Yerevan from Iran</h4>
+  ${ul([
+    '<strong>By Air (~1.5 hrs):</strong> Mahan Air, Flyone Armenia — Tehran (IKA) or Tabriz → Yerevan (EVN). ~$80–200 one-way. Check current schedules as airspace was disrupted in early 2026',
+    '<strong>By Bus (~18–22 hrs from Tehran):</strong> Two daily buses Tehran → Yerevan via Tabriz. ~$30–60. Most reliable option if flights are unavailable',
+    '<strong>By Land via Norduz–Agarak crossing:</strong> Drive or shared taxi to border, then onward taxi to Yerevan. Check current crossing status before travelling',
+  ])}`;
+
+  document.getElementById('res_visa').innerHTML = visa;
+
+  // ── 6. Documents ───────────────────────────────────────────────────────────
+  let docs = '';
+  let commonDocs = [
+    'Valid Iranian passport — minimum 6 months validity beyond your intended stay',
+    'All academic certificates & transcripts — originals + official certified translation (Persian → English/Italian/German) + apostille from Iranian Ministry of Foreign Affairs',
+    'Language test certificate (IELTS/TOEFL and/or TestDaF/DSH)',
+    'Biometric passport photos (white background, recent)',
+    'Health/travel insurance certificate',
+    'Proof of accommodation in destination country',
+    'Statement of Purpose (SoP) / Motivation letter — required by all universities',
+    'CV / Résumé',
+    'Two letters of recommendation (especially for Master\'s and PhD)',
+  ];
+
+  if (hasItaly()) {
+    const italyDocs = [
+      ...commonDocs,
+      'Pre-enrolment confirmation from Universitaly.it — complete this FIRST',
+      'Declaration of Value (DoV) — issued by Italian Embassy (Tehran or Yerevan); request early, takes 4–8 weeks',
+      'Admission letter from Italian university',
+      'Proof of financial means (bank statements or scholarship letter)',
+    ];
+    if (answers.fields.includes('medicine')) {
+      italyDocs.push('IMAT exam score confirmation');
+    }
+    docs += countryBlock('🇮🇹','Italy Document Checklist','italy', ul(italyDocs));
+  }
+
+  if (hasGermany()) {
+    const deDocs = [
+      ...commonDocs,
+      'APS Certificate — <strong>mandatory for all Iranians</strong>; apply via German Embassy Yerevan; takes 6–10 weeks',
+      'University admission letter (Zulassungsbescheid)',
+      'Proof of Blocked Account (Sperrkonto) showing €11,208 — from Fintiba or Expatrio',
+      'German health insurance proof (DAK, TK, Barmer — enrol before arriving)',
+      'Completed visa application form (from German Embassy website)',
+    ];
+    if (a.level === 'highschool') {
+      deDocs.push('Studienkolleg acceptance (if applicable) or equivalence documentation');
+    }
+    docs += countryBlock('🇩🇪','Germany Document Checklist','germany', ul(deDocs));
+  }
+
+  docs += alert_box('📌 <strong>Apostille first:</strong> Before going to any embassy, have your Iranian documents stamped by the Iranian Ministry of Foreign Affairs (Vezarat-e Omur-e Kharejeh) and officially translated by a certified translator. Only then can the embassies accept them.','amber');
+  document.getElementById('res_documents').innerHTML = docs;
+
+  // ── 7. Timeline ───────────────────────────────────────────────────────────
+  let tl = '';
+
+  const steps = [];
+
+  // Adjust urgency
+  const urgent = a.timeline === 'asap';
+  const relaxed = ['two_years','exploring'].includes(a.timeline);
+
+  if (!['good','strong'].includes(a.english)) {
+    steps.push({
+      title: urgent ? 'NOW — Boost English First' : 'Phase 1 — Language Preparation',
+      body: `Enrol in an intensive IELTS course. Target: IELTS 5.5 (Italy UG) or 6.5 (Germany Master's). Book your test at britishcouncil.ir or IDP.`
+    });
+  }
+  if (hasGermany() && !['b2','c1','c2'].includes(a.german) && (isUG() || answers.fields.includes('medicine'))) {
+    steps.push({
+      title: 'German Language Preparation',
+      body: `Start German immediately — B2 for most programmes, C1 for medicine. Goethe-Institut Tehran offers A1–C2 courses. Allow 12–18 months to reach B2 from scratch.`
+    });
+  }
+
+  steps.push({
+    title: 'Get Your APS Certificate (Germany) / DoV (Italy)',
+    body: `
+      ${hasGermany() ? '🇩🇪 Germany: Contact German Embassy Yerevan for APS Certificate — plan your Yerevan trip. Cost: €75. Allow 6–10 weeks.' : ''}
+      ${hasItaly() ? '🇮🇹 Italy: Request Declaration of Value (DoV) from Italian Embassy Yerevan or Tehran — takes 4–8 weeks.' : ''}
+    `
+  });
+
+  steps.push({
+    title: 'Apostille & Document Authentication',
+    body: `Have ALL academic documents officially translated and apostilled at the Iranian Ministry of Foreign Affairs. Do this before going to any embassy.`
+  });
+
+  if (hasItaly()) {
+    steps.push({
+      title: '🇮🇹 Complete Pre-enrolment on Universitaly.it',
+      body: `Register and submit your pre-enrolment (typically opens April–July for October intake). This is mandatory before applying for an Italian student visa.
+      ${answers.fields.includes('medicine') ? ' | Book IMAT: register May–July, exam in September.' : ''}
+      ${answers.fields.includes('engineering') ? ' | Take TOLC-I: register at cisia.it.' : ''}`
+    });
+  }
+
+  if (hasGermany()) {
+    steps.push({
+      title: '🇩🇪 Apply to German Universities',
+      body: `Apply via Uni-Assist (uni-assist.de) or directly through the university portal. Winter semester: apply by May–July. Summer semester: apply by November–January. Many top programmes have rolling admissions.`
+    });
+  }
+
+  if (a.scholarship !== 'self') {
+    steps.push({
+      title: 'Apply for Scholarships',
+      body: `DAAD: apply Oct–Nov (daad.de) | MAECI Italy: apply March–April (universitaly.it) | Political foundations: year-round — check individual deadlines. Apply early — competition is high.`
+    });
+  }
+
+  steps.push({
+    title: 'Book Embassy Appointment in Yerevan',
+    body: `
+      ${hasGermany() ? '🇩🇪 Germany: service2.diplo.de → Yerevan → National Visa D → Student. Slots fill fast — check regularly.' : ''}
+      ${hasItaly() ? '🇮🇹 Italy: Email Italian Embassy Yerevan: amb.jerevan@cert.esteri.it' : ''}
+      Arrange travel to Yerevan (visa-free for Iranians — up to 90 days).
+    `
+  });
+
+  if (hasGermany()) {
+    steps.push({
+      title: '🇩🇪 Open German Blocked Account (Sperrkonto)',
+      body: `Deposit €11,208 at Fintiba (fintiba.com) or Expatrio (expatrio.com). You get a certificate to present at the visa appointment. Once in Germany, withdraw ~€935/month.`
+    });
+  }
+
+  steps.push({
+    title: 'Attend Consular Appointment in Yerevan',
+    body: `Bring ALL documents — originals, translations, apostilles, DoV/APS, admission letter, financial proof, insurance. Visa processed in 4–12 weeks.`
+  });
+
+  steps.push({
+    title: 'Arrival & Settlement',
+    body: `
+      🇮🇹 Italy: Register at university (immatricolazione) → Apply for Permesso di Soggiorno within 8 days of arrival at Post Office (Poste Italiane) → Open bank account.
+      🇩🇪 Germany: Register address (Anmeldung) at Einwohnermeldeamt → Convert entry visa to Aufenthaltserlaubnis at Ausländerbehörde → Enrol in health insurance → Open bank account.
+    `
+  });
+
+  tl = `<div class="timeline">${steps.map((s,i) => `
+    <div class="tl-item">
+      <div class="tl-dot">${i+1}</div>
+      <div class="tl-title">${s.title}</div>
+      <div class="tl-body">${s.body.trim()}</div>
+    </div>`).join('')}
+  </div>`;
+
+  if (urgent) {
+    tl = alert_box('⚡ <strong>Urgent timeline (< 9 months):</strong> Focus immediately on language exams, APS/DoV requests, and scholarship deadlines. Some steps must run in parallel.','amber') + tl;
+  } else if (relaxed) {
+    tl = alert_box('✅ <strong>Good news:</strong> With 1.5–2 years of preparation time, you can complete all steps at a comfortable pace and be a strong candidate.','green') + tl;
+  }
+
+  document.getElementById('res_timeline').innerHTML = tl;
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+showStep(1);
+</script>
+</body>
+</html>
