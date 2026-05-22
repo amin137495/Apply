@@ -325,9 +325,166 @@
     .result-section-body { display: block !important; }
     .shell { max-width: 100%; }
   }
+
+  /* ── Globe loader overlay ── */
+  .loader-overlay {
+    position: fixed;
+    inset: 0;
+    background: #f3efe7;
+    display: none;
+    align-items: flex-start;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity .35s ease;
+    overflow: auto;
+    padding: 28px 20px;
+  }
+  .loader-overlay.visible { display: flex; opacity: 1; }
+  .loader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    max-width: 680px;
+    margin: auto 0;
+  }
+  .loader-country-name {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 14px;
+    letter-spacing: 0.42em;
+    color: rgba(21,20,15,0.5);
+    text-transform: uppercase;
+    font-weight: 600;
+    min-height: 1.2em;
+    text-align: center;
+  }
+  .loader-stage {
+    width: 200px;
+    height: 200px;
+    position: relative;
+  }
+  .loader-stage canvas {
+    position: absolute;
+    inset: 0;
+    width: 200px;
+    height: 200px;
+    display: block;
+  }
+  .loader-caption {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: rgba(21,20,15,0.6);
+    text-transform: uppercase;
+    min-height: 1.2em;
+    text-align: center;
+  }
+  .loader-facts {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .loader-fact {
+    background: #ffffff;
+    border: 1px solid rgba(21,20,15,0.10);
+    border-radius: 10px;
+    padding: 14px 10px 12px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    min-height: 138px;
+  }
+  .loader-fact.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .loader-fact .fact-icon { font-size: 20px; line-height: 1; }
+  .loader-fact .fact-label {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    color: rgba(21,20,15,0.55);
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+  .loader-fact .fact-body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 11.5px;
+    line-height: 1.4;
+    color: #15140f;
+    text-wrap: pretty;
+  }
+  .loader-progress {
+    width: 100%;
+    max-width: 320px;
+    height: 2px;
+    background: rgba(21,20,15,0.10);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .loader-progress-bar {
+    height: 100%;
+    background: rgba(21,20,15,0.6);
+    width: 0%;
+  }
+  .loader-skip {
+    background: transparent;
+    border: 1px solid rgba(21,20,15,0.22);
+    border-radius: 6px;
+    padding: 7px 18px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: rgba(21,20,15,0.7);
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+  }
+  .loader-skip:hover {
+    background: rgba(21,20,15,0.06);
+    color: #15140f;
+    border-color: rgba(21,20,15,0.4);
+  }
+  @media (max-width: 620px) {
+    .loader-facts { grid-template-columns: repeat(2, 1fr); }
+    .loader-content { gap: 12px; }
+  }
+  @media print {
+    .loader-overlay { display: none !important; }
+  }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════════
+     GLOBE LOADER OVERLAY (zoom + 15s country reveal)
+═══════════════════════════════════════════════ -->
+<div class="loader-overlay" id="loaderOverlay" aria-hidden="true">
+  <div class="loader-content">
+    <div class="loader-country-name" id="loaderCountryName"></div>
+    <div class="loader-stage">
+      <canvas id="loaderWhirl" width="400" height="400"></canvas>
+      <canvas id="loaderGlobe" width="400" height="400"></canvas>
+    </div>
+    <div class="loader-caption" id="loaderCaption">LOCATING</div>
+    <div class="loader-facts" id="loaderFacts"></div>
+    <div class="loader-progress"><div class="loader-progress-bar" id="loaderProgressBar"></div></div>
+    <button class="loader-skip" id="loaderSkip" type="button">Skip →</button>
+  </div>
+</div>
+
 <div class="shell">
 
   <!-- HEADER -->
@@ -736,6 +893,16 @@ function next(step) {
     const sel = getSelected('q_country');
     if (!sel.length) { alert('Please select an option.'); return; }
     answers.country = sel[0] === 'both' ? ['italy','germany'] : sel;
+
+    // Show globe zooming into the selected country before advancing
+    if (typeof window.showCountryLoader === 'function') {
+      window.showCountryLoader(answers.country, () => {
+        currentStep = 2;
+        showStep(2);
+        window.scrollTo({top:0, behavior:'smooth'});
+      });
+      return;
+    }
   } else if (step === 2) {
     const sel = getSelected('q_level');
     if (!sel.length) { alert('Please select your education level.'); return; }
@@ -1356,6 +1523,385 @@ function buildResults() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 showStep(1);
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     GLOBE LOADER SCRIPT — zoom + flag fill + 15s life-facts reveal
+═══════════════════════════════════════════════ -->
+<script>
+(async () => {
+  const INK   = '#15140f';
+  const LAND  = 'rgba(21, 20, 15, 0.08)';
+  const GRAT  = 'rgba(21, 20, 15, 0.18)';
+  const RIM   = 'rgba(21, 20, 15, 0.55)';
+  const WHIRL = 'rgba(21, 20, 15, 0.85)';
+
+  const ORIGIN_ID = '364'; // Iran
+
+  // Flag color stripes
+  const FLAGS = {
+    italy:   { orient: 'vertical',   colors: ['#008C45', '#F4F5F0', '#CD212A'] },
+    germany: { orient: 'horizontal', colors: ['#000000', '#DD0000', '#FFCE00'] }
+  };
+
+  // Per-country zoom presets
+  const PRESETS = {
+    italy: {
+      ids: ['380'], flagKeys: ['italy'],
+      center: [12.5, 42.5], radius: 220,
+      caption: 'LIFE IN ITALY', bigLabel: 'ITALIA · ITALY'
+    },
+    germany: {
+      ids: ['276'], flagKeys: ['germany'],
+      center: [10.5, 51.0], radius: 220,
+      caption: 'LIFE IN GERMANY', bigLabel: 'DEUTSCHLAND · GERMANY'
+    },
+    both: {
+      ids: ['380','276'], flagKeys: ['italy','germany'],
+      center: [12.0, 47.0], radius: 160,
+      caption: 'LIFE IN ITALY & GERMANY', bigLabel: 'ITALIA · DEUTSCHLAND'
+    }
+  };
+
+  // Life facts (researched from current student-life sources)
+  const FACTS = {
+    italy: [
+      { icon: '☀️', label: 'WEATHER', body: 'Mediterranean climate — mild winters, long hot summers. Snow in the northern Alps, beaches in the south.' },
+      { icon: '👥', label: 'PEOPLE',  body: 'Warm, expressive, family-oriented. Treated like “famiglia.” English common in Milan & Rome.' },
+      { icon: '🎓', label: 'STUDY',   body: '700+ Master’s taught in English. Bologna founded the world’s first university in 1088. Tuition often ~€1,500/year.' },
+      { icon: '🍝', label: 'FOOD',    body: 'Pasta, pizza, espresso, aperitivo. Cuisine is fiercely regional and meals are a social ritual.' },
+      { icon: '🏛️', label: 'CULTURE', body: 'Renaissance art, ~58 UNESCO sites, lively nightlife, easy weekend trips across Europe.' }
+    ],
+    germany: [
+      { icon: '🌧️', label: 'WEATHER', body: 'Four real seasons. Snowy winters with ~8 hrs daylight, mild summers around 20–24°C.' },
+      { icon: '👥', label: 'PEOPLE',  body: 'Direct, punctual, organised. Reserved at first — loyal friendships once trust is earned.' },
+      { icon: '🎓', label: 'STUDY',   body: 'Mostly tuition-free public universities. 400k+ international students. Rigorous, independent learning.' },
+      { icon: '🥨', label: 'FOOD',    body: 'Bratwurst, pretzels, schnitzel, beer. Mensa (canteen) lunch €3–5. Huge Turkish & Asian food scenes.' },
+      { icon: '🎄', label: 'CULTURE', body: 'Christmas markets with Glühwein, Oktoberfest, Black Forest. Punctual ICE trains; vibrant Berlin nights.' }
+    ],
+    both: [
+      { icon: '☀️', label: 'WEATHER', body: 'IT: Mediterranean, sunny most of the year. DE: four distinct seasons, cold winters, lush summers.' },
+      { icon: '👥', label: 'PEOPLE',  body: 'IT: warm, expressive, family-first. DE: direct and punctual — loyal once you break the ice.' },
+      { icon: '🎓', label: 'STUDY',   body: 'IT: ~€1,500/yr, ancient universities. DE: tuition-free public unis, world-class engineering.' },
+      { icon: '🍽️', label: 'FOOD',    body: 'IT: pasta, pizza, aperitivo culture. DE: bratwurst, pretzels, beer, cheap Mensa lunches.' },
+      { icon: '🎭', label: 'CULTURE', body: 'IT: Renaissance art & UNESCO sites. DE: Christmas markets, Oktoberfest, Berlin nightlife.' }
+    ]
+  };
+
+  const SIZE = 200, DPR = 2;
+  const gc = document.getElementById('loaderGlobe');
+  const wc = document.getElementById('loaderWhirl');
+  if (!gc || !wc) return;
+  const gctx = gc.getContext('2d');
+  const wctx = wc.getContext('2d');
+  const cx = SIZE*DPR/2, cy = SIZE*DPR/2;
+
+  const projection = d3.geoOrthographic()
+    .scale(78 * DPR).translate([cx, cy]).clipAngle(90).precision(0.5);
+  const path = d3.geoPath(projection, gctx);
+  const graticule = d3.geoGraticule10();
+  const sphere = { type: 'Sphere' };
+
+  let countries = null, originFeat = null, originCentroid = null;
+  try {
+    const world = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json').then(r => r.json());
+    countries = topojson.feature(world, world.objects.countries);
+    originFeat = countries.features.find(f => String(f.id) === ORIGIN_ID);
+    if (originFeat) originCentroid = d3.geoCentroid(originFeat);
+  } catch (e) { console.warn('world-atlas load failed', e); }
+
+  // Whirl particles
+  const comets = [
+    { r: 92,  speed:  1.00, len: 1.05, width: 1.6, dir:  1, phase: 0.00 },
+    { r: 92,  speed:  1.00, len: 0.75, width: 1.6, dir:  1, phase: Math.PI },
+    { r: 104, speed: -0.62, len: 1.40, width: 1.1, dir: -1, phase: 0.7 },
+    { r: 116, speed:  0.42, len: 1.85, width: 0.85, dir: 1, phase: 2.1 }
+  ];
+  const dots = [
+    { r: 92,  speed:  1.00, phase: Math.PI*0.5, size: 2.4 },
+    { r: 104, speed: -0.62, phase: Math.PI*1.7, size: 1.6 }
+  ];
+
+  const START_ROTATE = [-53, -32];
+  const START_RADIUS = 78;
+  const ZOOM_MS  = 1200;
+  const TOTAL_MS = 30000;
+  const FADE_MS  = 350;
+
+  function easeInOutCubic(t) { return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2, 3)/2; }
+  function lerp(a,b,t) { return a + (b-a)*t; }
+
+  let rafId = null, running = false;
+  let animStart = 0;
+  let currentTarget = null;
+
+  function fillFlag(bounds, flag) {
+    const [[x0,y0],[x1,y1]] = bounds;
+    const w = x1 - x0, h = y1 - y0;
+    if (flag.orient === 'vertical') {
+      const bw = w / flag.colors.length;
+      flag.colors.forEach((c, i) => {
+        gctx.fillStyle = c;
+        gctx.fillRect(x0 + i*bw - 1, y0 - 1, bw + 2, h + 2);
+      });
+    } else {
+      const bh = h / flag.colors.length;
+      flag.colors.forEach((c, i) => {
+        gctx.fillStyle = c;
+        gctx.fillRect(x0 - 1, y0 + i*bh - 1, w + 2, bh + 2);
+      });
+    }
+  }
+
+  function drawGlobe(progress) {
+    gctx.clearRect(0, 0, gc.width, gc.height);
+    gctx.lineJoin = 'round'; gctx.lineCap = 'round';
+
+    // sphere fill
+    gctx.beginPath(); path(sphere);
+    gctx.fillStyle = 'rgba(21,20,15,0.035)'; gctx.fill();
+
+    // graticule
+    gctx.beginPath(); path(graticule);
+    gctx.strokeStyle = GRAT; gctx.lineWidth = 0.75 * DPR; gctx.stroke();
+
+    // base countries
+    if (countries) {
+      gctx.beginPath(); path(countries);
+      gctx.fillStyle = LAND; gctx.fill();
+      gctx.beginPath(); path(countries);
+      gctx.strokeStyle = 'rgba(21,20,15,0.75)';
+      gctx.lineWidth = 0.9 * DPR; gctx.stroke();
+    }
+
+    // Origin (Iran) — fades as we zoom away
+    if (originFeat) {
+      gctx.beginPath(); path(originFeat);
+      gctx.fillStyle = `rgba(21,20,15,${0.35 + (1 - progress) * 0.5})`;
+      gctx.fill();
+      gctx.lineWidth = 1.0 * DPR; gctx.strokeStyle = INK; gctx.stroke();
+    }
+
+    // Target country/countries — flag-colored fills, clipped to country shape
+    if (currentTarget && currentTarget.flagFills) {
+      for (const ff of currentTarget.flagFills) {
+        const f = ff.feature;
+        if (!f) continue;
+        const b = path.bounds(f);
+        if (!b || !isFinite(b[0][0]) || (b[1][0] - b[0][0]) < 0.5) continue;
+        gctx.save();
+        gctx.beginPath();
+        path(f);
+        gctx.clip();
+        fillFlag(b, ff.flag);
+        gctx.restore();
+        // dark outline on top
+        gctx.beginPath(); path(f);
+        gctx.lineWidth = (1.0 + progress * 0.7) * DPR;
+        gctx.strokeStyle = INK; gctx.stroke();
+      }
+    }
+
+    // Arcs from Iran to target(s) — draw on with zoom
+    if (originCentroid && currentTarget && currentTarget.flagFills) {
+      for (const ff of currentTarget.flagFills) {
+        const f = ff.feature; if (!f) continue;
+        const tgt = d3.geoCentroid(f);
+        const interp = d3.geoInterpolate(originCentroid, tgt);
+        const steps = 64;
+        const grow = Math.min(1, progress * 1.4);
+        const coords = [];
+        for (let i = 0; i <= steps * grow; i++) coords.push(interp(i / steps));
+        if (coords.length < 2) continue;
+        gctx.beginPath(); path({ type:'LineString', coordinates: coords });
+        gctx.strokeStyle = `rgba(21,20,15,${0.6 * (1 - progress * 0.5)})`;
+        gctx.lineWidth = 1.2 * DPR;
+        gctx.setLineDash([3*DPR, 2*DPR]);
+        gctx.stroke();
+        gctx.setLineDash([]);
+      }
+    }
+
+    // Origin pulse marker (early phase only)
+    if (originCentroid && progress < 0.7) {
+      const xy = projection(originCentroid);
+      if (xy && isFinite(xy[0])) {
+        const a = 1 - (progress / 0.7);
+        gctx.beginPath();
+        gctx.arc(xy[0], xy[1], 2.4 * DPR, 0, Math.PI * 2);
+        gctx.fillStyle = `rgba(21,20,15,${a})`; gctx.fill();
+      }
+    }
+
+    // Rim
+    gctx.beginPath(); path(sphere);
+    gctx.strokeStyle = RIM; gctx.lineWidth = 1.25 * DPR; gctx.stroke();
+  }
+
+  function drawWhirl(t, alpha) {
+    wctx.clearRect(0, 0, wc.width, wc.height);
+    if (alpha <= 0.01) return;
+    wctx.globalAlpha = alpha;
+
+    wctx.beginPath();
+    wctx.arc(cx, cy, 92*DPR, 0, Math.PI*2);
+    wctx.strokeStyle = 'rgba(21,20,15,0.05)';
+    wctx.lineWidth = 1*DPR; wctx.stroke();
+
+    for (const c of comets) {
+      const head = c.phase + t * c.speed;
+      const segments = 36;
+      const segLen = c.len / segments;
+      for (let i = 0; i < segments; i++) {
+        const a0 = head - i * segLen * c.dir;
+        const a1 = head - (i+1) * segLen * c.dir;
+        const tIdx = i / segments;
+        const a = Math.pow(1 - tIdx, 1.8);
+        if (a < 0.01) continue;
+        wctx.beginPath();
+        wctx.arc(cx, cy, c.r*DPR, Math.min(a0,a1), Math.max(a0,a1));
+        wctx.strokeStyle = `rgba(21,20,15,${a*0.85})`;
+        wctx.lineWidth = c.width*DPR;
+        wctx.lineCap = 'round'; wctx.stroke();
+      }
+    }
+    for (const d of dots) {
+      const a = d.phase + t * d.speed;
+      for (let i = 0; i < 6; i++) {
+        const aa = a - i*0.05*Math.sign(d.speed);
+        const xx = cx + Math.cos(aa)*d.r*DPR;
+        const yy = cy + Math.sin(aa)*d.r*DPR;
+        wctx.beginPath();
+        wctx.arc(xx, yy, d.size*DPR*(1-i/6), 0, Math.PI*2);
+        wctx.fillStyle = `rgba(21,20,15,${0.9*(1-i/6)})`;
+        wctx.fill();
+      }
+      const x = cx + Math.cos(a)*d.r*DPR, y = cy + Math.sin(a)*d.r*DPR;
+      wctx.beginPath();
+      wctx.arc(x, y, d.size*DPR, 0, Math.PI*2);
+      wctx.fillStyle = WHIRL; wctx.fill();
+    }
+    wctx.globalAlpha = 1;
+  }
+
+  function frame(now) {
+    if (!running || !currentTarget) return;
+    const elapsed = now - animStart;
+    let progress, radius, rotate, whirlAlpha;
+
+    if (elapsed < ZOOM_MS) {
+      const p = elapsed / ZOOM_MS;
+      progress = easeInOutCubic(p);
+      radius = lerp(currentTarget.startRadius, currentTarget.endRadius, progress);
+      rotate = [
+        lerp(currentTarget.startRotate[0], currentTarget.endRotate[0], progress),
+        lerp(currentTarget.startRotate[1], currentTarget.endRotate[1], progress),
+        0
+      ];
+      whirlAlpha = Math.max(0, 1 - p * 1.3);
+    } else {
+      progress = 1;
+      // gentle Ken-Burns drift after landing (~8% extra zoom + tiny rotation)
+      const post = Math.min(1, (elapsed - ZOOM_MS) / (TOTAL_MS - ZOOM_MS));
+      radius = currentTarget.endRadius * (1 + post * 0.08);
+      const drift = Math.sin(post * Math.PI) * 1.5;
+      rotate = [currentTarget.endRotate[0] + drift, currentTarget.endRotate[1], 0];
+      whirlAlpha = 0;
+    }
+
+    projection.scale(radius * DPR).rotate(rotate);
+    drawGlobe(progress);
+    drawWhirl((elapsed / 1000) * Math.PI, whirlAlpha);
+    rafId = requestAnimationFrame(frame);
+  }
+
+  window.showCountryLoader = function(selection, onComplete) {
+    if (!selection || !selection.length) { if (onComplete) onComplete(); return; }
+    const key = selection.length === 2 ? 'both' : selection[0];
+    const preset = PRESETS[key];
+    if (!preset) { if (onComplete) onComplete(); return; }
+
+    // Resolve target features + their flag definitions
+    const flagFills = [];
+    if (countries) {
+      for (let i = 0; i < preset.ids.length; i++) {
+        const feat = countries.features.find(f => String(f.id) === preset.ids[i]);
+        flagFills.push({ feature: feat, flag: FLAGS[preset.flagKeys[i]] });
+      }
+    }
+
+    currentTarget = {
+      startRotate: START_ROTATE.slice(),
+      endRotate:   [-preset.center[0], -preset.center[1]],
+      startRadius: START_RADIUS,
+      endRadius:   preset.radius,
+      flagFills
+    };
+
+    const overlay     = document.getElementById('loaderOverlay');
+    const cap         = document.getElementById('loaderCaption');
+    const nameEl      = document.getElementById('loaderCountryName');
+    const factsEl     = document.getElementById('loaderFacts');
+    const progressBar = document.getElementById('loaderProgressBar');
+    const skipBtn     = document.getElementById('loaderSkip');
+
+    if (nameEl) nameEl.textContent = preset.bigLabel;
+    if (cap) cap.textContent = `LOCATING ${preset.bigLabel.split(' · ').pop()}`;
+
+    // Render fact cards (hidden, will stagger in)
+    const factSet = FACTS[key] || [];
+    factsEl.innerHTML = factSet.map(f => `
+      <div class="loader-fact">
+        <div class="fact-icon">${f.icon}</div>
+        <div class="fact-label">${f.label}</div>
+        <div class="fact-body">${f.body}</div>
+      </div>`).join('');
+    if (progressBar) progressBar.style.width = '0%';
+
+    overlay.classList.add('visible');
+    overlay.setAttribute('aria-hidden', 'false');
+
+    animStart = performance.now();
+    running = true;
+    rafId = requestAnimationFrame(frame);
+
+    const timers = [];
+    // Caption swap after zoom
+    timers.push(setTimeout(() => { if (cap) cap.textContent = preset.caption; }, ZOOM_MS));
+    // Stagger fact cards
+    const factCards = factsEl.querySelectorAll('.loader-fact');
+    factCards.forEach((card, i) => {
+      timers.push(setTimeout(() => card.classList.add('visible'), ZOOM_MS + 250 + i * 500));
+    });
+    // Progress bar ticks every 80ms
+    const progressStart = performance.now();
+    const progressTimer = setInterval(() => {
+      const p = Math.min(1, (performance.now() - progressStart) / TOTAL_MS);
+      if (progressBar) progressBar.style.width = (p * 100) + '%';
+      if (p >= 1) clearInterval(progressTimer);
+    }, 80);
+
+    let dismissed = false;
+    function dismiss() {
+      if (dismissed) return;
+      dismissed = true;
+      clearInterval(progressTimer);
+      timers.forEach(t => clearTimeout(t));
+      overlay.classList.remove('visible');
+      overlay.setAttribute('aria-hidden', 'true');
+      setTimeout(() => {
+        running = false;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+        if (skipBtn) skipBtn.onclick = null;
+        if (typeof onComplete === 'function') onComplete();
+      }, FADE_MS);
+    }
+
+    timers.push(setTimeout(dismiss, TOTAL_MS));
+    if (skipBtn) skipBtn.onclick = dismiss;
+  };
+})();
 </script>
 </body>
 </html>
