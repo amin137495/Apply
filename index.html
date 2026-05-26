@@ -462,6 +462,42 @@
   @media print {
     .loader-overlay { display: none !important; }
   }
+
+  /* ── Language Picker Overlay ── */
+  .lang-overlay {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #1a3c6e 0%, #2E74B5 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 99999; flex-direction: column; gap: 28px;
+    padding: 40px 20px;
+  }
+  .lang-overlay-flag { font-size: 3rem; letter-spacing: .1em; }
+  .lang-overlay h2 { color: #fff; font-size: 1.6rem; font-weight: 700; text-align: center; line-height: 1.3; }
+  .lang-overlay .lang-subtitle { color: rgba(255,255,255,.7); font-size: .92rem; text-align: center; }
+  .lang-btn-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .lang-btn {
+    padding: 20px 36px; border-radius: 14px;
+    border: 2px solid rgba(255,255,255,.3);
+    background: rgba(255,255,255,.12); color: #fff;
+    font-size: 1.05rem; font-weight: 700; cursor: pointer;
+    transition: all .2s; display: flex; align-items: center;
+    flex-direction: column; gap: 8px; min-width: 140px;
+    font-family: inherit;
+  }
+  .lang-btn:hover { background: rgba(255,255,255,.28); border-color: rgba(255,255,255,.7); transform: translateY(-2px); }
+  .lang-btn .lang-flag { font-size: 2.2rem; }
+  .lang-farsi-link { color: rgba(255,255,255,.6); font-size: .85rem; text-align: center; }
+  .lang-farsi-link a { color: rgba(255,255,255,.8); text-decoration: underline; cursor: pointer; }
+  /* Language switch button in header */
+  .header { position: relative; }
+  #langSwitchBtn {
+    position: absolute; top: 12px; right: 16px;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
+    color: #fff; border-radius: 6px; padding: 5px 12px;
+    font-size: .78rem; cursor: pointer; font-family: inherit;
+    transition: background .2s;
+  }
+  #langSwitchBtn:hover { background: rgba(255,255,255,.28); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
@@ -485,6 +521,25 @@
   </div>
 </div>
 
+<!-- ═══ Language Picker Overlay ═══ -->
+<div class="lang-overlay" id="langOverlay">
+  <div class="lang-overlay-flag">🇮🇹 🇩🇪</div>
+  <h2>Choose Your Language<br><span style="font-size:1rem;font-weight:400;opacity:.7">Wählen Sie Ihre Sprache</span></h2>
+  <div class="lang-btn-group">
+    <button class="lang-btn" onclick="setLang('de')">
+      <span class="lang-flag">🇩🇪</span>
+      <span>Deutsch</span>
+    </button>
+    <button class="lang-btn" onclick="setLang('en')">
+      <span class="lang-flag">🇬🇧</span>
+      <span>English</span>
+    </button>
+  </div>
+  <div class="lang-farsi-link">
+    🇮🇷 <a href="index-fa.html">نسخه فارسی</a>
+  </div>
+</div>
+
 <div class="shell">
 
   <!-- HEADER -->
@@ -495,6 +550,7 @@
     <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
     <div class="progress-label" id="progressLabel">Step 0 of 9</div>
   </div>
+  <button id="langSwitchBtn" onclick="showLangPicker()">🌐 Language</button>
 
   <!-- CARD -->
   <div class="card">
@@ -868,6 +924,193 @@
 </div><!-- /shell -->
 
 <script>
+
+// ─── Language support ─────────────────────────────────────────────────────────
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const overlay = document.getElementById('langOverlay');
+  if (overlay) overlay.style.display = 'none';
+  const btn = document.getElementById('langSwitchBtn');
+  if (lang === 'de') {
+    window._deLang = true;
+    applyGerman();
+    if (btn) btn.textContent = '🌐 EN / فارسی';
+  } else {
+    window._deLang = false;
+    if (btn) btn.textContent = '🌐 DE / فارسی';
+  }
+}
+
+function showLangPicker() {
+  const overlay = document.getElementById('langOverlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function setText(sel, text) {
+  const el = document.querySelector(sel);
+  if (el) el.textContent = text;
+}
+function setHtml(sel, html) {
+  const el = document.querySelector(sel);
+  if (el) el.innerHTML = html;
+}
+
+function applyGerman() {
+  document.title = 'Studienberatung im Ausland — Iran → Italien & Deutschland';
+  setText('.header h1', 'Studienberatung im Ausland');
+  setText('.header > p', 'Schritt-für-Schritt-Fragebogen für iranische Studierende — Italien oder Deutschland');
+
+  // Step 1
+  setText('#step1 .step-title', 'Welches Land ist Ihr Ziel?');
+  setText('#step1 .step-sub', 'Sie können ein oder beide Länder wählen. Wir passen die Ergebnisse entsprechend an.');
+  setText('#step1 [data-val="italy"] .opt-title', 'Italien');
+  setText('#step1 [data-val="italy"] .opt-desc', 'Starke Medizin & Technik; englischsprachige Studiengänge verfügbar');
+  setText('#step1 [data-val="germany"] .opt-title', 'Deutschland');
+  setText('#step1 [data-val="germany"] .opt-desc', 'Kostenfreies Studium; Weltklasse-Ingenieurwesen & Forschung');
+  setText('#step1 [data-val="both"] .opt-title', 'Beide / Noch unsicher');
+  setText('#step1 [data-val="both"] .opt-desc', 'Zeig mir Optionen für beide — ich entscheide später');
+
+  // Step 2
+  setText('#step2 .step-title', 'Welchen Bildungsabschluss haben Sie?');
+  setText('#step2 .step-sub', 'Dies bestimmt, für welche Studiengänge Sie sich bewerben können.');
+  setText('#step2 [data-val="highschool"] .opt-title', 'Gymnasialabschluss (Diplom)');
+  setText('#step2 [data-val="highschool"] .opt-desc', 'Ich habe mein iranisches Konkur-Zeugnis — suche einen Bachelor-Studiengang');
+  setText('#step2 [data-val="bachelor"] .opt-title', 'Bachelorabschluss');
+  setText('#step2 [data-val="bachelor"] .opt-desc', 'Ich habe einen Karshenasi (B.Sc./B.A.) — suche einen Master- oder PhD-Studiengang');
+  setText('#step2 [data-val="master"] .opt-title', 'Masterabschluss');
+  setText('#step2 [data-val="master"] .opt-desc', 'Ich habe einen Arshad und möchte einen PhD oder Postdoc absolvieren');
+  setText('#step2 [data-val="phd"] .opt-title', 'PhD / Bereits eingeschrieben');
+  setText('#step2 [data-val="phd"] .opt-desc', 'Auf der Suche nach Postdoc, Forschungsstelle oder Hochschulwechsel');
+
+  // Step 3
+  setText('#step3 .step-title', 'Welches Fachgebiet möchten Sie studieren?');
+  setText('#step3 .step-sub', 'Wählen Sie das, was Ihrem Interesse am besten entspricht.');
+  setText('#step3 .multi-hint', '💡 Sie können mehrere Felder auswählen');
+  setText('#step3 [data-val="medicine"] .opt-title', 'Medizin / Zahnmedizin');
+  setText('#step3 [data-val="medicine"] .opt-desc', 'Humanmedizin, Zahnmedizin, Pharmazie, Medizinische Wissenschaften');
+  setText('#step3 [data-val="engineering"] .opt-title', 'Ingenieurwesen & Technologie');
+  setText('#step3 [data-val="engineering"] .opt-desc', 'Maschinenbau, Bauingenieurwesen, Informatik, Elektrotechnik, Chemie, Luft- und Raumfahrt…');
+  setText('#step3 [data-val="science"] .opt-title', 'Naturwissenschaften');
+  setText('#step3 [data-val="science"] .opt-desc', 'Biologie, Chemie, Physik, Mathematik, Umweltwissenschaften');
+  setText('#step3 [data-val="business"] .opt-title', 'Wirtschaft & Management');
+  setText('#step3 [data-val="business"] .opt-desc', 'Management, Finanzen, Volkswirtschaft, MBA');
+  setText('#step3 [data-val="arts"] .opt-title', 'Kunst, Design & Architektur');
+  setText('#step3 [data-val="arts"] .opt-desc', 'Industriedesign, Architektur, Bildende Kunst, Modedesign');
+  setText('#step3 [data-val="humanities"] .opt-title', 'Geistes- & Sozialwissenschaften');
+  setText('#step3 [data-val="humanities"] .opt-desc', 'Jura, Psychologie, Soziologie, Geschichte, Sprachwissenschaft');
+
+  // Step 4
+  setText('#step4 .step-title', 'Welches Englischniveau haben Sie?');
+  setText('#step4 .step-sub', 'Dies beeinflusst, für welche Studiengänge Sie sich direkt bewerben können.');
+  setText('#step4 [data-val="none"] .opt-title', 'Noch kein Test / Nicht abgelegt');
+  setText('#step4 [data-val="none"] .opt-desc', 'Ich habe noch kein IELTS oder TOEFL abgelegt');
+  setText('#step4 [data-val="low"] .opt-title', 'IELTS unter 5,5 / TOEFL unter 70');
+  setText('#step4 [data-val="low"] .opt-desc', 'Grundniveau — muss vor der Bewerbung verbessert werden');
+  setText('#step4 [data-val="mid"] .opt-title', 'IELTS 5,5–6,0 / TOEFL 72–79');
+  setText('#step4 [data-val="mid"] .opt-desc', 'Ausreichend für einige italienische Bachelorstudiengänge');
+  setText('#step4 [data-val="good"] .opt-title', 'IELTS 6,0–6,5 / TOEFL 80–87');
+  setText('#step4 [data-val="good"] .opt-desc', 'Erfüllt die meisten Master-Anforderungen in Italien und Deutschland');
+  setText('#step4 [data-val="strong"] .opt-title', 'IELTS 6,5+ / TOEFL 88+');
+  setText('#step4 [data-val="strong"] .opt-desc', 'Stark — erfüllt alle Programme in beiden Ländern');
+
+  // Step 5
+  setText('#step5 .step-title', 'Sprechen Sie Deutsch oder Italienisch?');
+  setText('#step5 .step-sub', 'Dies erweitert Ihre Programmoptionen erheblich — besonders für Deutschland.');
+  setText('#step5 label[for="q_german"], #step5 .field:first-of-type label', 'Deutschkenntnisse');
+  setText('#step5 label[for="q_italian"], #step5 .field:last-of-type label', 'Italienischkenntnisse');
+  // dropdown options for German level
+  const gSel = document.getElementById('q_german');
+  if (gSel) {
+    const go = ['Keine / A1','A2 — sehr grundlegend','B1 — mittelstufe','B2 — obere Mittelstufe (Minimum für deutschsprachiges Studium)','C1 — fortgeschritten (für Medizin in Deutschland erforderlich)','C2 — muttersprachennah'];
+    [...gSel.options].forEach((o,i) => { if (go[i]) o.text = go[i]; });
+  }
+  const iSel = document.getElementById('q_italian');
+  if (iSel) {
+    const io = ['Keine / A1','A2 — sehr grundlegend','B1 — mittelstufe','B2 — obere Mittelstufe (Minimum für italienischsprachiges Studium)','C1 — fortgeschritten'];
+    [...iSel.options].forEach((o,i) => { if (io[i]) o.text = io[i]; });
+  }
+
+  // Step 6
+  setText('#step6 .step-title', 'Wie hoch ist Ihr akademischer Notendurchschnitt?');
+  setText('#step6 .step-sub', 'Verwenden Sie die iranische Skala (von 20). Beeinflusst Stipendienberechtigung und Programmzugang.');
+  setText('#step6 .field:first-of-type label', 'Ihr GPA / Notendurchschnitt (von 20)');
+  setText('#step6 .hint', 'Schieberegler ziehen. Falls Sie zwei GPAs haben, verwenden Sie den Hochschul-GPA.');
+  setText('#step6 .field:last-of-type label', 'Für welchen Abschluss gilt dieser GPA?');
+  const gpaSel = document.getElementById('q_gpa_type');
+  if (gpaSel) {
+    const go = ['Gymnasialabschluss (Diplom)','Bachelorabschluss (Karshenasi)','Masterabschluss (Arshad)'];
+    [...gpaSel.options].forEach((o,i) => { if (go[i]) o.text = go[i]; });
+  }
+
+  // Step 7
+  setText('#step7 .step-title', 'Benötigen Sie finanzielle Unterstützung?');
+  setText('#step7 .step-sub', 'Hilft uns, die relevantesten Stipendien und kostengünstigen Optionen für Sie zu finden.');
+  setText('#step7 [data-val="full"] .opt-title', 'Ja — ich brauche ein Vollstipendium');
+  setText('#step7 [data-val="full"] .opt-desc', 'Ich kann mein Studium nicht ohne externe Unterstützung finanzieren');
+  setText('#step7 [data-val="partial"] .opt-title', 'Teilfinanzierung wäre hilfreich');
+  setText('#step7 [data-val="partial"] .opt-desc', 'Ich kann einen Teil der Kosten decken, aber ein Stipendium wäre sehr hilfreich');
+  setText('#step7 [data-val="self"] .opt-title', 'Nein — ich bin selbstfinanziert');
+  setText('#step7 [data-val="self"] .opt-desc', 'Ich oder meine Familie können alle Studien- und Lebenshaltungskosten decken');
+
+  // Step 8
+  setText('#step8 .step-title', 'Wann planen Sie zu beginnen?');
+  setText('#step8 .step-sub', 'Dies beeinflusst, welchen Aufnahmetermin Sie anstreben und wie dringend Sie starten müssen.');
+  setText('#step8 [data-val="asap"] .opt-title', 'So bald wie möglich');
+  setText('#step8 [data-val="asap"] .opt-desc', 'Ich möchte innerhalb der nächsten 6–9 Monate beginnen');
+  setText('#step8 [data-val="next_year"] .opt-title', 'Nächstes Studienjahr');
+  setText('#step8 [data-val="next_year"] .opt-desc', 'Ich habe 10–16 Monate zur Vorbereitung');
+  setText('#step8 [data-val="two_years"] .opt-title', 'In 1,5–2 Jahren');
+  setText('#step8 [data-val="two_years"] .opt-desc', 'Ich habe genügend Zeit, mich gründlich vorzubereiten');
+  setText('#step8 [data-val="exploring"] .opt-title', 'Ich erkunde gerade nur');
+  setText('#step8 [data-val="exploring"] .opt-desc', 'Kein fester Zeitplan — ich bin noch in der Recherchephase');
+
+  // Step 9
+  setText('#step9 .step-title', 'Fast fertig! Noch ein paar letzte Details.');
+  setText('#step9 .step-sub', 'Optional — wird nur zur Personalisierung Ihres Berichts verwendet.');
+  setText('#step9 .field:nth-of-type(1) label', 'Ihr Name (optional)');
+  document.querySelector('#q_name') && (document.querySelector('#q_name').placeholder = 'z.B. Ali Ahmadi');
+  setText('#step9 .field:nth-of-type(2) label', 'Fachrichtung / Spezialisierung (optional)');
+  document.querySelector('#q_subfield') && (document.querySelector('#q_subfield').placeholder = 'z.B. Softwaretechnik, Kardiologie, Industriedesign…');
+  setText('#step9 .field:nth-of-type(3) label', 'Gibt es etwas, das wir wissen sollten?');
+  const exSel = document.getElementById('q_extra');
+  if (exSel) {
+    const eo = ['Nichts Besonderes','Ich möchte ein forschungsorientiertes Programm','Ich bevorzuge praxisorientiertes / industrienahe Ausbildung','Ich hoffe, langfristig in Europa zu bleiben und zu arbeiten','Ich plane, nach dem Abschluss in den Iran zurückzukehren'];
+    [...exSel.options].forEach((o,i) => { if (eo[i]) o.text = eo[i]; });
+  }
+
+  // Navigation buttons
+  document.querySelectorAll('.btn-primary').forEach(b => {
+    if (b.textContent.trim() === 'Next →') b.textContent = 'Weiter →';
+  });
+  document.querySelectorAll('.btn-secondary').forEach(b => {
+    if (b.textContent.trim() === '← Back') b.textContent = '← Zurück';
+    if (b.textContent.includes('Print')) b.textContent = '🖨️ Drucken / Als PDF speichern';
+  });
+  document.querySelectorAll('.btn-green').forEach(b => {
+    if (b.textContent.includes('Generate')) b.textContent = '🎯 Bericht generieren';
+  });
+  document.querySelectorAll('.btn-primary').forEach(b => {
+    if (b.textContent.includes('Start Over')) b.textContent = '↩ Neu starten';
+  });
+
+  // Result section headers
+  const heads = document.querySelectorAll('.result-section-head span:nth-child(2)');
+  const deHeads = ['Zulassungsübersicht','Empfohlene Universitäten & Studiengänge','Erforderliche Tests & Prüfungen','Stipendien & Finanzierung','Botschaftsstatus & Visum','Dokumenten-Checkliste','Ihr Schritt-für-Schritt-Aktionsplan'];
+  heads.forEach((h, i) => { if (deHeads[i]) h.textContent = deHeads[i]; });
+
+  // Result static header (before JS populates)
+  setText('#res_name', 'Ihr persönlicher Studienberatungsbericht');
+  setText('#res_tagline', 'Basierend auf Ihren Antworten — Iran → Italien & Deutschland');
+
+  // Print/restart
+  const printBtn = document.querySelector('.print-btn .btn-secondary');
+  if (printBtn) printBtn.textContent = '🖨️ Drucken / Als PDF speichern';
+  const restartBtn = document.querySelector('.print-btn .btn-primary');
+  if (restartBtn) restartBtn.textContent = '↩ Neu starten';
+}
+
 // ─── State ────────────────────────────────────────────────────────────────────
 const TOTAL = 9;
 let currentStep = 1;
@@ -880,7 +1123,7 @@ function showStep(n) {
   if (el) el.classList.add('active');
   const pct = Math.round(((n-1)/TOTAL)*100);
   document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = `Step ${n} of ${TOTAL}`;
+  document.getElementById('progressLabel').textContent = window._deLang ? `Schritt ${n} von ${TOTAL}` : `Step ${n} of ${TOTAL}`;
 }
 
 function getSelected(groupId) {
