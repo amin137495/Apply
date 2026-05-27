@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Study Abroad Advisor — Iran → Italy & Germany</title>
+<title>مشاور تحصیل در خارج — Iran → Italy & Germany</title>
 <style>
   :root {
     --blue:    #1F497D;
@@ -462,45 +462,35 @@
   @media print {
     .loader-overlay { display: none !important; }
   }
-
-  /* ── Language Picker Overlay ── */
-  .lang-overlay {
-    position: fixed; inset: 0;
-    background: linear-gradient(135deg, #1a3c6e 0%, #2E74B5 100%);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 99999; flex-direction: column; gap: 28px;
-    padding: 40px 20px;
-  }
-  .lang-overlay-flag { font-size: 3rem; letter-spacing: .1em; }
-  .lang-overlay h2 { color: #fff; font-size: 1.6rem; font-weight: 700; text-align: center; line-height: 1.3; }
-  .lang-overlay .lang-subtitle { color: rgba(255,255,255,.7); font-size: .92rem; text-align: center; }
-  .lang-btn-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
-  .lang-btn {
-    padding: 20px 36px; border-radius: 14px;
-    border: 2px solid rgba(255,255,255,.3);
-    background: rgba(255,255,255,.12); color: #fff;
-    font-size: 1.05rem; font-weight: 700; cursor: pointer;
-    transition: all .2s; display: flex; align-items: center;
-    flex-direction: column; gap: 8px; min-width: 140px;
-    font-family: inherit;
-  }
-  .lang-btn:hover { background: rgba(255,255,255,.28); border-color: rgba(255,255,255,.7); transform: translateY(-2px); }
-  .lang-btn .lang-flag { font-size: 2.2rem; }
-  .lang-farsi-link { color: rgba(255,255,255,.6); font-size: .85rem; text-align: center; }
-  .lang-farsi-link a { color: rgba(255,255,255,.8); text-decoration: underline; cursor: pointer; }
-  /* Language switch button in header */
-  .header { position: relative; }
-  #langSwitchBtn {
-    position: absolute; top: 12px; right: 16px;
-    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
-    color: #fff; border-radius: 6px; padding: 5px 12px;
-    font-size: .78rem; cursor: pointer; font-family: inherit;
-    transition: background .2s;
-  }
-  #langSwitchBtn:hover { background: rgba(255,255,255,.28); }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body { font-family: "Vazirmatn", "Segoe UI", Arial, sans-serif !important; direction: rtl; text-align: right; }
+  .timeline { padding-left: 0; padding-right: 28px; }
+  .timeline::before { left: auto; right: 9px; }
+  .tl-dot { left: auto; right: -28px; }
+  .opt.selected::after { right: auto; left: 10px; }
+  .country-block { border-left: none !important; border-right: 4px solid var(--blue-md); border-radius: 6px 0 0 6px; }
+  .country-block.italy  { border-right-color: var(--red) !important; }
+  .country-block.germany{ border-right-color: var(--green) !important; }
+  .alert-box { border-left: none !important; border-right: 4px solid; }
+  .alert-amber { border-right-color: var(--amber); }
+  .alert-blue  { border-right-color: var(--blue-md); }
+  .alert-green { border-right-color: var(--green); }
+  .result-section-head .arrow { margin-left: 0; margin-right: auto; }
+  ul.result-list li { padding-left: 0; padding-right: 20px; }
+  ul.result-list li::before { left: auto; right: 0; }
+  .nav { flex-direction: row-reverse; }
+  .field input, .field select { text-align: right; }
+  .loader-country-name, .loader-caption { direction: ltr; text-align: center; }
+  .loader-fact .fact-label { direction: ltr; }
+  .print-btn { direction: ltr; }
+  .slider-wrap { direction: ltr; }
+</style>
 </head>
 <body>
 
@@ -514,29 +504,10 @@
       <canvas id="loaderWhirl" width="400" height="400"></canvas>
       <canvas id="loaderGlobe" width="400" height="400"></canvas>
     </div>
-    <div class="loader-caption" id="loaderCaption">LOCATING</div>
+    <div class="loader-caption" id="loaderCaption">در حال مکان‌یابی</div>
     <div class="loader-facts" id="loaderFacts"></div>
     <div class="loader-progress"><div class="loader-progress-bar" id="loaderProgressBar"></div></div>
-    <button class="loader-skip" id="loaderSkip" type="button">Skip →</button>
-  </div>
-</div>
-
-<!-- ═══ Language Picker Overlay ═══ -->
-<div class="lang-overlay" id="langOverlay">
-  <div class="lang-overlay-flag">🇮🇹 🇩🇪</div>
-  <h2>Choose Your Language<br><span style="font-size:1rem;font-weight:400;opacity:.7">Wählen Sie Ihre Sprache</span></h2>
-  <div class="lang-btn-group">
-    <button class="lang-btn" onclick="setLang('de')">
-      <span class="lang-flag">🇩🇪</span>
-      <span>Deutsch</span>
-    </button>
-    <button class="lang-btn" onclick="setLang('en')">
-      <span class="lang-flag">🇬🇧</span>
-      <span>English</span>
-    </button>
-  </div>
-  <div class="lang-farsi-link">
-    🇮🇷 <a href="index-fa.html">نسخه فارسی</a>
+    <button class="loader-skip" id="loaderSkip" type="button">رد کردن ←</button>
   </div>
 </div>
 
@@ -545,12 +516,11 @@
   <!-- HEADER -->
   <div class="header">
     <div class="flags">🇮🇷 → 🇮🇹 🇩🇪</div>
-    <h1>Study Abroad Advisor</h1>
-    <p>Step-by-step questionnaire for Iranian students planning to study in Italy or Germany</p>
+    <h1>مشاور تحصیل در خارج</h1>
+    <p>پرسشنامه گام‌به‌گام برای دانشجویان ایرانی برای تحصیل در ایتالیا یا آلمان</p>
     <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
-    <div class="progress-label" id="progressLabel">Step 0 of 9</div>
+    <div class="progress-label" id="progressLabel">مرحله ۰ از ۹</div>
   </div>
-  <button id="langSwitchBtn" onclick="showLangPicker()">🌐 Language</button>
 
   <!-- CARD -->
   <div class="card">
@@ -561,280 +531,280 @@
 
     <!-- STEP 1: Country -->
     <div class="step active" id="step1">
-      <div class="step-title">Which country are you targeting?</div>
-      <div class="step-sub">You can choose one or both. We will tailor your results accordingly.</div>
+      <div class="step-title">کدام کشور را هدف قرار داده‌اید؟</div>
+      <div class="step-sub">می‌توانید یک یا هر دو را انتخاب کنید. نتایج بر اساس انتخاب شما تنظیم می‌شود.</div>
       <div class="options cols3" id="q_country">
         <div class="opt" data-val="italy" onclick="toggle(this,'q_country',true)">
           <span class="opt-icon">🇮🇹</span>
-          <div class="opt-title">Italy</div>
+          <div class="opt-title">ایتالیا</div>
           <div class="opt-desc">Strong medicine & engineering; English programmes available</div>
         </div>
         <div class="opt" data-val="germany" onclick="toggle(this,'q_country',true)">
           <span class="opt-icon">🇩🇪</span>
-          <div class="opt-title">Germany</div>
+          <div class="opt-title">آلمان</div>
           <div class="opt-desc">Free tuition; world-class engineering & research</div>
         </div>
         <div class="opt" data-val="both" onclick="toggle(this,'q_country',false)">
           <span class="opt-icon">🌍</span>
-          <div class="opt-title">Both / Not sure yet</div>
-          <div class="opt-desc">Show me options for both and I'll decide</div>
+          <div class="opt-title">هر دو / هنوز مطمئن نیستم</div>
+          <div class="opt-desc">گزینه‌های هر دو کشور را نشانم بده تا تصمیم بگیرم</div>
         </div>
       </div>
       <div class="nav">
         <span></span>
-        <button class="btn btn-primary" onclick="next(1)">Next →</button>
+        <button class="btn btn-primary" onclick="next(1)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 2: Education level -->
     <div class="step" id="step2">
-      <div class="step-title">What is your current education level?</div>
-      <div class="step-sub">This determines which programmes you are eligible to apply for.</div>
+      <div class="step-title">سطح تحصیلی فعلی شما چیست؟</div>
+      <div class="step-sub">این تعیین می‌کند واجد شرایط درخواست برای کدام برنامه‌ها هستید.</div>
       <div class="options cols2" id="q_level">
         <div class="opt" data-val="highschool" onclick="toggle(this,'q_level',false)">
           <span class="opt-icon">🏫</span>
-          <div class="opt-title">High School Diploma (Diplom)</div>
-          <div class="opt-desc">I have my Iranian Konkur diploma — looking for a Bachelor's degree abroad</div>
+          <div class="opt-title">دیپلم متوسطه (دیپلم)</div>
+          <div class="opt-desc">دیپلم کنکور ایران را دارم — به دنبال مدرک کارشناسی در خارج هستم</div>
         </div>
         <div class="opt" data-val="bachelor" onclick="toggle(this,'q_level',false)">
           <span class="opt-icon">🎓</span>
-          <div class="opt-title">Bachelor's Degree</div>
-          <div class="opt-desc">I hold a Karshenasi (B.Sc./B.A.) — looking for a Master's or PhD</div>
+          <div class="opt-title">مدرک کارشناسی</div>
+          <div class="opt-desc">کارشناسی (B.Sc./B.A.) دارم — به دنبال ارشد یا دکتری هستم</div>
         </div>
         <div class="opt" data-val="master" onclick="toggle(this,'q_level',false)">
           <span class="opt-icon">🔬</span>
-          <div class="opt-title">Master's Degree</div>
-          <div class="opt-desc">I hold an Arshad and want to pursue a PhD or Postdoc</div>
+          <div class="opt-title">مدرک کارشناسی ارشد</div>
+          <div class="opt-desc">ارشد دارم و می‌خواهم دکتری یا پست‌دکترا ادامه دهم</div>
         </div>
         <div class="opt" data-val="phd" onclick="toggle(this,'q_level',false)">
           <span class="opt-icon">📚</span>
-          <div class="opt-title">PhD / Already enrolled</div>
-          <div class="opt-desc">Looking for postdoc, research position, or transfer</div>
+          <div class="opt-title">دکتری / در حال تحصیل</div>
+          <div class="opt-desc">به دنبال پست‌دکترا، موقعیت تحقیقاتی یا انتقال هستم</div>
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(2)">← Back</button>
-        <button class="btn btn-primary" onclick="next(2)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(2)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(2)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 3: Field -->
     <div class="step" id="step3">
-      <div class="step-title">What field do you want to study?</div>
-      <div class="step-sub">Choose the one that best matches your interest.</div>
-      <div class="multi-hint">💡 You may select multiple fields</div>
+      <div class="step-title">در چه رشته‌ای می‌خواهید تحصیل کنید؟</div>
+      <div class="step-sub">آنچه را که با علاقه شما بیشترین تطابق دارد انتخاب کنید.</div>
+      <div class="multi-hint">💡 می‌توانید چند رشته انتخاب کنید</div>
       <div class="options cols2" id="q_field">
         <div class="opt" data-val="medicine" onclick="toggle(this,'q_field',true)">
           <span class="opt-icon">⚕️</span>
-          <div class="opt-title">Medicine / Dentistry</div>
-          <div class="opt-desc">MD, Dentistry, Pharmacy, Medical Sciences</div>
+          <div class="opt-title">پزشکی / دندانپزشکی</div>
+          <div class="opt-desc">MD، دندانپزشکی، داروسازی، علوم پزشکی</div>
         </div>
         <div class="opt" data-val="engineering" onclick="toggle(this,'q_field',true)">
           <span class="opt-icon">⚙️</span>
           <div class="opt-title">Engineering & Technology</div>
-          <div class="opt-desc">Mechanical, Civil, CS, Electrical, Chemical, Aerospace…</div>
+          <div class="opt-desc">مکانیک، عمران، کامپیوتر، برق، شیمی، هوافضا…</div>
         </div>
         <div class="opt" data-val="science" onclick="toggle(this,'q_field',true)">
           <span class="opt-icon">🧪</span>
-          <div class="opt-title">Natural Sciences</div>
-          <div class="opt-desc">Biology, Chemistry, Physics, Maths, Environmental Science</div>
+          <div class="opt-title">علوم پایه</div>
+          <div class="opt-desc">زیست‌شناسی، شیمی، فیزیک، ریاضی، علوم محیطی</div>
         </div>
         <div class="opt" data-val="business" onclick="toggle(this,'q_field',true)">
           <span class="opt-icon">📊</span>
           <div class="opt-title">Business & Economics</div>
-          <div class="opt-desc">Management, Finance, Economics, MBA</div>
+          <div class="opt-desc">مدیریت، مالی، اقتصاد، MBA</div>
         </div>
         <div class="opt" data-val="arts" onclick="toggle(this,'q_field',true)">
           <span class="opt-icon">🎨</span>
           <div class="opt-title">Arts, Design & Architecture</div>
-          <div class="opt-desc">Industrial Design, Architecture, Fine Arts, Fashion</div>
+          <div class="opt-desc">طراحی صنعتی، معماری، هنرهای زیبا، مد</div>
         </div>
         <div class="opt" data-val="humanities" onclick="toggle(this,'q_field',true)">
           <span class="opt-icon">📖</span>
           <div class="opt-title">Humanities & Social Sciences</div>
-          <div class="opt-desc">Law, Psychology, Sociology, History, Linguistics</div>
+          <div class="opt-desc">حقوق، روان‌شناسی، جامعه‌شناسی، تاریخ، زبان‌شناسی</div>
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(3)">← Back</button>
-        <button class="btn btn-primary" onclick="next(3)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(3)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(3)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 4: English level -->
     <div class="step" id="step4">
-      <div class="step-title">What is your English language level?</div>
-      <div class="step-sub">This affects which programmes you can apply to directly.</div>
+      <div class="step-title">سطح زبان انگلیسی شما چیست؟</div>
+      <div class="step-sub">این بر روی برنامه‌هایی که می‌توانید مستقیماً درخواست دهید تأثیر می‌گذارد.</div>
       <div class="options" id="q_english">
         <div class="opt" data-val="none" onclick="toggle(this,'q_english',false)">
-          <div class="opt-title">No test yet / Not taken</div>
-          <div class="opt-desc">I haven't taken IELTS or TOEFL yet</div>
+          <div class="opt-title">هنوز آزمون نداده‌ام</div>
+          <div class="opt-desc">هنوز آیلتس یا تافل نداده‌ام</div>
         </div>
         <div class="opt" data-val="low" onclick="toggle(this,'q_english',false)">
-          <div class="opt-title">IELTS below 5.5 / TOEFL below 70</div>
-          <div class="opt-desc">Basic level — need to improve before applying</div>
+          <div class="opt-title">آیلتس زیر ۵.۵ / تافل زیر ۷۰</div>
+          <div class="opt-desc">سطح پایه — قبل از درخواست باید بهبود یابد</div>
         </div>
         <div class="opt" data-val="mid" onclick="toggle(this,'q_english',false)">
-          <div class="opt-title">IELTS 5.5–6.0 / TOEFL 72–79</div>
-          <div class="opt-desc">Sufficient for some Italian undergraduate programmes</div>
+          <div class="opt-title">آیلتس ۵.۵ تا ۶.۰ / تافل ۷۲ تا ۷۹</div>
+          <div class="opt-desc">کافی برای برخی برنامه‌های کارشناسی ایتالیا</div>
         </div>
         <div class="opt" data-val="good" onclick="toggle(this,'q_english',false)">
-          <div class="opt-title">IELTS 6.0–6.5 / TOEFL 80–87</div>
-          <div class="opt-desc">Meets most Master's requirements in Italy and Germany</div>
+          <div class="opt-title">آیلتس ۶.۰ تا ۶.۵ / تافل ۸۰ تا ۸۷</div>
+          <div class="opt-desc">پاسخگوی اکثر الزامات کارشناسی ارشد در ایتالیا و آلمان</div>
         </div>
         <div class="opt" data-val="strong" onclick="toggle(this,'q_english',false)">
-          <div class="opt-title">IELTS 6.5+ / TOEFL 88+</div>
-          <div class="opt-desc">Strong — meets all programmes in both countries</div>
+          <div class="opt-title">آیلتس ۶.۵ به بالا / تافل ۸۸ به بالا</div>
+          <div class="opt-desc">قوی — پاسخگوی تمام برنامه‌ها در هر دو کشور</div>
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(4)">← Back</button>
-        <button class="btn btn-primary" onclick="next(4)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(4)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(4)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 5: German/Italian -->
     <div class="step" id="step5">
-      <div class="step-title">Do you speak German or Italian?</div>
-      <div class="step-sub">This significantly expands your programme options — especially for Germany.</div>
+      <div class="step-title">آیا آلمانی یا ایتالیایی بلد هستید؟</div>
+      <div class="step-sub">این گزینه‌های برنامه شما را به طور قابل توجهی گسترش می‌دهد — به‌ویژه برای آلمان.</div>
       <div class="field">
-        <label>German language level</label>
+        <label>سطح زبان آلمانی</label>
         <select id="q_german">
-          <option value="none">None / A1</option>
-          <option value="a2">A2 — very basic</option>
-          <option value="b1">B1 — intermediate</option>
-          <option value="b2">B2 — upper-intermediate (minimum for German-language study)</option>
-          <option value="c1">C1 — advanced (required for Medicine in Germany)</option>
-          <option value="c2">C2 — near-native</option>
+          <option value="none">هیچ / A1</option>
+          <option value="a2">A2 — خیلی ابتدایی</option>
+          <option value="b1">B1 — متوسط</option>
+          <option value="b2">B2 — بالاتر از متوسط (حداقل برای تحصیل به زبان آلمانی)</option>
+          <option value="c1">C1 — پیشرفته (لازمه پزشکی در آلمان)</option>
+          <option value="c2">C2 — نزدیک به بومی</option>
         </select>
       </div>
       <div class="field">
-        <label>Italian language level</label>
+        <label>سطح زبان ایتالیایی</label>
         <select id="q_italian">
-          <option value="none">None / A1</option>
-          <option value="a2">A2 — very basic</option>
-          <option value="b1">B1 — intermediate</option>
-          <option value="b2">B2 — upper-intermediate (minimum for Italian-language study)</option>
-          <option value="c1">C1 — advanced</option>
+          <option value="none">هیچ / A1</option>
+          <option value="a2">A2 — خیلی ابتدایی</option>
+          <option value="b1">B1 — متوسط</option>
+          <option value="b2">B2 — بالاتر از متوسط (حداقل برای تحصیل به زبان ایتالیایی)</option>
+          <option value="c1">C1 — پیشرفته</option>
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(5)">← Back</button>
-        <button class="btn btn-primary" onclick="next(5)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(5)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(5)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 6: GPA -->
     <div class="step" id="step6">
-      <div class="step-title">What is your academic GPA?</div>
-      <div class="step-sub">Use the Iranian scale (out of 20). This affects scholarship eligibility and programme access.</div>
+      <div class="step-title">معدل تحصیلی شما چیست؟</div>
+      <div class="step-sub">از مقیاس ایرانی (از ۲۰) استفاده کنید. این بر واجد شرایط بودن بورسیه و دسترسی به برنامه تأثیر می‌گذارد.</div>
       <div class="field">
-        <label>Your GPA / Final grade average (out of 20)</label>
+        <label>معدل شما (از ۲۰)</label>
         <div class="slider-wrap">
           <input type="range" min="10" max="20" step="0.25" value="16"
             id="q_gpa_slider" oninput="document.getElementById('gpa_display').textContent=parseFloat(this.value).toFixed(2)">
           <div class="slider-val" id="gpa_display">16.00</div>
         </div>
-        <div class="hint">Drag the slider. If you have a diploma GPA and a university GPA, use your university GPA.</div>
+        <div class="hint">نوار لغزنده را بکشید. اگر هم معدل دیپلم و هم معدل دانشگاه دارید، از معدل دانشگاه استفاده کنید.</div>
       </div>
       <div class="field">
-        <label>Which qualification does this GPA refer to?</label>
+        <label>این معدل به کدام مدرک مربوط می‌شود؟</label>
         <select id="q_gpa_type">
-          <option value="diploma">High school diploma (Diplom)</option>
-          <option value="bachelor">Bachelor's degree (Karshenasi)</option>
-          <option value="master">Master's degree (Arshad)</option>
+          <option value="diploma">دیپلم متوسطه (دیپلم)</option>
+          <option value="bachelor">کارشناسی (کارشناسی)</option>
+          <option value="master">کارشناسی ارشد (ارشد)</option>
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(6)">← Back</button>
-        <button class="btn btn-primary" onclick="next(6)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(6)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(6)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 7: Scholarship need -->
     <div class="step" id="step7">
-      <div class="step-title">Do you need financial support?</div>
-      <div class="step-sub">This helps us highlight the most relevant scholarships and low-cost options for you.</div>
+      <div class="step-title">آیا به حمایت مالی نیاز دارید؟</div>
+      <div class="step-sub">این به ما کمک می‌کند مرتبط‌ترین بورسیه‌ها و گزینه‌های کم‌هزینه را برای شما برجسته کنیم.</div>
       <div class="options" id="q_scholarship">
         <div class="opt" data-val="full" onclick="toggle(this,'q_scholarship',false)">
           <span class="opt-icon">🏆</span>
-          <div class="opt-title">Yes — I need a full scholarship</div>
-          <div class="opt-desc">I cannot fund my studies without external support</div>
+          <div class="opt-title">بله — به بورسیه کامل نیاز دارم</div>
+          <div class="opt-desc">بدون حمایت خارجی نمی‌توانم هزینه تحصیلم را تأمین کنم</div>
         </div>
         <div class="opt" data-val="partial" onclick="toggle(this,'q_scholarship',false)">
           <span class="opt-icon">💼</span>
-          <div class="opt-title">Partial support would help</div>
-          <div class="opt-desc">I can cover some costs but a scholarship would make a big difference</div>
+          <div class="opt-title">حمایت جزئی کمک‌کننده خواهد بود</div>
+          <div class="opt-desc">می‌توانم برخی هزینه‌ها را پوشش دهم اما بورسیه تفاوت بزرگی ایجاد می‌کند</div>
         </div>
         <div class="opt" data-val="self" onclick="toggle(this,'q_scholarship',false)">
           <span class="opt-icon">✅</span>
-          <div class="opt-title">No — I am self-funded</div>
-          <div class="opt-desc">I or my family can cover all study and living expenses</div>
+          <div class="opt-title">نه — خودم هزینه‌ها را تأمین می‌کنم</div>
+          <div class="opt-desc">من یا خانواده‌ام می‌توانیم تمام هزینه‌های تحصیل و زندگی را پوشش دهیم</div>
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(7)">← Back</button>
-        <button class="btn btn-primary" onclick="next(7)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(7)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(7)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 8: Timeline -->
     <div class="step" id="step8">
-      <div class="step-title">When do you plan to start?</div>
-      <div class="step-sub">This affects which intake you should target and how urgently you need to begin your preparations.</div>
+      <div class="step-title">چه زمانی قصد شروع دارید؟</div>
+      <div class="step-sub">این بر کدام دوره پذیرش را هدف قرار دهید و چقدر فوری باید آماده‌سازی شروع کنید تأثیر می‌گذارد.</div>
       <div class="options cols2" id="q_timeline">
         <div class="opt" data-val="asap" onclick="toggle(this,'q_timeline',false)">
           <span class="opt-icon">⚡</span>
-          <div class="opt-title">As soon as possible</div>
-          <div class="opt-desc">I want to start within the next 6–9 months</div>
+          <div class="opt-title">هر چه زودتر</div>
+          <div class="opt-desc">می‌خواهم ظرف ۶ تا ۹ ماه آینده شروع کنم</div>
         </div>
         <div class="opt" data-val="next_year" onclick="toggle(this,'q_timeline',false)">
           <span class="opt-icon">📅</span>
-          <div class="opt-title">Next academic year</div>
-          <div class="opt-desc">I have 10–16 months to prepare</div>
+          <div class="opt-title">سال تحصیلی بعد</div>
+          <div class="opt-desc">۱۰ تا ۱۶ ماه برای آماده‌سازی دارم</div>
         </div>
         <div class="opt" data-val="two_years" onclick="toggle(this,'q_timeline',false)">
           <span class="opt-icon">🗓️</span>
-          <div class="opt-title">In 1.5–2 years</div>
-          <div class="opt-desc">I have plenty of time to prepare thoroughly</div>
+          <div class="opt-title">در ۱.۵ تا ۲ سال آینده</div>
+          <div class="opt-desc">وقت کافی برای آماده‌سازی کامل دارم</div>
         </div>
         <div class="opt" data-val="exploring" onclick="toggle(this,'q_timeline',false)">
           <span class="opt-icon">🔍</span>
-          <div class="opt-title">Just exploring for now</div>
-          <div class="opt-desc">No fixed timeline — I'm still in the research stage</div>
+          <div class="opt-title">فعلاً فقط در حال بررسی هستم</div>
+          <div class="opt-desc">برنامه زمانی مشخصی ندارم — هنوز در مرحله تحقیق هستم</div>
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(8)">← Back</button>
-        <button class="btn btn-primary" onclick="next(8)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(8)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(8)">بعدی ←</button>
       </div>
     </div>
 
     <!-- STEP 9: Name (optional) -->
     <div class="step" id="step9">
-      <div class="step-title">Almost done! A few last details.</div>
-      <div class="step-sub">Optional — used only to personalise your report.</div>
+      <div class="step-title">تقریباً تمام شد! چند جزئیات آخر.</div>
+      <div class="step-sub">اختیاری — فقط برای شخصی‌سازی گزارش شما استفاده می‌شود.</div>
       <div class="field">
-        <label>Your name (optional)</label>
-        <input type="text" id="q_name" placeholder="e.g. Ali Ahmadi">
+        <label>نام شما (اختیاری)</label>
+        <input type="text" id="q_name" placeholder="مثال: علی احمدی">
       </div>
       <div class="field">
-        <label>Sub-field or specialisation you're interested in (optional)</label>
-        <input type="text" id="q_subfield" placeholder="e.g. Software Engineering, Cardiology, Industrial Design…">
+        <label>زیررشته یا تخصص مورد علاقه (اختیاری)</label>
+        <input type="text" id="q_subfield" placeholder="مثال: مهندسی نرم‌افزار، قلب‌وعروق، طراحی صنعتی…">
       </div>
       <div class="field">
-        <label>Anything else we should know?</label>
+        <label>چیز دیگری هست که باید بدانیم؟</label>
         <select id="q_extra">
-          <option value="none">Nothing specific</option>
-          <option value="research">I want a research-focused programme</option>
-          <option value="industry">I prefer industry / practical training</option>
-          <option value="permanent">I'm hoping to stay and work in Europe long-term</option>
-          <option value="return">I plan to return to Iran after graduating</option>
+          <option value="none">چیز خاصی نیست</option>
+          <option value="research">می‌خواهم برنامه‌ای تحقیق‌محور داشته باشم</option>
+          <option value="industry">صنعت / آموزش عملی را ترجیح می‌دهم</option>
+          <option value="permanent">امیدوارم در اروپا بمانم و به صورت بلندمدت کار کنم</option>
+          <option value="return">قصد دارم پس از فارغ‌التحصیلی به ایران برگردم</option>
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(9)">← Back</button>
-        <button class="btn btn-green" onclick="generateResults()">🎯 Generate My Report</button>
+        <button class="btn btn-secondary" onclick="prev(9)">→ برگشت</button>
+        <button class="btn btn-green" onclick="generateResults()">🎯 گزارش من را ایجاد کن</button>
       </div>
     </div>
 
@@ -844,7 +814,7 @@
     <div id="results">
 
       <div class="result-header">
-        <h2 id="res_name">Your Personalised Study Abroad Report</h2>
+        <h2 id="res_name">گزارش شخصی‌سازی‌شده تحصیل در خارج شما</h2>
         <p id="res_tagline">Based on your answers — Iran → Italy & Germany</p>
         <div class="profile-chips" id="profile_chips"></div>
       </div>
@@ -852,7 +822,7 @@
       <!-- 1. Eligibility & Overview -->
       <div class="result-section">
         <div class="result-section-head open" onclick="toggleSection(this)">
-          <span>📋</span> <span>Eligibility Overview</span>
+          <span>📋</span> <span>مرور واجد شرایط بودن</span>
           <span class="arrow">▼</span>
         </div>
         <div class="result-section-body open" id="res_eligibility"></div>
@@ -897,7 +867,7 @@
       <!-- 6. Document Checklist -->
       <div class="result-section">
         <div class="result-section-head" onclick="toggleSection(this)">
-          <span>📁</span> <span>Document Checklist</span>
+          <span>📁</span> <span>فهرست اسناد</span>
           <span class="arrow">▼</span>
         </div>
         <div class="result-section-body" id="res_documents"></div>
@@ -906,16 +876,16 @@
       <!-- 7. Action Plan / Timeline -->
       <div class="result-section">
         <div class="result-section-head" onclick="toggleSection(this)">
-          <span>🗓️</span> <span>Your Step-by-Step Action Plan</span>
+          <span>🗓️</span> <span>برنامه عمل گام‌به‌گام شما</span>
           <span class="arrow">▼</span>
         </div>
         <div class="result-section-body" id="res_timeline"></div>
       </div>
 
       <div class="print-btn">
-        <button class="btn btn-secondary" onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button class="btn btn-secondary" onclick="window.print()">🖨️ چاپ / ذخیره به عنوان PDF</button>
         &nbsp;
-        <button class="btn btn-primary" onclick="restart()">↩ Start Over</button>
+        <button class="btn btn-primary" onclick="restart()">↩ شروع مجدد</button>
       </div>
 
     </div><!-- /results -->
@@ -924,193 +894,6 @@
 </div><!-- /shell -->
 
 <script>
-
-// ─── Language support ─────────────────────────────────────────────────────────
-let currentLang = 'en';
-
-function setLang(lang) {
-  currentLang = lang;
-  const overlay = document.getElementById('langOverlay');
-  if (overlay) overlay.style.display = 'none';
-  const btn = document.getElementById('langSwitchBtn');
-  if (lang === 'de') {
-    window._deLang = true;
-    applyGerman();
-    if (btn) btn.textContent = '🌐 EN / فارسی';
-  } else {
-    window._deLang = false;
-    if (btn) btn.textContent = '🌐 DE / فارسی';
-  }
-}
-
-function showLangPicker() {
-  const overlay = document.getElementById('langOverlay');
-  if (overlay) overlay.style.display = 'flex';
-}
-
-function setText(sel, text) {
-  const el = document.querySelector(sel);
-  if (el) el.textContent = text;
-}
-function setHtml(sel, html) {
-  const el = document.querySelector(sel);
-  if (el) el.innerHTML = html;
-}
-
-function applyGerman() {
-  document.title = 'Studienberatung im Ausland — Iran → Italien & Deutschland';
-  setText('.header h1', 'Studienberatung im Ausland');
-  setText('.header > p', 'Schritt-für-Schritt-Fragebogen für iranische Studierende — Italien oder Deutschland');
-
-  // Step 1
-  setText('#step1 .step-title', 'Welches Land ist Ihr Ziel?');
-  setText('#step1 .step-sub', 'Sie können ein oder beide Länder wählen. Wir passen die Ergebnisse entsprechend an.');
-  setText('#step1 [data-val="italy"] .opt-title', 'Italien');
-  setText('#step1 [data-val="italy"] .opt-desc', 'Starke Medizin & Technik; englischsprachige Studiengänge verfügbar');
-  setText('#step1 [data-val="germany"] .opt-title', 'Deutschland');
-  setText('#step1 [data-val="germany"] .opt-desc', 'Kostenfreies Studium; Weltklasse-Ingenieurwesen & Forschung');
-  setText('#step1 [data-val="both"] .opt-title', 'Beide / Noch unsicher');
-  setText('#step1 [data-val="both"] .opt-desc', 'Zeig mir Optionen für beide — ich entscheide später');
-
-  // Step 2
-  setText('#step2 .step-title', 'Welchen Bildungsabschluss haben Sie?');
-  setText('#step2 .step-sub', 'Dies bestimmt, für welche Studiengänge Sie sich bewerben können.');
-  setText('#step2 [data-val="highschool"] .opt-title', 'Gymnasialabschluss (Diplom)');
-  setText('#step2 [data-val="highschool"] .opt-desc', 'Ich habe mein iranisches Konkur-Zeugnis — suche einen Bachelor-Studiengang');
-  setText('#step2 [data-val="bachelor"] .opt-title', 'Bachelorabschluss');
-  setText('#step2 [data-val="bachelor"] .opt-desc', 'Ich habe einen Karshenasi (B.Sc./B.A.) — suche einen Master- oder PhD-Studiengang');
-  setText('#step2 [data-val="master"] .opt-title', 'Masterabschluss');
-  setText('#step2 [data-val="master"] .opt-desc', 'Ich habe einen Arshad und möchte einen PhD oder Postdoc absolvieren');
-  setText('#step2 [data-val="phd"] .opt-title', 'PhD / Bereits eingeschrieben');
-  setText('#step2 [data-val="phd"] .opt-desc', 'Auf der Suche nach Postdoc, Forschungsstelle oder Hochschulwechsel');
-
-  // Step 3
-  setText('#step3 .step-title', 'Welches Fachgebiet möchten Sie studieren?');
-  setText('#step3 .step-sub', 'Wählen Sie das, was Ihrem Interesse am besten entspricht.');
-  setText('#step3 .multi-hint', '💡 Sie können mehrere Felder auswählen');
-  setText('#step3 [data-val="medicine"] .opt-title', 'Medizin / Zahnmedizin');
-  setText('#step3 [data-val="medicine"] .opt-desc', 'Humanmedizin, Zahnmedizin, Pharmazie, Medizinische Wissenschaften');
-  setText('#step3 [data-val="engineering"] .opt-title', 'Ingenieurwesen & Technologie');
-  setText('#step3 [data-val="engineering"] .opt-desc', 'Maschinenbau, Bauingenieurwesen, Informatik, Elektrotechnik, Chemie, Luft- und Raumfahrt…');
-  setText('#step3 [data-val="science"] .opt-title', 'Naturwissenschaften');
-  setText('#step3 [data-val="science"] .opt-desc', 'Biologie, Chemie, Physik, Mathematik, Umweltwissenschaften');
-  setText('#step3 [data-val="business"] .opt-title', 'Wirtschaft & Management');
-  setText('#step3 [data-val="business"] .opt-desc', 'Management, Finanzen, Volkswirtschaft, MBA');
-  setText('#step3 [data-val="arts"] .opt-title', 'Kunst, Design & Architektur');
-  setText('#step3 [data-val="arts"] .opt-desc', 'Industriedesign, Architektur, Bildende Kunst, Modedesign');
-  setText('#step3 [data-val="humanities"] .opt-title', 'Geistes- & Sozialwissenschaften');
-  setText('#step3 [data-val="humanities"] .opt-desc', 'Jura, Psychologie, Soziologie, Geschichte, Sprachwissenschaft');
-
-  // Step 4
-  setText('#step4 .step-title', 'Welches Englischniveau haben Sie?');
-  setText('#step4 .step-sub', 'Dies beeinflusst, für welche Studiengänge Sie sich direkt bewerben können.');
-  setText('#step4 [data-val="none"] .opt-title', 'Noch kein Test / Nicht abgelegt');
-  setText('#step4 [data-val="none"] .opt-desc', 'Ich habe noch kein IELTS oder TOEFL abgelegt');
-  setText('#step4 [data-val="low"] .opt-title', 'IELTS unter 5,5 / TOEFL unter 70');
-  setText('#step4 [data-val="low"] .opt-desc', 'Grundniveau — muss vor der Bewerbung verbessert werden');
-  setText('#step4 [data-val="mid"] .opt-title', 'IELTS 5,5–6,0 / TOEFL 72–79');
-  setText('#step4 [data-val="mid"] .opt-desc', 'Ausreichend für einige italienische Bachelorstudiengänge');
-  setText('#step4 [data-val="good"] .opt-title', 'IELTS 6,0–6,5 / TOEFL 80–87');
-  setText('#step4 [data-val="good"] .opt-desc', 'Erfüllt die meisten Master-Anforderungen in Italien und Deutschland');
-  setText('#step4 [data-val="strong"] .opt-title', 'IELTS 6,5+ / TOEFL 88+');
-  setText('#step4 [data-val="strong"] .opt-desc', 'Stark — erfüllt alle Programme in beiden Ländern');
-
-  // Step 5
-  setText('#step5 .step-title', 'Sprechen Sie Deutsch oder Italienisch?');
-  setText('#step5 .step-sub', 'Dies erweitert Ihre Programmoptionen erheblich — besonders für Deutschland.');
-  setText('#step5 label[for="q_german"], #step5 .field:first-of-type label', 'Deutschkenntnisse');
-  setText('#step5 label[for="q_italian"], #step5 .field:last-of-type label', 'Italienischkenntnisse');
-  // dropdown options for German level
-  const gSel = document.getElementById('q_german');
-  if (gSel) {
-    const go = ['Keine / A1','A2 — sehr grundlegend','B1 — mittelstufe','B2 — obere Mittelstufe (Minimum für deutschsprachiges Studium)','C1 — fortgeschritten (für Medizin in Deutschland erforderlich)','C2 — muttersprachennah'];
-    [...gSel.options].forEach((o,i) => { if (go[i]) o.text = go[i]; });
-  }
-  const iSel = document.getElementById('q_italian');
-  if (iSel) {
-    const io = ['Keine / A1','A2 — sehr grundlegend','B1 — mittelstufe','B2 — obere Mittelstufe (Minimum für italienischsprachiges Studium)','C1 — fortgeschritten'];
-    [...iSel.options].forEach((o,i) => { if (io[i]) o.text = io[i]; });
-  }
-
-  // Step 6
-  setText('#step6 .step-title', 'Wie hoch ist Ihr akademischer Notendurchschnitt?');
-  setText('#step6 .step-sub', 'Verwenden Sie die iranische Skala (von 20). Beeinflusst Stipendienberechtigung und Programmzugang.');
-  setText('#step6 .field:first-of-type label', 'Ihr GPA / Notendurchschnitt (von 20)');
-  setText('#step6 .hint', 'Schieberegler ziehen. Falls Sie zwei GPAs haben, verwenden Sie den Hochschul-GPA.');
-  setText('#step6 .field:last-of-type label', 'Für welchen Abschluss gilt dieser GPA?');
-  const gpaSel = document.getElementById('q_gpa_type');
-  if (gpaSel) {
-    const go = ['Gymnasialabschluss (Diplom)','Bachelorabschluss (Karshenasi)','Masterabschluss (Arshad)'];
-    [...gpaSel.options].forEach((o,i) => { if (go[i]) o.text = go[i]; });
-  }
-
-  // Step 7
-  setText('#step7 .step-title', 'Benötigen Sie finanzielle Unterstützung?');
-  setText('#step7 .step-sub', 'Hilft uns, die relevantesten Stipendien und kostengünstigen Optionen für Sie zu finden.');
-  setText('#step7 [data-val="full"] .opt-title', 'Ja — ich brauche ein Vollstipendium');
-  setText('#step7 [data-val="full"] .opt-desc', 'Ich kann mein Studium nicht ohne externe Unterstützung finanzieren');
-  setText('#step7 [data-val="partial"] .opt-title', 'Teilfinanzierung wäre hilfreich');
-  setText('#step7 [data-val="partial"] .opt-desc', 'Ich kann einen Teil der Kosten decken, aber ein Stipendium wäre sehr hilfreich');
-  setText('#step7 [data-val="self"] .opt-title', 'Nein — ich bin selbstfinanziert');
-  setText('#step7 [data-val="self"] .opt-desc', 'Ich oder meine Familie können alle Studien- und Lebenshaltungskosten decken');
-
-  // Step 8
-  setText('#step8 .step-title', 'Wann planen Sie zu beginnen?');
-  setText('#step8 .step-sub', 'Dies beeinflusst, welchen Aufnahmetermin Sie anstreben und wie dringend Sie starten müssen.');
-  setText('#step8 [data-val="asap"] .opt-title', 'So bald wie möglich');
-  setText('#step8 [data-val="asap"] .opt-desc', 'Ich möchte innerhalb der nächsten 6–9 Monate beginnen');
-  setText('#step8 [data-val="next_year"] .opt-title', 'Nächstes Studienjahr');
-  setText('#step8 [data-val="next_year"] .opt-desc', 'Ich habe 10–16 Monate zur Vorbereitung');
-  setText('#step8 [data-val="two_years"] .opt-title', 'In 1,5–2 Jahren');
-  setText('#step8 [data-val="two_years"] .opt-desc', 'Ich habe genügend Zeit, mich gründlich vorzubereiten');
-  setText('#step8 [data-val="exploring"] .opt-title', 'Ich erkunde gerade nur');
-  setText('#step8 [data-val="exploring"] .opt-desc', 'Kein fester Zeitplan — ich bin noch in der Recherchephase');
-
-  // Step 9
-  setText('#step9 .step-title', 'Fast fertig! Noch ein paar letzte Details.');
-  setText('#step9 .step-sub', 'Optional — wird nur zur Personalisierung Ihres Berichts verwendet.');
-  setText('#step9 .field:nth-of-type(1) label', 'Ihr Name (optional)');
-  document.querySelector('#q_name') && (document.querySelector('#q_name').placeholder = 'z.B. Ali Ahmadi');
-  setText('#step9 .field:nth-of-type(2) label', 'Fachrichtung / Spezialisierung (optional)');
-  document.querySelector('#q_subfield') && (document.querySelector('#q_subfield').placeholder = 'z.B. Softwaretechnik, Kardiologie, Industriedesign…');
-  setText('#step9 .field:nth-of-type(3) label', 'Gibt es etwas, das wir wissen sollten?');
-  const exSel = document.getElementById('q_extra');
-  if (exSel) {
-    const eo = ['Nichts Besonderes','Ich möchte ein forschungsorientiertes Programm','Ich bevorzuge praxisorientiertes / industrienahe Ausbildung','Ich hoffe, langfristig in Europa zu bleiben und zu arbeiten','Ich plane, nach dem Abschluss in den Iran zurückzukehren'];
-    [...exSel.options].forEach((o,i) => { if (eo[i]) o.text = eo[i]; });
-  }
-
-  // Navigation buttons
-  document.querySelectorAll('.btn-primary').forEach(b => {
-    if (b.textContent.trim() === 'Next →') b.textContent = 'Weiter →';
-  });
-  document.querySelectorAll('.btn-secondary').forEach(b => {
-    if (b.textContent.trim() === '← Back') b.textContent = '← Zurück';
-    if (b.textContent.includes('Print')) b.textContent = '🖨️ Drucken / Als PDF speichern';
-  });
-  document.querySelectorAll('.btn-green').forEach(b => {
-    if (b.textContent.includes('Generate')) b.textContent = '🎯 Bericht generieren';
-  });
-  document.querySelectorAll('.btn-primary').forEach(b => {
-    if (b.textContent.includes('Start Over')) b.textContent = '↩ Neu starten';
-  });
-
-  // Result section headers
-  const heads = document.querySelectorAll('.result-section-head span:nth-child(2)');
-  const deHeads = ['Zulassungsübersicht','Empfohlene Universitäten & Studiengänge','Erforderliche Tests & Prüfungen','Stipendien & Finanzierung','Botschaftsstatus & Visum','Dokumenten-Checkliste','Ihr Schritt-für-Schritt-Aktionsplan'];
-  heads.forEach((h, i) => { if (deHeads[i]) h.textContent = deHeads[i]; });
-
-  // Result static header (before JS populates)
-  setText('#res_name', 'Ihr persönlicher Studienberatungsbericht');
-  setText('#res_tagline', 'Basierend auf Ihren Antworten — Iran → Italien & Deutschland');
-
-  // Print/restart
-  const printBtn = document.querySelector('.print-btn .btn-secondary');
-  if (printBtn) printBtn.textContent = '🖨️ Drucken / Als PDF speichern';
-  const restartBtn = document.querySelector('.print-btn .btn-primary');
-  if (restartBtn) restartBtn.textContent = '↩ Neu starten';
-}
-
 // ─── State ────────────────────────────────────────────────────────────────────
 const TOTAL = 9;
 let currentStep = 1;
@@ -1123,7 +906,7 @@ function showStep(n) {
   if (el) el.classList.add('active');
   const pct = Math.round(((n-1)/TOTAL)*100);
   document.getElementById('progressBar').style.width = pct + '%';
-  document.getElementById('progressLabel').textContent = window._deLang ? `Schritt ${n} von ${TOTAL}` : `Step ${n} of ${TOTAL}`;
+  document.getElementById('progressLabel').textContent = `مرحله ${n} از ${TOTAL}`;
 }
 
 function getSelected(groupId) {
@@ -1134,7 +917,7 @@ function next(step) {
   // collect answer
   if (step === 1) {
     const sel = getSelected('q_country');
-    if (!sel.length) { alert('Please select an option.'); return; }
+    if (!sel.length) { alert('لطفاً یک گزینه انتخاب کنید.'); return; }
     answers.country = sel[0] === 'both' ? ['italy','germany'] : sel;
 
     // Show globe zooming into the selected country before advancing
@@ -1148,15 +931,15 @@ function next(step) {
     }
   } else if (step === 2) {
     const sel = getSelected('q_level');
-    if (!sel.length) { alert('Please select your education level.'); return; }
+    if (!sel.length) { alert('لطفاً سطح تحصیلی خود را انتخاب کنید.'); return; }
     answers.level = sel[0];
   } else if (step === 3) {
     const sel = getSelected('q_field');
-    if (!sel.length) { alert('Please select at least one field.'); return; }
+    if (!sel.length) { alert('لطفاً حداقل یک رشته انتخاب کنید.'); return; }
     answers.fields = sel;
   } else if (step === 4) {
     const sel = getSelected('q_english');
-    if (!sel.length) { alert('Please select your English level.'); return; }
+    if (!sel.length) { alert('لطفاً سطح زبان انگلیسی خود را انتخاب کنید.'); return; }
     answers.english = sel[0];
   } else if (step === 5) {
     answers.german  = document.getElementById('q_german').value;
@@ -1166,11 +949,11 @@ function next(step) {
     answers.gpa_type = document.getElementById('q_gpa_type').value;
   } else if (step === 7) {
     const sel = getSelected('q_scholarship');
-    if (!sel.length) { alert('Please select an option.'); return; }
+    if (!sel.length) { alert('لطفاً یک گزینه انتخاب کنید.'); return; }
     answers.scholarship = sel[0];
   } else if (step === 8) {
     const sel = getSelected('q_timeline');
-    if (!sel.length) { alert('Please select your timeline.'); return; }
+    if (!sel.length) { alert('لطفاً برنامه زمانی خود را انتخاب کنید.'); return; }
     answers.timeline = sel[0];
   }
   currentStep = step + 1;
@@ -1216,14 +999,14 @@ function restart() {
 
 // ─── RESULT GENERATION ────────────────────────────────────────────────────────
 function generateResults() {
-  answers.name     = document.getElementById('q_name').value.trim() || 'Student';
+  answers.name     = document.getElementById('q_name').value.trim() || 'دانشجو';
   answers.subfield = document.getElementById('q_subfield').value.trim();
   answers.extra    = document.getElementById('q_extra').value;
 
   // hide steps
   document.querySelectorAll('.step').forEach(s => s.style.display = 'none');
   document.getElementById('progressBar').style.width = '100%';
-  document.getElementById('progressLabel').textContent = 'Report Ready ✓';
+  document.getElementById('progressLabel').textContent = 'گزارش آماده است ✓';
 
   buildResults();
   document.getElementById('results').style.display = 'block';
@@ -1232,21 +1015,21 @@ function generateResults() {
 
 // helpers
 const levelLabel = {
-  highschool: 'High School Graduate (seeking Bachelor\'s)',
-  bachelor:   'Bachelor\'s Graduate (seeking Master\'s / PhD)',
-  master:     'Master\'s Graduate (seeking PhD / Postdoc)',
-  phd:        'PhD Holder (seeking Postdoc / Research)'
+  highschool: 'دیپلم متوسطه (به دنبال کارشناسی)',
+  bachelor:   'کارشناسی (به دنبال ارشد / دکتری)',
+  master:     'کارشناسی ارشد (به دنبال دکتری / پست‌دکترا)',
+  phd:        'دکتری (به دنبال پست‌دکترا / تحقیقات)'
 };
 const englishLabel = {
-  none: 'No English test yet', low: 'IELTS < 5.5',
-  mid: 'IELTS 5.5–6.0', good: 'IELTS 6.0–6.5', strong: 'IELTS 6.5+'
+  none: 'بدون آزمون زبان', low: 'آیلتس زیر ۵.۵',
+  mid: 'آیلتس ۵.۵–۶.۰', good: 'آیلتس ۶.۰–۶.۵', strong: 'آیلتس ۶.۵ به بالا'
 };
 const schLabel = {
-  full: 'Needs Full Scholarship', partial: 'Partial Funding', self: 'Self-Funded'
+  full: 'نیاز به بورسیه کامل', partial: 'حمایت جزئی', self: 'خودتأمین'
 };
 const timeLabel = {
-  asap: 'Start ASAP (< 9 months)', next_year: 'Next Academic Year',
-  two_years: '1.5–2 Years', exploring: 'Exploring / No Fixed Date'
+  asap: 'شروع هر چه زودتر (کمتر از ۹ ماه)', next_year: 'سال تحصیلی بعد',
+  two_years: '۱.۵–۲ سال', exploring: 'در حال بررسی / بدون تاریخ مشخص'
 };
 
 function hasItaly()   { return answers.country.includes('italy'); }
@@ -1277,12 +1060,12 @@ function buildResults() {
 
   // Profile header
   document.getElementById('res_name').textContent =
-    name !== 'Student' ? `${name}'s Study Abroad Report` : 'Your Personalised Study Abroad Report';
+    name !== 'دانشجو' ? `گزارش تحصیل در خارج ${name}` : 'گزارش شخصی‌سازی‌شده تحصیل در خارج شما';
   document.getElementById('res_tagline').textContent =
     `${levelLabel[a.level]} | ${a.fields.map(f=>f.charAt(0).toUpperCase()+f.slice(1)).join(', ')} | ${englishLabel[a.english]}`;
 
   const chips = [
-    a.country.map(c => c === 'italy' ? '🇮🇹 Italy' : '🇩🇪 Germany').join(' + '),
+    a.country.map(c => c === 'italy' ? '🇮🇹 ایتالیا' : '🇩🇪 آلمان').join(' + '),
     levelLabel[a.level].split(' (')[0],
     englishLabel[a.english],
     `GPA ${gpa().toFixed(2)}/20`,
@@ -1321,7 +1104,7 @@ function buildResults() {
         ✅ Most PhD supervisors accept English applicants
       `;
     }
-    elig += countryBlock('🇮🇹','Italy','italy', italyStatus);
+    elig += countryBlock('🇮🇹','ایتالیا','italy', italyStatus);
   }
 
   if (hasGermany()) {
@@ -1350,7 +1133,7 @@ function buildResults() {
         ✅ Salary €1,500–€2,500/month net
       `;
     }
-    elig += countryBlock('🇩🇪','Germany','germany', deStatus);
+    elig += countryBlock('🇩🇪','آلمان','germany', deStatus);
   }
 
   // Overall rating
@@ -1411,7 +1194,7 @@ function buildResults() {
       italyUnis.push('Sapienza Università di Roma — largest European university');
       italyUnis.push('Università di Padova — broad academic range');
     }
-    unis += countryBlock('🇮🇹','Italy','italy', ul(italyUnis));
+    unis += countryBlock('🇮🇹','ایتالیا','italy', ul(italyUnis));
   }
 
   if (hasGermany()) {
@@ -1457,7 +1240,7 @@ function buildResults() {
       deUnis.push('Freie Universität Berlin — comprehensive, internationally oriented');
       deUnis.push('Humboldt-Universität zu Berlin — excellent for research and humanities');
     }
-    unis += countryBlock('🇩🇪','Germany','germany', ul(deUnis));
+    unis += countryBlock('🇩🇪','آلمان','germany', ul(deUnis));
   }
 
   unis += alert_box('💡 Use <strong>DAAD university search</strong> (daad.de) and <strong>Mastersportal.eu</strong> to find English-language programmes and filter by field, tuition, and IELTS requirement.','blue');
@@ -1497,7 +1280,7 @@ function buildResults() {
       italyTests.push('Your English level meets most Italian programme requirements ✅');
       italyTests.push('Keep your IELTS certificate valid (2-year validity)');
     }
-    tests += countryBlock('🇮🇹','Italy — Required Tests','italy', ul(italyTests));
+    tests += countryBlock('🇮🇹','ایتالیا — آزمون‌های لازم','italy', ul(italyTests));
   }
 
   if (hasGermany()) {
@@ -1525,7 +1308,7 @@ function buildResults() {
         TMS: medtest.de | HAM-Nat: offered at specific universities`);
     }
     if (!deTests.length) deTests.push('No additional test gaps identified based on your profile ✅');
-    tests += countryBlock('🇩🇪','Germany — Required Tests','germany', ul(deTests));
+    tests += countryBlock('🇩🇪','آلمان — آزمون‌های لازم','germany', ul(deTests));
   }
 
   document.getElementById('res_tests').innerHTML = tests;
@@ -1555,7 +1338,7 @@ function buildResults() {
       Bologna: Unibo Study Grants for International Students<br>
       Politecnico di Milano: Merit-based grants (check polimi.it/en/education/fees-and-scholarships)<br>
       Padova: Excellence Scholarships for International Students`);
-    schol += countryBlock('🇮🇹','Italy Scholarships','italy', ul(italySchol));
+    schol += countryBlock('🇮🇹','بورسیه‌های ایتالیا','italy', ul(italySchol));
   }
 
   if (hasGermany()) {
@@ -1583,7 +1366,7 @@ function buildResults() {
     deSchol.push(`<strong>Blocked Account (Sperrkonto)</strong> ${tag('Not a scholarship — your own money','blue')}<br>
       €11,208 required for student visa | Providers: Fintiba, Expatrio, Deutsche Bank<br>
       You withdraw ~€935/month while studying — the money stays yours`);
-    schol += countryBlock('🇩🇪','Germany Scholarships & Funding','germany', ul(deSchol));
+    schol += countryBlock('🇩🇪','بورسیه‌ها و منابع مالی آلمان','germany', ul(deSchol));
   }
 
   if (needsFull) {
@@ -1639,7 +1422,7 @@ function buildResults() {
     if (answers.fields.includes('medicine')) {
       italyDocs.push('IMAT exam score confirmation');
     }
-    docs += countryBlock('🇮🇹','Italy Document Checklist','italy', ul(italyDocs));
+    docs += countryBlock('🇮🇹','فهرست اسناد ایتالیا','italy', ul(italyDocs));
   }
 
   if (hasGermany()) {
@@ -1654,7 +1437,7 @@ function buildResults() {
     if (a.level === 'highschool') {
       deDocs.push('Studienkolleg acceptance (if applicable) or equivalence documentation');
     }
-    docs += countryBlock('🇩🇪','Germany Document Checklist','germany', ul(deDocs));
+    docs += countryBlock('🇩🇪','فهرست اسناد آلمان','germany', ul(deDocs));
   }
 
   docs += alert_box('📌 <strong>Apostille first:</strong> Before going to any embassy, have your Iranian documents stamped by the Iranian Ministry of Foreign Affairs (Vezarat-e Omur-e Kharejeh) and officially translated by a certified translator. Only then can the embassies accept them.','amber');
@@ -1792,17 +1575,17 @@ showStep(1);
     italy: {
       ids: ['380'], flagKeys: ['italy'],
       center: [12.5, 42.5], radius: 220,
-      caption: 'LIFE IN ITALY', bigLabel: 'ITALIA · ITALY'
+      caption: 'زندگی در ایتالیا', bigLabel: 'ایتالیا · ITALIA'
     },
     germany: {
       ids: ['276'], flagKeys: ['germany'],
       center: [10.5, 51.0], radius: 220,
-      caption: 'LIFE IN GERMANY', bigLabel: 'DEUTSCHLAND · GERMANY'
+      caption: 'زندگی در آلمان', bigLabel: 'آلمان · DEUTSCHLAND'
     },
     both: {
       ids: ['380','276'], flagKeys: ['italy','germany'],
       center: [12.0, 47.0], radius: 160,
-      caption: 'LIFE IN ITALY & GERMANY', bigLabel: 'ITALIA · DEUTSCHLAND'
+      caption: 'زندگی در ایتالیا و آلمان', bigLabel: 'ایتالیا · آلمان'
     }
   };
 
@@ -2089,7 +1872,7 @@ showStep(1);
     const skipBtn     = document.getElementById('loaderSkip');
 
     if (nameEl) nameEl.textContent = preset.bigLabel;
-    if (cap) cap.textContent = `LOCATING ${preset.bigLabel.split(' · ').pop()}`;
+    if (cap) cap.textContent = `در حال مکان‌یابی ${preset.bigLabel.split(' · ')[0]}`;
 
     // Render fact cards (hidden, will stagger in)
     const factSet = FACTS[key] || [];
