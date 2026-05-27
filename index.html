@@ -559,8 +559,36 @@
          STEPS
     ═══════════════════════════════════════════════ -->
 
-    <!-- STEP 1: Country -->
+    <!-- STEP 1: Name (optional) -->
     <div class="step active" id="step1">
+      <div class="step-title">Let's start — tell us about yourself</div>
+      <div class="step-sub">A few quick details to personalise your results.</div>
+      <div class="field">
+        <label>Your name (optional)</label>
+        <input type="text" id="q_name" placeholder="e.g. Ali Ahmadi">
+      </div>
+      <div class="field">
+        <label>Sub-field or specialisation you're interested in (optional)</label>
+        <input type="text" id="q_subfield" placeholder="e.g. Software Engineering, Cardiology, Industrial Design…">
+      </div>
+      <div class="field">
+        <label>Anything else we should know?</label>
+        <select id="q_extra">
+          <option value="none">Nothing specific</option>
+          <option value="research">I want a research-focused programme</option>
+          <option value="industry">I prefer industry / practical training</option>
+          <option value="permanent">I'm hoping to stay and work in Europe long-term</option>
+          <option value="return">I plan to return to Iran after graduating</option>
+        </select>
+      </div>
+      <div class="nav">
+        <span></span>
+        <button class="btn btn-primary" onclick="next(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Country -->
+    <div class="step" id="step2">
       <div class="step-title">Which country are you targeting?</div>
       <div class="step-sub">You can choose one or both. We will tailor your results accordingly.</div>
       <div class="options cols3" id="q_country">
@@ -581,13 +609,13 @@
         </div>
       </div>
       <div class="nav">
-        <span></span>
-        <button class="btn btn-primary" onclick="next(1)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(2)">← Back</button>
+        <button class="btn btn-primary" onclick="next(2)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 2: Education level -->
-    <div class="step" id="step2">
+    <!-- STEP 3: Education level -->
+    <div class="step" id="step3">
       <div class="step-title">What is your current education level?</div>
       <div class="step-sub">This determines which programmes you are eligible to apply for.</div>
       <div class="options cols2" id="q_level">
@@ -613,13 +641,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(2)">← Back</button>
-        <button class="btn btn-primary" onclick="next(2)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(3)">← Back</button>
+        <button class="btn btn-primary" onclick="next(3)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 3: Field -->
-    <div class="step" id="step3">
+    <!-- STEP 4: Field -->
+    <div class="step" id="step4">
       <div class="step-title">What field do you want to study?</div>
       <div class="step-sub">Choose the one that best matches your interest.</div>
       <div class="multi-hint">💡 You may select multiple fields</div>
@@ -656,13 +684,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(3)">← Back</button>
-        <button class="btn btn-primary" onclick="next(3)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(4)">← Back</button>
+        <button class="btn btn-primary" onclick="next(4)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 4: English level -->
-    <div class="step" id="step4">
+    <!-- STEP 5: English level -->
+    <div class="step" id="step5">
       <div class="step-title">What is your English language level?</div>
       <div class="step-sub">This affects which programmes you can apply to directly.</div>
       <div class="options" id="q_english">
@@ -688,13 +716,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(4)">← Back</button>
-        <button class="btn btn-primary" onclick="next(4)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(5)">← Back</button>
+        <button class="btn btn-primary" onclick="next(5)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 5: German/Italian -->
-    <div class="step" id="step5">
+    <!-- STEP 6: German/Italian -->
+    <div class="step" id="step6">
       <div class="step-title">Do you speak German or Italian?</div>
       <div class="step-sub">This significantly expands your programme options — especially for Germany.</div>
       <div class="field">
@@ -719,13 +747,13 @@
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(5)">← Back</button>
-        <button class="btn btn-primary" onclick="next(5)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(6)">← Back</button>
+        <button class="btn btn-primary" onclick="next(6)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 6: GPA -->
-    <div class="step" id="step6">
+    <!-- STEP 7: GPA -->
+    <div class="step" id="step7">
       <div class="step-title">What is your academic GPA?</div>
       <div class="step-sub">Use the Iranian scale (out of 20). This affects scholarship eligibility and programme access.</div>
       <div class="field">
@@ -746,13 +774,13 @@
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(6)">← Back</button>
-        <button class="btn btn-primary" onclick="next(6)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(7)">← Back</button>
+        <button class="btn btn-primary" onclick="next(7)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 7: Scholarship need -->
-    <div class="step" id="step7">
+    <!-- STEP 8: Scholarship need -->
+    <div class="step" id="step8">
       <div class="step-title">Do you need financial support?</div>
       <div class="step-sub">This helps us highlight the most relevant scholarships and low-cost options for you.</div>
       <div class="options" id="q_scholarship">
@@ -773,13 +801,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(7)">← Back</button>
-        <button class="btn btn-primary" onclick="next(7)">Next →</button>
+        <button class="btn btn-secondary" onclick="prev(8)">← Back</button>
+        <button class="btn btn-primary" onclick="next(8)">Next →</button>
       </div>
     </div>
 
-    <!-- STEP 8: Timeline -->
-    <div class="step" id="step8">
+    <!-- STEP 9: Timeline -->
+    <div class="step" id="step9">
       <div class="step-title">When do you plan to start?</div>
       <div class="step-sub">This affects which intake you should target and how urgently you need to begin your preparations.</div>
       <div class="options cols2" id="q_timeline">
@@ -803,34 +831,6 @@
           <div class="opt-title">Just exploring for now</div>
           <div class="opt-desc">No fixed timeline — I'm still in the research stage</div>
         </div>
-      </div>
-      <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(8)">← Back</button>
-        <button class="btn btn-primary" onclick="next(8)">Next →</button>
-      </div>
-    </div>
-
-    <!-- STEP 9: Name (optional) -->
-    <div class="step" id="step9">
-      <div class="step-title">Almost done! A few last details.</div>
-      <div class="step-sub">Optional — used only to personalise your report.</div>
-      <div class="field">
-        <label>Your name (optional)</label>
-        <input type="text" id="q_name" placeholder="e.g. Ali Ahmadi">
-      </div>
-      <div class="field">
-        <label>Sub-field or specialisation you're interested in (optional)</label>
-        <input type="text" id="q_subfield" placeholder="e.g. Software Engineering, Cardiology, Industrial Design…">
-      </div>
-      <div class="field">
-        <label>Anything else we should know?</label>
-        <select id="q_extra">
-          <option value="none">Nothing specific</option>
-          <option value="research">I want a research-focused programme</option>
-          <option value="industry">I prefer industry / practical training</option>
-          <option value="permanent">I'm hoping to stay and work in Europe long-term</option>
-          <option value="return">I plan to return to Iran after graduating</option>
-        </select>
       </div>
       <div class="nav">
         <button class="btn btn-secondary" onclick="prev(9)">← Back</button>
@@ -963,63 +963,63 @@ function applyGerman() {
   setText('.header > p', 'Schritt-für-Schritt-Fragebogen für iranische Studierende — Italien oder Deutschland');
 
   // Step 1
-  setText('#step1 .step-title', 'Welches Land ist Ihr Ziel?');
-  setText('#step1 .step-sub', 'Sie können ein oder beide Länder wählen. Wir passen die Ergebnisse entsprechend an.');
-  setText('#step1 [data-val="italy"] .opt-title', 'Italien');
-  setText('#step1 [data-val="italy"] .opt-desc', 'Starke Medizin & Technik; englischsprachige Studiengänge verfügbar');
-  setText('#step1 [data-val="germany"] .opt-title', 'Deutschland');
-  setText('#step1 [data-val="germany"] .opt-desc', 'Kostenfreies Studium; Weltklasse-Ingenieurwesen & Forschung');
-  setText('#step1 [data-val="both"] .opt-title', 'Beide / Noch unsicher');
-  setText('#step1 [data-val="both"] .opt-desc', 'Zeig mir Optionen für beide — ich entscheide später');
+  setText('#step2 .step-title', 'Welches Land ist Ihr Ziel?');
+  setText('#step2 .step-sub', 'Sie können ein oder beide Länder wählen. Wir passen die Ergebnisse entsprechend an.');
+  setText('#step2 [data-val="italy"] .opt-title', 'Italien');
+  setText('#step2 [data-val="italy"] .opt-desc', 'Starke Medizin & Technik; englischsprachige Studiengänge verfügbar');
+  setText('#step2 [data-val="germany"] .opt-title', 'Deutschland');
+  setText('#step2 [data-val="germany"] .opt-desc', 'Kostenfreies Studium; Weltklasse-Ingenieurwesen & Forschung');
+  setText('#step2 [data-val="both"] .opt-title', 'Beide / Noch unsicher');
+  setText('#step2 [data-val="both"] .opt-desc', 'Zeig mir Optionen für beide — ich entscheide später');
 
   // Step 2
-  setText('#step2 .step-title', 'Welchen Bildungsabschluss haben Sie?');
-  setText('#step2 .step-sub', 'Dies bestimmt, für welche Studiengänge Sie sich bewerben können.');
-  setText('#step2 [data-val="highschool"] .opt-title', 'Gymnasialabschluss (Diplom)');
-  setText('#step2 [data-val="highschool"] .opt-desc', 'Ich habe mein iranisches Konkur-Zeugnis — suche einen Bachelor-Studiengang');
-  setText('#step2 [data-val="bachelor"] .opt-title', 'Bachelorabschluss');
-  setText('#step2 [data-val="bachelor"] .opt-desc', 'Ich habe einen Karshenasi (B.Sc./B.A.) — suche einen Master- oder PhD-Studiengang');
-  setText('#step2 [data-val="master"] .opt-title', 'Masterabschluss');
-  setText('#step2 [data-val="master"] .opt-desc', 'Ich habe einen Arshad und möchte einen PhD oder Postdoc absolvieren');
-  setText('#step2 [data-val="phd"] .opt-title', 'PhD / Bereits eingeschrieben');
-  setText('#step2 [data-val="phd"] .opt-desc', 'Auf der Suche nach Postdoc, Forschungsstelle oder Hochschulwechsel');
+  setText('#step3 .step-title', 'Welchen Bildungsabschluss haben Sie?');
+  setText('#step3 .step-sub', 'Dies bestimmt, für welche Studiengänge Sie sich bewerben können.');
+  setText('#step3 [data-val="highschool"] .opt-title', 'Gymnasialabschluss (Diplom)');
+  setText('#step3 [data-val="highschool"] .opt-desc', 'Ich habe mein iranisches Konkur-Zeugnis — suche einen Bachelor-Studiengang');
+  setText('#step3 [data-val="bachelor"] .opt-title', 'Bachelorabschluss');
+  setText('#step3 [data-val="bachelor"] .opt-desc', 'Ich habe einen Karshenasi (B.Sc./B.A.) — suche einen Master- oder PhD-Studiengang');
+  setText('#step3 [data-val="master"] .opt-title', 'Masterabschluss');
+  setText('#step3 [data-val="master"] .opt-desc', 'Ich habe einen Arshad und möchte einen PhD oder Postdoc absolvieren');
+  setText('#step3 [data-val="phd"] .opt-title', 'PhD / Bereits eingeschrieben');
+  setText('#step3 [data-val="phd"] .opt-desc', 'Auf der Suche nach Postdoc, Forschungsstelle oder Hochschulwechsel');
 
   // Step 3
-  setText('#step3 .step-title', 'Welches Fachgebiet möchten Sie studieren?');
-  setText('#step3 .step-sub', 'Wählen Sie das, was Ihrem Interesse am besten entspricht.');
-  setText('#step3 .multi-hint', '💡 Sie können mehrere Felder auswählen');
-  setText('#step3 [data-val="medicine"] .opt-title', 'Medizin / Zahnmedizin');
-  setText('#step3 [data-val="medicine"] .opt-desc', 'Humanmedizin, Zahnmedizin, Pharmazie, Medizinische Wissenschaften');
-  setText('#step3 [data-val="engineering"] .opt-title', 'Ingenieurwesen & Technologie');
-  setText('#step3 [data-val="engineering"] .opt-desc', 'Maschinenbau, Bauingenieurwesen, Informatik, Elektrotechnik, Chemie, Luft- und Raumfahrt…');
-  setText('#step3 [data-val="science"] .opt-title', 'Naturwissenschaften');
-  setText('#step3 [data-val="science"] .opt-desc', 'Biologie, Chemie, Physik, Mathematik, Umweltwissenschaften');
-  setText('#step3 [data-val="business"] .opt-title', 'Wirtschaft & Management');
-  setText('#step3 [data-val="business"] .opt-desc', 'Management, Finanzen, Volkswirtschaft, MBA');
-  setText('#step3 [data-val="arts"] .opt-title', 'Kunst, Design & Architektur');
-  setText('#step3 [data-val="arts"] .opt-desc', 'Industriedesign, Architektur, Bildende Kunst, Modedesign');
-  setText('#step3 [data-val="humanities"] .opt-title', 'Geistes- & Sozialwissenschaften');
-  setText('#step3 [data-val="humanities"] .opt-desc', 'Jura, Psychologie, Soziologie, Geschichte, Sprachwissenschaft');
+  setText('#step4 .step-title', 'Welches Fachgebiet möchten Sie studieren?');
+  setText('#step4 .step-sub', 'Wählen Sie das, was Ihrem Interesse am besten entspricht.');
+  setText('#step4 .multi-hint', '💡 Sie können mehrere Felder auswählen');
+  setText('#step4 [data-val="medicine"] .opt-title', 'Medizin / Zahnmedizin');
+  setText('#step4 [data-val="medicine"] .opt-desc', 'Humanmedizin, Zahnmedizin, Pharmazie, Medizinische Wissenschaften');
+  setText('#step4 [data-val="engineering"] .opt-title', 'Ingenieurwesen & Technologie');
+  setText('#step4 [data-val="engineering"] .opt-desc', 'Maschinenbau, Bauingenieurwesen, Informatik, Elektrotechnik, Chemie, Luft- und Raumfahrt…');
+  setText('#step4 [data-val="science"] .opt-title', 'Naturwissenschaften');
+  setText('#step4 [data-val="science"] .opt-desc', 'Biologie, Chemie, Physik, Mathematik, Umweltwissenschaften');
+  setText('#step4 [data-val="business"] .opt-title', 'Wirtschaft & Management');
+  setText('#step4 [data-val="business"] .opt-desc', 'Management, Finanzen, Volkswirtschaft, MBA');
+  setText('#step4 [data-val="arts"] .opt-title', 'Kunst, Design & Architektur');
+  setText('#step4 [data-val="arts"] .opt-desc', 'Industriedesign, Architektur, Bildende Kunst, Modedesign');
+  setText('#step4 [data-val="humanities"] .opt-title', 'Geistes- & Sozialwissenschaften');
+  setText('#step4 [data-val="humanities"] .opt-desc', 'Jura, Psychologie, Soziologie, Geschichte, Sprachwissenschaft');
 
   // Step 4
-  setText('#step4 .step-title', 'Welches Englischniveau haben Sie?');
-  setText('#step4 .step-sub', 'Dies beeinflusst, für welche Studiengänge Sie sich direkt bewerben können.');
-  setText('#step4 [data-val="none"] .opt-title', 'Noch kein Test / Nicht abgelegt');
-  setText('#step4 [data-val="none"] .opt-desc', 'Ich habe noch kein IELTS oder TOEFL abgelegt');
-  setText('#step4 [data-val="low"] .opt-title', 'IELTS unter 5,5 / TOEFL unter 70');
-  setText('#step4 [data-val="low"] .opt-desc', 'Grundniveau — muss vor der Bewerbung verbessert werden');
-  setText('#step4 [data-val="mid"] .opt-title', 'IELTS 5,5–6,0 / TOEFL 72–79');
-  setText('#step4 [data-val="mid"] .opt-desc', 'Ausreichend für einige italienische Bachelorstudiengänge');
-  setText('#step4 [data-val="good"] .opt-title', 'IELTS 6,0–6,5 / TOEFL 80–87');
-  setText('#step4 [data-val="good"] .opt-desc', 'Erfüllt die meisten Master-Anforderungen in Italien und Deutschland');
-  setText('#step4 [data-val="strong"] .opt-title', 'IELTS 6,5+ / TOEFL 88+');
-  setText('#step4 [data-val="strong"] .opt-desc', 'Stark — erfüllt alle Programme in beiden Ländern');
+  setText('#step5 .step-title', 'Welches Englischniveau haben Sie?');
+  setText('#step5 .step-sub', 'Dies beeinflusst, für welche Studiengänge Sie sich direkt bewerben können.');
+  setText('#step5 [data-val="none"] .opt-title', 'Noch kein Test / Nicht abgelegt');
+  setText('#step5 [data-val="none"] .opt-desc', 'Ich habe noch kein IELTS oder TOEFL abgelegt');
+  setText('#step5 [data-val="low"] .opt-title', 'IELTS unter 5,5 / TOEFL unter 70');
+  setText('#step5 [data-val="low"] .opt-desc', 'Grundniveau — muss vor der Bewerbung verbessert werden');
+  setText('#step5 [data-val="mid"] .opt-title', 'IELTS 5,5–6,0 / TOEFL 72–79');
+  setText('#step5 [data-val="mid"] .opt-desc', 'Ausreichend für einige italienische Bachelorstudiengänge');
+  setText('#step5 [data-val="good"] .opt-title', 'IELTS 6,0–6,5 / TOEFL 80–87');
+  setText('#step5 [data-val="good"] .opt-desc', 'Erfüllt die meisten Master-Anforderungen in Italien und Deutschland');
+  setText('#step5 [data-val="strong"] .opt-title', 'IELTS 6,5+ / TOEFL 88+');
+  setText('#step5 [data-val="strong"] .opt-desc', 'Stark — erfüllt alle Programme in beiden Ländern');
 
   // Step 5
-  setText('#step5 .step-title', 'Sprechen Sie Deutsch oder Italienisch?');
-  setText('#step5 .step-sub', 'Dies erweitert Ihre Programmoptionen erheblich — besonders für Deutschland.');
-  setText('#step5 label[for="q_german"], #step5 .field:first-of-type label', 'Deutschkenntnisse');
-  setText('#step5 label[for="q_italian"], #step5 .field:last-of-type label', 'Italienischkenntnisse');
+  setText('#step6 .step-title', 'Sprechen Sie Deutsch oder Italienisch?');
+  setText('#step6 .step-sub', 'Dies erweitert Ihre Programmoptionen erheblich — besonders für Deutschland.');
+  setText('#step6 label[for="q_german"], #step5 .field:first-of-type label', 'Deutschkenntnisse');
+  setText('#step6 label[for="q_italian"], #step5 .field:last-of-type label', 'Italienischkenntnisse');
   // dropdown options for German level
   const gSel = document.getElementById('q_german');
   if (gSel) {
@@ -1033,11 +1033,11 @@ function applyGerman() {
   }
 
   // Step 6
-  setText('#step6 .step-title', 'Wie hoch ist Ihr akademischer Notendurchschnitt?');
-  setText('#step6 .step-sub', 'Verwenden Sie die iranische Skala (von 20). Beeinflusst Stipendienberechtigung und Programmzugang.');
-  setText('#step6 .field:first-of-type label', 'Ihr GPA / Notendurchschnitt (von 20)');
-  setText('#step6 .hint', 'Schieberegler ziehen. Falls Sie zwei GPAs haben, verwenden Sie den Hochschul-GPA.');
-  setText('#step6 .field:last-of-type label', 'Für welchen Abschluss gilt dieser GPA?');
+  setText('#step7 .step-title', 'Wie hoch ist Ihr akademischer Notendurchschnitt?');
+  setText('#step7 .step-sub', 'Verwenden Sie die iranische Skala (von 20). Beeinflusst Stipendienberechtigung und Programmzugang.');
+  setText('#step7 .field:first-of-type label', 'Ihr GPA / Notendurchschnitt (von 20)');
+  setText('#step7 .hint', 'Schieberegler ziehen. Falls Sie zwei GPAs haben, verwenden Sie den Hochschul-GPA.');
+  setText('#step7 .field:last-of-type label', 'Für welchen Abschluss gilt dieser GPA?');
   const gpaSel = document.getElementById('q_gpa_type');
   if (gpaSel) {
     const go = ['Gymnasialabschluss (Diplom)','Bachelorabschluss (Karshenasi)','Masterabschluss (Arshad)'];
@@ -1045,35 +1045,35 @@ function applyGerman() {
   }
 
   // Step 7
-  setText('#step7 .step-title', 'Benötigen Sie finanzielle Unterstützung?');
-  setText('#step7 .step-sub', 'Hilft uns, die relevantesten Stipendien und kostengünstigen Optionen für Sie zu finden.');
-  setText('#step7 [data-val="full"] .opt-title', 'Ja — ich brauche ein Vollstipendium');
-  setText('#step7 [data-val="full"] .opt-desc', 'Ich kann mein Studium nicht ohne externe Unterstützung finanzieren');
-  setText('#step7 [data-val="partial"] .opt-title', 'Teilfinanzierung wäre hilfreich');
-  setText('#step7 [data-val="partial"] .opt-desc', 'Ich kann einen Teil der Kosten decken, aber ein Stipendium wäre sehr hilfreich');
-  setText('#step7 [data-val="self"] .opt-title', 'Nein — ich bin selbstfinanziert');
-  setText('#step7 [data-val="self"] .opt-desc', 'Ich oder meine Familie können alle Studien- und Lebenshaltungskosten decken');
+  setText('#step8 .step-title', 'Benötigen Sie finanzielle Unterstützung?');
+  setText('#step8 .step-sub', 'Hilft uns, die relevantesten Stipendien und kostengünstigen Optionen für Sie zu finden.');
+  setText('#step8 [data-val="full"] .opt-title', 'Ja — ich brauche ein Vollstipendium');
+  setText('#step8 [data-val="full"] .opt-desc', 'Ich kann mein Studium nicht ohne externe Unterstützung finanzieren');
+  setText('#step8 [data-val="partial"] .opt-title', 'Teilfinanzierung wäre hilfreich');
+  setText('#step8 [data-val="partial"] .opt-desc', 'Ich kann einen Teil der Kosten decken, aber ein Stipendium wäre sehr hilfreich');
+  setText('#step8 [data-val="self"] .opt-title', 'Nein — ich bin selbstfinanziert');
+  setText('#step8 [data-val="self"] .opt-desc', 'Ich oder meine Familie können alle Studien- und Lebenshaltungskosten decken');
 
-  // Step 8
-  setText('#step8 .step-title', 'Wann planen Sie zu beginnen?');
-  setText('#step8 .step-sub', 'Dies beeinflusst, welchen Aufnahmetermin Sie anstreben und wie dringend Sie starten müssen.');
-  setText('#step8 [data-val="asap"] .opt-title', 'So bald wie möglich');
-  setText('#step8 [data-val="asap"] .opt-desc', 'Ich möchte innerhalb der nächsten 6–9 Monate beginnen');
-  setText('#step8 [data-val="next_year"] .opt-title', 'Nächstes Studienjahr');
-  setText('#step8 [data-val="next_year"] .opt-desc', 'Ich habe 10–16 Monate zur Vorbereitung');
-  setText('#step8 [data-val="two_years"] .opt-title', 'In 1,5–2 Jahren');
-  setText('#step8 [data-val="two_years"] .opt-desc', 'Ich habe genügend Zeit, mich gründlich vorzubereiten');
-  setText('#step8 [data-val="exploring"] .opt-title', 'Ich erkunde gerade nur');
-  setText('#step8 [data-val="exploring"] .opt-desc', 'Kein fester Zeitplan — ich bin noch in der Recherchephase');
+  // Step 9 — timeline (now last)
+  setText('#step9 .step-title', 'Wann planen Sie zu beginnen?');
+  setText('#step9 .step-sub', 'Dies beeinflusst, welchen Aufnahmetermin Sie anstreben und wie dringend Sie starten müssen.');
+  setText('#step9 [data-val="asap"] .opt-title', 'So bald wie möglich');
+  setText('#step9 [data-val="asap"] .opt-desc', 'Ich möchte innerhalb der nächsten 6–9 Monate beginnen');
+  setText('#step9 [data-val="next_year"] .opt-title', 'Nächstes Studienjahr');
+  setText('#step9 [data-val="next_year"] .opt-desc', 'Ich habe 10–16 Monate zur Vorbereitung');
+  setText('#step9 [data-val="two_years"] .opt-title', 'In 1,5–2 Jahren');
+  setText('#step9 [data-val="two_years"] .opt-desc', 'Ich habe genügend Zeit, mich gründlich vorzubereiten');
+  setText('#step9 [data-val="exploring"] .opt-title', 'Ich erkunde gerade nur');
+  setText('#step9 [data-val="exploring"] .opt-desc', 'Kein fester Zeitplan — ich bin noch in der Recherchephase');
 
-  // Step 9
-  setText('#step9 .step-title', 'Fast fertig! Noch ein paar letzte Details.');
-  setText('#step9 .step-sub', 'Optional — wird nur zur Personalisierung Ihres Berichts verwendet.');
-  setText('#step9 .field:nth-of-type(1) label', 'Ihr Name (optional)');
+  // Step 1 — personal info (now first)
+  setText('#step1 .step-title', 'Erzählen Sie uns von sich');
+  setText('#step1 .step-sub', 'Ein paar Details, um Ihre Ergebnisse zu personalisieren.');
+  setText('#step1 .field:nth-of-type(1) label', 'Ihr Name (optional)');
   document.querySelector('#q_name') && (document.querySelector('#q_name').placeholder = 'z.B. Ali Ahmadi');
-  setText('#step9 .field:nth-of-type(2) label', 'Fachrichtung / Spezialisierung (optional)');
+  setText('#step1 .field:nth-of-type(2) label', 'Fachrichtung / Spezialisierung (optional)');
   document.querySelector('#q_subfield') && (document.querySelector('#q_subfield').placeholder = 'z.B. Softwaretechnik, Kardiologie, Industriedesign…');
-  setText('#step9 .field:nth-of-type(3) label', 'Gibt es etwas, das wir wissen sollten?');
+  setText('#step1 .field:nth-of-type(3) label', 'Gibt es etwas, das wir wissen sollten?');
   const exSel = document.getElementById('q_extra');
   if (exSel) {
     const eo = ['Nichts Besonderes','Ich möchte ein forschungsorientiertes Programm','Ich bevorzuge praxisorientiertes / industrienahe Ausbildung','Ich hoffe, langfristig in Europa zu bleiben und zu arbeiten','Ich plane, nach dem Abschluss in den Iran zurückzukehren'];
@@ -1133,6 +1133,8 @@ function getSelected(groupId) {
 function next(step) {
   // collect answer
   if (step === 1) {
+    // personal info — all optional, collected later in generateResults()
+  } else if (step === 2) {
     const sel = getSelected('q_country');
     if (!sel.length) { alert('Please select an option.'); return; }
     answers.country = sel[0] === 'both' ? ['italy','germany'] : sel;
@@ -1140,38 +1142,34 @@ function next(step) {
     // Show globe zooming into the selected country before advancing
     if (typeof window.showCountryLoader === 'function') {
       window.showCountryLoader(answers.country, () => {
-        currentStep = 2;
-        showStep(2);
+        currentStep = 3;
+        showStep(3);
         window.scrollTo({top:0, behavior:'smooth'});
       });
       return;
     }
-  } else if (step === 2) {
+  } else if (step === 3) {
     const sel = getSelected('q_level');
     if (!sel.length) { alert('Please select your education level.'); return; }
     answers.level = sel[0];
-  } else if (step === 3) {
+  } else if (step === 4) {
     const sel = getSelected('q_field');
     if (!sel.length) { alert('Please select at least one field.'); return; }
     answers.fields = sel;
-  } else if (step === 4) {
+  } else if (step === 5) {
     const sel = getSelected('q_english');
     if (!sel.length) { alert('Please select your English level.'); return; }
     answers.english = sel[0];
-  } else if (step === 5) {
+  } else if (step === 6) {
     answers.german  = document.getElementById('q_german').value;
     answers.italian = document.getElementById('q_italian').value;
-  } else if (step === 6) {
+  } else if (step === 7) {
     answers.gpa      = parseFloat(document.getElementById('q_gpa_slider').value);
     answers.gpa_type = document.getElementById('q_gpa_type').value;
-  } else if (step === 7) {
+  } else if (step === 8) {
     const sel = getSelected('q_scholarship');
     if (!sel.length) { alert('Please select an option.'); return; }
     answers.scholarship = sel[0];
-  } else if (step === 8) {
-    const sel = getSelected('q_timeline');
-    if (!sel.length) { alert('Please select your timeline.'); return; }
-    answers.timeline = sel[0];
   }
   currentStep = step + 1;
   showStep(currentStep);
@@ -1216,6 +1214,9 @@ function restart() {
 
 // ─── RESULT GENERATION ────────────────────────────────────────────────────────
 function generateResults() {
+  const tlSel = getSelected('q_timeline');
+  if (!tlSel.length) { alert('Please select your timeline.'); return; }
+  answers.timeline = tlSel[0];
   answers.name     = document.getElementById('q_name').value.trim() || 'Student';
   answers.subfield = document.getElementById('q_subfield').value.trim();
   answers.extra    = document.getElementById('q_extra').value;
