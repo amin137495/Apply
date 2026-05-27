@@ -1643,25 +1643,25 @@ showStep(1);
   // Life facts (researched from current student-life sources)
   const FACTS = {
     italy: [
-      { icon: '☀️', label: 'WEATHER', body: 'Mediterranean climate — mild winters, long hot summers. Snow in the northern Alps, beaches in the south.' },
-      { icon: '👥', label: 'PEOPLE',  body: 'Warm, expressive, family-oriented. Treated like “famiglia.” English common in Milan & Rome.' },
-      { icon: '🎓', label: 'STUDY',   body: '700+ Master’s taught in English. Bologna founded the world’s first university in 1088. Tuition often ~€1,500/year.' },
-      { icon: '🍝', label: 'FOOD',    body: 'Pasta, pizza, espresso, aperitivo. Cuisine is fiercely regional and meals are a social ritual.' },
-      { icon: '🏛️', label: 'CULTURE', body: 'Renaissance art, ~58 UNESCO sites, lively nightlife, easy weekend trips across Europe.' }
+      { icon: ‘☀️’, label: ‘آب‌وهوا’,   body: ‘آب‌وهوای مدیترانه‌ای — زمستان‌های ملایم و تابستان‌های گرم و طولانی. برف در آلپ شمالی، سواحل زیبا در جنوب.’ },
+      { icon: ‘👥’, label: ‘مردم’,      body: ‘گرم، پرانرژی و خانواده‌محور. مثل یک عضو خانواده («فامیلیا») با شما رفتار می‌کنند. در میلان و رم انگلیسی رایج است.’ },
+      { icon: ‘🎓’, label: ‘تحصیل’,    body: ‘بیش از ۷۰۰ دوره کارشناسی ارشد به انگلیسی. دانشگاه بولونیا در ۱۰۸۸ تأسیس شد — اولین دانشگاه جهان. شهریه معمولاً ~۱٬۵۰۰ یورو در سال.’ },
+      { icon: ‘🍝’, label: ‘غذا’,      body: ‘پاستا، پیتزا، اسپرسو و آپریتیوو. آشپزی کاملاً منطقه‌ای است و وعده غذایی یک آیین اجتماعی محسوب می‌شود.’ },
+      { icon: ‘🏛️’, label: ‘فرهنگ’,   body: ‘هنر رنسانس، ~۵۸ سایت یونسکو، زندگی شبانه پرجنب‌وجوش و سفرهای آخر هفته آسان به سراسر اروپا.’ }
     ],
     germany: [
-      { icon: '🌧️', label: 'WEATHER', body: 'Four real seasons. Snowy winters with ~8 hrs daylight, mild summers around 20–24°C.' },
-      { icon: '👥', label: 'PEOPLE',  body: 'Direct, punctual, organised. Reserved at first — loyal friendships once trust is earned.' },
-      { icon: '🎓', label: 'STUDY',   body: 'Mostly tuition-free public universities. 400k+ international students. Rigorous, independent learning.' },
-      { icon: '🥨', label: 'FOOD',    body: 'Bratwurst, pretzels, schnitzel, beer. Mensa (canteen) lunch €3–5. Huge Turkish & Asian food scenes.' },
-      { icon: '🎄', label: 'CULTURE', body: 'Christmas markets with Glühwein, Oktoberfest, Black Forest. Punctual ICE trains; vibrant Berlin nights.' }
+      { icon: ‘🌧️’, label: ‘آب‌وهوا’,  body: ‘چهار فصل واقعی. زمستان‌های برفی با ~۸ ساعت روشنایی روز، تابستان‌های ملایم حدود ۲۰–۲۴ درجه سانتیگراد.’ },
+      { icon: ‘👥’, label: ‘مردم’,     body: ‘صریح، منظم و وقت‌شناس. در ابتدا محافظه‌کارند — اما وقتی اعتماد جلب شود، دوستی‌های عمیقی شکل می‌گیرد.’ },
+      { icon: ‘🎓’, label: ‘تحصیل’,   body: ‘دانشگاه‌های دولتی عمدتاً رایگان. بیش از ۴۰۰٬۰۰۰ دانشجوی بین‌المللی. سیستم آموزشی دقیق و مستقل‌محور.’ },
+      { icon: ‘🥨’, label: ‘غذا’,     body: ‘براتووُرست، کرچوف، اشنیتسل و آبجو. ناهار در مِنسا (غذاخوری دانشگاه) ۳–۵ یورو. صحنه غذایی ترکی و آسیایی بسیار گسترده.’ },
+      { icon: ‘🎄’, label: ‘فرهنگ’,   body: ‘بازارهای کریسمس با گلووَین، اکتوبرفست، جنگل سیاه. قطارهای ICE دقیق؛ زندگی شبانه پرانرژی در برلین.’ }
     ],
     both: [
-      { icon: '☀️', label: 'WEATHER', body: 'IT: Mediterranean, sunny most of the year. DE: four distinct seasons, cold winters, lush summers.' },
-      { icon: '👥', label: 'PEOPLE',  body: 'IT: warm, expressive, family-first. DE: direct and punctual — loyal once you break the ice.' },
-      { icon: '🎓', label: 'STUDY',   body: 'IT: ~€1,500/yr, ancient universities. DE: tuition-free public unis, world-class engineering.' },
-      { icon: '🍽️', label: 'FOOD',    body: 'IT: pasta, pizza, aperitivo culture. DE: bratwurst, pretzels, beer, cheap Mensa lunches.' },
-      { icon: '🎭', label: 'CULTURE', body: 'IT: Renaissance art & UNESCO sites. DE: Christmas markets, Oktoberfest, Berlin nightlife.' }
+      { icon: ‘☀️’, label: ‘آب‌وهوا’,  body: ‘ایتالیا: مدیترانه‌ای، آفتابی بیشتر سال. آلمان: چهار فصل متمایز، زمستان سرد، تابستان سرسبز.’ },
+      { icon: ‘👥’, label: ‘مردم’,     body: ‘ایتالیا: گرم، پرجوش و خانواده‌محور. آلمان: مستقیم و وقت‌شناس — بعد از شکستن یخ، دوست وفادار.’ },
+      { icon: ‘🎓’, label: ‘تحصیل’,   body: ‘ایتالیا: ~۱٬۵۰۰ یورو در سال، دانشگاه‌های باستانی. آلمان: دانشگاه‌های دولتی رایگان، مهندسی در سطح جهانی.’ },
+      { icon: ‘🍽️’, label: ‘غذا’,     body: ‘ایتالیا: پاستا، پیتزا و فرهنگ آپریتیوو. آلمان: براتووُرست، کرچوف، آبجو و ناهار ارزان در مِنسا.’ },
+      { icon: ‘🎭’, label: ‘فرهنگ’,   body: ‘ایتالیا: هنر رنسانس و سایت‌های یونسکو. آلمان: بازارهای کریسمس، اکتوبرفست و زندگی شبانه برلین.’ }
     ]
   };
 
