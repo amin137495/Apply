@@ -524,19 +524,16 @@
 <!-- ═══ Language Picker Overlay ═══ -->
 <div class="lang-overlay" id="langOverlay">
   <div class="lang-overlay-flag">🇮🇹 🇩🇪</div>
-  <h2>Choose Your Language<br><span style="font-size:1rem;font-weight:400;opacity:.7">Wählen Sie Ihre Sprache</span></h2>
+  <h2>انتخاب زبان<br><span style="font-size:1rem;font-weight:400;opacity:.7">Choose Language</span></h2>
   <div class="lang-btn-group">
-    <button class="lang-btn" onclick="setLang('de')">
-      <span class="lang-flag">🇩🇪</span>
-      <span>Deutsch</span>
-    </button>
     <button class="lang-btn" onclick="setLang('en')">
       <span class="lang-flag">🇬🇧</span>
       <span>English</span>
     </button>
-  </div>
-  <div class="lang-farsi-link">
-    🇮🇷 <a href="index-fa.html">نسخه فارسی</a>
+    <button class="lang-btn" onclick="window.location.href='index-fa.html'">
+      <span class="lang-flag">🇮🇷</span>
+      <span>فارسی</span>
+    </button>
   </div>
 </div>
 
@@ -936,10 +933,10 @@ function setLang(lang) {
   if (lang === 'de') {
     window._deLang = true;
     applyGerman();
-    if (btn) btn.textContent = '🌐 EN / فارسی';
+    if (btn) btn.textContent = '🌐 فارسی';
   } else {
     window._deLang = false;
-    if (btn) btn.textContent = '🌐 DE / فارسی';
+    if (btn) btn.textContent = '🌐 فارسی';
   }
 }
 

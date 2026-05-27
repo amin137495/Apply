@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مشاور تحصیل در خارج — Iran → Italy & Germany</title>
+<title>مشاور تحصیل در خارج — ایران → ایتالیا و آلمان</title>
 <style>
   :root {
     --blue:    #1F497D;
@@ -491,6 +491,33 @@
   .print-btn { direction: ltr; }
   .slider-wrap { direction: ltr; }
 </style>
+<style>
+  .lang-overlay {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #1a3c6e 0%, #2E74B5 100%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 99999; flex-direction: column; gap: 28px; padding: 40px 20px;
+  }
+  .lang-overlay-flag { font-size: 3rem; letter-spacing: .1em; }
+  .lang-overlay h2 { color: #fff; font-size: 1.6rem; font-weight: 700; text-align: center; line-height: 1.3; font-family: "Vazirmatn", sans-serif; }
+  .lang-btn-group { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+  .lang-btn {
+    padding: 20px 36px; border-radius: 14px; border: 2px solid rgba(255,255,255,.3);
+    background: rgba(255,255,255,.12); color: #fff; font-size: 1.05rem; font-weight: 700;
+    cursor: pointer; transition: all .2s; display: flex; align-items: center;
+    flex-direction: column; gap: 8px; min-width: 140px; font-family: "Vazirmatn", sans-serif;
+  }
+  .lang-btn:hover { background: rgba(255,255,255,.28); border-color: rgba(255,255,255,.7); transform: translateY(-2px); }
+  .lang-btn .lang-flag { font-size: 2.2rem; }
+  .header { position: relative; }
+  #langSwitchBtn {
+    position: absolute; top: 12px; left: 16px;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.35);
+    color: #fff; border-radius: 6px; padding: 5px 12px; font-size: .78rem;
+    cursor: pointer; font-family: "Vazirmatn", sans-serif; transition: background .2s;
+  }
+  #langSwitchBtn:hover { background: rgba(255,255,255,.28); }
+</style>
 </head>
 <body>
 
@@ -511,6 +538,22 @@
   </div>
 </div>
 
+<!-- ═══ Language Picker Overlay ═══ -->
+<div class="lang-overlay" id="langOverlay">
+  <div class="lang-overlay-flag">🇮🇹 🇩🇪</div>
+  <h2>انتخاب زبان<br><span style="font-size:1rem;font-weight:400;opacity:.7">Choose Language</span></h2>
+  <div class="lang-btn-group">
+    <button class="lang-btn" onclick="document.getElementById('langOverlay').style.display='none'">
+      <span class="lang-flag">🇮🇷</span>
+      <span>فارسی</span>
+    </button>
+    <button class="lang-btn" onclick="window.location.href='index.html'">
+      <span class="lang-flag">🇬🇧</span>
+      <span>English</span>
+    </button>
+  </div>
+</div>
+
 <div class="shell">
 
   <!-- HEADER -->
@@ -521,6 +564,7 @@
     <div class="progress-wrap"><div class="progress-bar" id="progressBar" style="width:0%"></div></div>
     <div class="progress-label" id="progressLabel">مرحله ۰ از ۹</div>
   </div>
+  <button id="langSwitchBtn" onclick="document.getElementById('langOverlay').style.display='flex'">🌐 EN</button>
 
   <!-- CARD -->
   <div class="card">
@@ -529,8 +573,36 @@
          STEPS
     ═══════════════════════════════════════════════ -->
 
-    <!-- STEP 1: Country -->
+    <!-- STEP 1: Name (optional) -->
     <div class="step active" id="step1">
+      <div class="step-title">بیایید شروع کنیم — کمی درباره خودتان بگویید</div>
+      <div class="step-sub">چند جزئیات کوتاه برای شخصی‌سازی نتایج شما.</div>
+      <div class="field">
+        <label>نام شما (اختیاری)</label>
+        <input type="text" id="q_name" placeholder="مثال: علی احمدی">
+      </div>
+      <div class="field">
+        <label>زیررشته یا تخصص مورد علاقه (اختیاری)</label>
+        <input type="text" id="q_subfield" placeholder="مثال: مهندسی نرم‌افزار، قلب‌وعروق، طراحی صنعتی…">
+      </div>
+      <div class="field">
+        <label>چیز دیگری هست که باید بدانیم؟</label>
+        <select id="q_extra">
+          <option value="none">چیز خاصی نیست</option>
+          <option value="research">می‌خواهم برنامه‌ای تحقیق‌محور داشته باشم</option>
+          <option value="industry">صنعت / آموزش عملی را ترجیح می‌دهم</option>
+          <option value="permanent">امیدوارم در اروپا بمانم و به صورت بلندمدت کار کنم</option>
+          <option value="return">قصد دارم پس از فارغ‌التحصیلی به ایران برگردم</option>
+        </select>
+      </div>
+      <div class="nav">
+        <span></span>
+        <button class="btn btn-primary" onclick="next(1)">بعدی ←</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Country -->
+    <div class="step" id="step2">
       <div class="step-title">کدام کشور را هدف قرار داده‌اید؟</div>
       <div class="step-sub">می‌توانید یک یا هر دو را انتخاب کنید. نتایج بر اساس انتخاب شما تنظیم می‌شود.</div>
       <div class="options cols3" id="q_country">
@@ -551,13 +623,13 @@
         </div>
       </div>
       <div class="nav">
-        <span></span>
-        <button class="btn btn-primary" onclick="next(1)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(2)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(2)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 2: Education level -->
-    <div class="step" id="step2">
+    <!-- STEP 3: Education level -->
+    <div class="step" id="step3">
       <div class="step-title">سطح تحصیلی فعلی شما چیست؟</div>
       <div class="step-sub">این تعیین می‌کند واجد شرایط درخواست برای کدام برنامه‌ها هستید.</div>
       <div class="options cols2" id="q_level">
@@ -583,13 +655,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(2)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(2)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(3)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(3)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 3: Field -->
-    <div class="step" id="step3">
+    <!-- STEP 4: Field -->
+    <div class="step" id="step4">
       <div class="step-title">در چه رشته‌ای می‌خواهید تحصیل کنید؟</div>
       <div class="step-sub">آنچه را که با علاقه شما بیشترین تطابق دارد انتخاب کنید.</div>
       <div class="multi-hint">💡 می‌توانید چند رشته انتخاب کنید</div>
@@ -626,13 +698,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(3)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(3)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(4)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(4)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 4: English level -->
-    <div class="step" id="step4">
+    <!-- STEP 5: English level -->
+    <div class="step" id="step5">
       <div class="step-title">سطح زبان انگلیسی شما چیست؟</div>
       <div class="step-sub">این بر روی برنامه‌هایی که می‌توانید مستقیماً درخواست دهید تأثیر می‌گذارد.</div>
       <div class="options" id="q_english">
@@ -658,13 +730,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(4)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(4)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(5)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(5)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 5: German/Italian -->
-    <div class="step" id="step5">
+    <!-- STEP 6: German/Italian -->
+    <div class="step" id="step6">
       <div class="step-title">آیا آلمانی یا ایتالیایی بلد هستید؟</div>
       <div class="step-sub">این گزینه‌های برنامه شما را به طور قابل توجهی گسترش می‌دهد — به‌ویژه برای آلمان.</div>
       <div class="field">
@@ -689,13 +761,13 @@
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(5)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(5)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(6)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(6)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 6: GPA -->
-    <div class="step" id="step6">
+    <!-- STEP 7: GPA -->
+    <div class="step" id="step7">
       <div class="step-title">معدل تحصیلی شما چیست؟</div>
       <div class="step-sub">از مقیاس ایرانی (از ۲۰) استفاده کنید. این بر واجد شرایط بودن بورسیه و دسترسی به برنامه تأثیر می‌گذارد.</div>
       <div class="field">
@@ -716,13 +788,13 @@
         </select>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(6)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(6)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(7)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(7)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 7: Scholarship need -->
-    <div class="step" id="step7">
+    <!-- STEP 8: Scholarship need -->
+    <div class="step" id="step8">
       <div class="step-title">آیا به حمایت مالی نیاز دارید؟</div>
       <div class="step-sub">این به ما کمک می‌کند مرتبط‌ترین بورسیه‌ها و گزینه‌های کم‌هزینه را برای شما برجسته کنیم.</div>
       <div class="options" id="q_scholarship">
@@ -743,13 +815,13 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(7)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(7)">بعدی ←</button>
+        <button class="btn btn-secondary" onclick="prev(8)">→ برگشت</button>
+        <button class="btn btn-primary" onclick="next(8)">بعدی ←</button>
       </div>
     </div>
 
-    <!-- STEP 8: Timeline -->
-    <div class="step" id="step8">
+    <!-- STEP 9: Timeline -->
+    <div class="step" id="step9">
       <div class="step-title">چه زمانی قصد شروع دارید؟</div>
       <div class="step-sub">این بر کدام دوره پذیرش را هدف قرار دهید و چقدر فوری باید آماده‌سازی شروع کنید تأثیر می‌گذارد.</div>
       <div class="options cols2" id="q_timeline">
@@ -775,36 +847,8 @@
         </div>
       </div>
       <div class="nav">
-        <button class="btn btn-secondary" onclick="prev(8)">→ برگشت</button>
-        <button class="btn btn-primary" onclick="next(8)">بعدی ←</button>
-      </div>
-    </div>
-
-    <!-- STEP 9: Name (optional) -->
-    <div class="step" id="step9">
-      <div class="step-title">تقریباً تمام شد! چند جزئیات آخر.</div>
-      <div class="step-sub">اختیاری — فقط برای شخصی‌سازی گزارش شما استفاده می‌شود.</div>
-      <div class="field">
-        <label>نام شما (اختیاری)</label>
-        <input type="text" id="q_name" placeholder="مثال: علی احمدی">
-      </div>
-      <div class="field">
-        <label>زیررشته یا تخصص مورد علاقه (اختیاری)</label>
-        <input type="text" id="q_subfield" placeholder="مثال: مهندسی نرم‌افزار، قلب‌وعروق، طراحی صنعتی…">
-      </div>
-      <div class="field">
-        <label>چیز دیگری هست که باید بدانیم؟</label>
-        <select id="q_extra">
-          <option value="none">چیز خاصی نیست</option>
-          <option value="research">می‌خواهم برنامه‌ای تحقیق‌محور داشته باشم</option>
-          <option value="industry">صنعت / آموزش عملی را ترجیح می‌دهم</option>
-          <option value="permanent">امیدوارم در اروپا بمانم و به صورت بلندمدت کار کنم</option>
-          <option value="return">قصد دارم پس از فارغ‌التحصیلی به ایران برگردم</option>
-        </select>
-      </div>
-      <div class="nav">
         <button class="btn btn-secondary" onclick="prev(9)">→ برگشت</button>
-        <button class="btn btn-green" onclick="generateResults()">🎯 گزارش من را ایجاد کن</button>
+        <button class="btn btn-green" onclick="generateResults()">🎯 مشاهده نتایج</button>
       </div>
     </div>
 
@@ -914,47 +958,42 @@ function getSelected(groupId) {
 }
 
 function next(step) {
-  // collect answer
   if (step === 1) {
+    // اطلاعات شخصی — اختیاری، در generateResults() جمع‌آوری می‌شود
+  } else if (step === 2) {
     const sel = getSelected('q_country');
     if (!sel.length) { alert('لطفاً یک گزینه انتخاب کنید.'); return; }
     answers.country = sel[0] === 'both' ? ['italy','germany'] : sel;
-
-    // Show globe zooming into the selected country before advancing
     if (typeof window.showCountryLoader === 'function') {
       window.showCountryLoader(answers.country, () => {
-        currentStep = 2;
-        showStep(2);
+        currentStep = 3;
+        showStep(3);
         window.scrollTo({top:0, behavior:'smooth'});
       });
       return;
     }
-  } else if (step === 2) {
+  } else if (step === 3) {
     const sel = getSelected('q_level');
     if (!sel.length) { alert('لطفاً سطح تحصیلی خود را انتخاب کنید.'); return; }
     answers.level = sel[0];
-  } else if (step === 3) {
+  } else if (step === 4) {
     const sel = getSelected('q_field');
     if (!sel.length) { alert('لطفاً حداقل یک رشته انتخاب کنید.'); return; }
     answers.fields = sel;
-  } else if (step === 4) {
+  } else if (step === 5) {
     const sel = getSelected('q_english');
     if (!sel.length) { alert('لطفاً سطح زبان انگلیسی خود را انتخاب کنید.'); return; }
     answers.english = sel[0];
-  } else if (step === 5) {
+  } else if (step === 6) {
     answers.german  = document.getElementById('q_german').value;
     answers.italian = document.getElementById('q_italian').value;
-  } else if (step === 6) {
+  } else if (step === 7) {
     answers.gpa      = parseFloat(document.getElementById('q_gpa_slider').value);
     answers.gpa_type = document.getElementById('q_gpa_type').value;
-  } else if (step === 7) {
+  } else if (step === 8) {
     const sel = getSelected('q_scholarship');
     if (!sel.length) { alert('لطفاً یک گزینه انتخاب کنید.'); return; }
     answers.scholarship = sel[0];
-  } else if (step === 8) {
-    const sel = getSelected('q_timeline');
-    if (!sel.length) { alert('لطفاً برنامه زمانی خود را انتخاب کنید.'); return; }
-    answers.timeline = sel[0];
   }
   currentStep = step + 1;
   showStep(currentStep);
@@ -999,6 +1038,9 @@ function restart() {
 
 // ─── RESULT GENERATION ────────────────────────────────────────────────────────
 function generateResults() {
+  const tlSel = getSelected('q_timeline');
+  if (!tlSel.length) { alert('لطفاً برنامه زمانی خود را انتخاب کنید.'); return; }
+  answers.timeline = tlSel[0];
   answers.name     = document.getElementById('q_name').value.trim() || 'دانشجو';
   answers.subfield = document.getElementById('q_subfield').value.trim();
   answers.extra    = document.getElementById('q_extra').value;
@@ -1023,6 +1065,14 @@ const levelLabel = {
 const englishLabel = {
   none: 'بدون آزمون زبان', low: 'آیلتس زیر ۵.۵',
   mid: 'آیلتس ۵.۵–۶.۰', good: 'آیلتس ۶.۰–۶.۵', strong: 'آیلتس ۶.۵ به بالا'
+};
+const fieldLabel = {
+  medicine:    'پزشکی / دندانپزشکی',
+  engineering: 'مهندسی و فناوری',
+  science:     'علوم پایه',
+  business:    'مدیریت و اقتصاد',
+  arts:        'هنر، طراحی و معماری',
+  humanities:  'علوم انسانی و اجتماعی'
 };
 const schLabel = {
   full: 'نیاز به بورسیه کامل', partial: 'حمایت جزئی', self: 'خودتأمین'
@@ -1062,7 +1112,7 @@ function buildResults() {
   document.getElementById('res_name').textContent =
     name !== 'دانشجو' ? `گزارش تحصیل در خارج ${name}` : 'گزارش شخصی‌سازی‌شده تحصیل در خارج شما';
   document.getElementById('res_tagline').textContent =
-    `${levelLabel[a.level]} | ${a.fields.map(f=>f.charAt(0).toUpperCase()+f.slice(1)).join(', ')} | ${englishLabel[a.english]}`;
+    `${levelLabel[a.level]} | ${a.fields.map(f=>fieldLabel[f]||f).join('، ')} | ${englishLabel[a.english]}`;
 
   const chips = [
     a.country.map(c => c === 'italy' ? '🇮🇹 ایتالیا' : '🇩🇪 آلمان').join(' + '),
@@ -1085,17 +1135,17 @@ function buildResults() {
 
     if (isUG()) {
       italyStatus = `
-        <strong>Bachelor's programmes</strong> — ${engOk || italianOk ? tag('Eligible','green') : tag('Language prep needed','amber')}<br>
-        ${engOk ? '✅ English level sufficient for English-language Bachelor\'s' : '⚠️ IELTS 5.5+ required for English-language programmes'}<br>
-        ${italianOk ? '✅ Italian level sufficient for Italian-language programmes' : ''}
-        ${hasMed() ? '<br>⚕️ Medicine: IMAT exam required (competitive — September each year)' : ''}
+        <strong>Bachelor's programmes</strong> — ${engOk || italianOk ? tag('واجد شرایط','green') : tag('نیاز به آمادگی زبانی','amber')}<br>
+        ${engOk ? '✅ سطح انگلیسی برای برنامه‌های کارشناسی انگلیسی‌زبان کافی است' : '⚠️ آیلتس ۵.۵ یا بالاتر برای برنامه‌های انگلیسی‌زبان الزامی است'}<br>
+        ${italianOk ? '✅ سطح ایتالیایی برای برنامه‌های ایتالیایی‌زبان کافی است' : ''}
+        ${hasMed() ? '<br>⚕️ پزشکی: آزمون IMAT الزامی است (رقابتی — هر سال سپتامبر)' : ''}
       `;
     } else if (a.level === 'bachelor') {
       const engMeet = ['good','strong'].includes(a.english);
       italyStatus = `
-        <strong>Master's programmes</strong> — ${engMeet || italianOk ? tag('Eligible','green') : tag('IELTS upgrade needed','amber')}<br>
-        ${engMeet ? '✅ IELTS 6.0–6.5 sufficient for most Master\'s' : '⚠️ IELTS 6.0+ required for English Master\'s'}
-        ${gpa() >= 16 ? '<br>✅ GPA ≥ 16/20 — competitive for top universities' : '<br>⚠️ GPA below 16 may limit choices at top universities'}
+        <strong>Master's programmes</strong> — ${engMeet || italianOk ? tag('Eligible','green') : tag('ارتقاء آیلتس لازم است','amber')}<br>
+        ${engMeet ? '✅ آیلتس ۶.۰–۶.۵ برای اکثر دوره‌های ارشد کافی است' : '⚠️ آیلتس ۶.۰ یا بالاتر برای دوره‌های ارشد انگلیسی‌زبان الزامی است'}
+        ${gpa() >= 16 ? '<br>✅ معدل ۱۶ یا بالاتر — رقابتی برای دانشگاه‌های برتر' : '<br>⚠️ معدل زیر ۱۶ ممکن است گزینه‌ها در دانشگاه‌های برتر را محدود کند'}
       `;
     } else if (isPhD()) {
       italyStatus = `
@@ -1113,21 +1163,21 @@ function buildResults() {
     const engStr  = ['good','strong'].includes(a.english);
     if (isUG()) {
       deStatus = `
-        <strong>Bachelor's programmes</strong> — ${gerOk ? tag('Eligible (German-taught)','green') : tag('German required','amber')}<br>
-        ${gerOk ? '✅ German level meets Bachelor\'s requirement' : '⚠️ Most German Bachelor\'s are taught in German — you need B2+'}<br>
+        <strong>Bachelor's programmes</strong> — ${gerOk ? tag('واجد شرایط (به زبان آلمانی)','green') : tag('آلمانی الزامی است','amber')}<br>
+        ${gerOk ? '✅ سطح آلمانی شما نیاز برنامه کارشناسی را برآورده می‌کند' : '⚠️ اکثر دوره‌های کارشناسی آلمان به آلمانی تدریس می‌شوند — حداقل B2 لازم دارید'}<br>
         ⚠️ APS Certificate is <strong>mandatory</strong> — apply immediately
-        ${hasMed() ? '<br>⚕️ Medicine NC is extremely competitive — GPA equivalent of 17.5+/20 needed' : ''}
+        ${hasMed() ? '<br>⚕️ NC پزشکی بسیار رقابتی است — معدل معادل ۱۷.۵ یا بالاتر نیاز است' : ''}
       `;
     } else if (a.level === 'bachelor') {
       deStatus = `
-        <strong>Master's programmes</strong> — ${engStr || gerOk ? tag('Eligible','green') : tag('Language upgrade needed','amber')}<br>
-        ${engStr ? '✅ IELTS 6.5+ — qualifies for English-taught Master\'s' : '⚠️ IELTS 6.5+ or German B2 required'}
-        ${gpa() >= 15 ? '<br>✅ GPA competitive for German universities' : '<br>⚠️ GPA below 15 — check specific programme requirements'}
+        <strong>Master's programmes</strong> — ${engStr || gerOk ? tag('Eligible','green') : tag('نیاز به ارتقاء زبان','amber')}<br>
+        ${engStr ? '✅ آیلتس ۶.۵ یا بالاتر — برای ارشد انگلیسی‌زبان مناسب است' : '⚠️ آیلتس ۶.۵ یا آلمانی B2 الزامی است'}
+        ${gpa() >= 15 ? '<br>✅ معدل شما برای دانشگاه‌های آلمان رقابتی است' : '<br>⚠️ معدل زیر ۱۵ — الزامات خاص هر برنامه را بررسی کنید'}
         <br>⚠️ APS Certificate mandatory — arrange via German Embassy Yerevan
       `;
     } else if (isPhD()) {
       deStatus = `
-        <strong>PhD / Promotion</strong> — ${tag('Excellent opportunity','green')}<br>
+        <strong>PhD / Promotion</strong> — ${tag('فرصت عالی','green')}<br>
         ✅ Paid research position (Wissenschaftlicher Mitarbeiter) — no tuition<br>
         ✅ Most supervisors accept English-speaking PhD candidates<br>
         ✅ Salary €1,500–€2,500/month net
@@ -1140,11 +1190,11 @@ function buildResults() {
   const englishGood = ['good','strong'].includes(a.english);
   const gpaGood = gpa() >= 15;
   if (englishGood && gpaGood) {
-    elig = alert_box('🟢 <strong>Strong Profile:</strong> Your English level and GPA make you competitive for top programmes in both countries. Focus on documents and entrance exams.', 'green') + elig;
+    elig = alert_box('🟢 <strong>پروفایل قوی:</strong> سطح انگلیسی و معدل شما برای برنامه‌های برتر در هر دو کشور رقابتی است. روی مدارک و آزمون‌های ورودی تمرکز کنید.', 'green') + elig;
   } else if (!englishGood && a.english !== 'none') {
-    elig = alert_box('🟡 <strong>Language is your priority:</strong> Improving your IELTS to 6.0+ (Italy) or 6.5+ (Germany) will unlock significantly more programmes and scholarships.', 'amber') + elig;
+    elig = alert_box('🟡 <strong>اولویت شما زبان است:</strong> ارتقاء آیلتس به ۶.۰ (ایتالیا) یا ۶.۵ (آلمان) دسترسی به برنامه‌ها و بورسیه‌های بیشتری را باز می‌کند.', 'amber') + elig;
   } else if (a.english === 'none') {
-    elig = alert_box('🔴 <strong>Take an English test first:</strong> Nearly all international programmes require IELTS or TOEFL. This should be your first concrete step.', 'amber') + elig;
+    elig = alert_box('🔴 <strong>اول آزمون زبان بدهید:</strong> تقریباً تمام برنامه‌های بین‌المللی IELTS یا TOEFL می‌خواهند. این اولین گام عملی شما باشد.', 'amber') + elig;
   }
   document.getElementById('res_eligibility').innerHTML = elig;
 
@@ -1160,7 +1210,7 @@ function buildResults() {
     const isBus = answers.fields.includes('business');
 
     if (isMed) {
-      italyUnis.push('<strong>Medicine (IMAT — English):</strong>');
+      italyUnis.push('<strong>پزشکی (آزمون IMAT — انگلیسی):</strong>');
       italyUnis.push('Università di Bologna (UNIBO) — most international students; strong reputation');
       italyUnis.push('Università di Pavia — excellent clinical training, smaller cohort');
       italyUnis.push('Sapienza Università di Roma — large campus, very competitive IMAT score needed');
@@ -1169,7 +1219,7 @@ function buildResults() {
       italyUnis.push('Università Federico II Napoli — southern Italy, lower living costs');
     }
     if (isEng) {
-      italyUnis.push('<strong>Engineering:</strong>');
+      italyUnis.push('<strong>مهندسی:</strong>');
       italyUnis.push('Politecnico di Milano — #1 in Italy; globally ranked ~140 Engineering & Technology; 100+ English programmes');
       italyUnis.push('Politecnico di Torino — strong Aerospace, Automotive, Mechanical');
       italyUnis.push('Università di Bologna — broad engineering portfolio, many English options');
@@ -1177,13 +1227,13 @@ function buildResults() {
       italyUnis.push('Università di Padova — strong ICT, Mechatronics, Bioengineering');
     }
     if (isArt) {
-      italyUnis.push('<strong>Design & Architecture:</strong>');
+      italyUnis.push('<strong>طراحی و معماری:</strong>');
       italyUnis.push('Politecnico di Milano — world-famous for Industrial Design and Architecture');
       italyUnis.push('IUAV Venezia — leading Architecture school in Venice');
       italyUnis.push('Domus Academy (private) — postgrad design; taught in English');
     }
     if (isSci || isBus || answers.fields.includes('humanities')) {
-      italyUnis.push('<strong>Sciences, Business & Humanities:</strong>');
+      italyUnis.push('<strong>علوم، مدیریت و علوم انسانی:</strong>');
       italyUnis.push('Università di Bologna — comprehensive; top-ranked in Italy');
       italyUnis.push('Università di Padova — strong natural sciences and social sciences');
       italyUnis.push('Bocconi University (private) — best business school in Italy; excellent English MBA/MSc');
@@ -1206,7 +1256,7 @@ function buildResults() {
     const isCS  = answers.subfield.toLowerCase().includes('computer') || answers.subfield.toLowerCase().includes('software');
 
     if (isMed) {
-      deUnis.push('<strong>Medicine (German language C1 required):</strong>');
+      deUnis.push('<strong>پزشکی (آلمانی سطح C1 الزامی):</strong>');
       deUnis.push('Ruprecht-Karls-Universität Heidelberg — one of Germany\'s top medical faculties');
       deUnis.push('LMU München (Ludwig Maximilian) — very high NC required');
       deUnis.push('Charité – Universitätsmedizin Berlin — Europe\'s largest university hospital, attached to FU & HU Berlin');
@@ -1223,13 +1273,13 @@ function buildResults() {
       deUnis.push('Technische Universität Dresden — strong in Microelectronics and Materials');
     }
     if (isSci) {
-      deUnis.push('<strong>Natural Sciences:</strong>');
+      deUnis.push('<strong>علوم پایه:</strong>');
       deUnis.push('LMU München — top natural sciences, many English Master\'s');
       deUnis.push('Heidelberg University — Germany\'s oldest; exceptional in Life Sciences');
       deUnis.push('Freie Universität Berlin — strong in Biochemistry, Chemistry, Environment');
     }
     if (isBus) {
-      deUnis.push('<strong>Business & Economics:</strong>');
+      deUnis.push('<strong>مدیریت و اقتصاد:</strong>');
       deUnis.push('WHU – Otto Beisheim School of Management (private) — top German business school');
       deUnis.push('Mannheim Business School — highest-ranked public business programme');
       deUnis.push('Frankfurt School of Finance & Management — strong finance and banking track');
@@ -1243,7 +1293,7 @@ function buildResults() {
     unis += countryBlock('🇩🇪','آلمان','germany', ul(deUnis));
   }
 
-  unis += alert_box('💡 Use <strong>DAAD university search</strong> (daad.de) and <strong>Mastersportal.eu</strong> to find English-language programmes and filter by field, tuition, and IELTS requirement.','blue');
+  unis += alert_box('💡 از <strong>جستجوی دانشگاه DAAD</strong> (daad.de) و <strong>Mastersportal.eu</strong> برای یافتن برنامه‌های انگلیسی‌زبان و فیلتر بر اساس رشته، شهریه و نیاز IELTS استفاده کنید.','blue');
   document.getElementById('res_universities').innerHTML = unis;
 
   // ── 3. Tests ───────────────────────────────────────────────────────────────
@@ -1254,60 +1304,60 @@ function buildResults() {
     const isMed = answers.fields.includes('medicine');
     const isEng = answers.fields.includes('engineering');
     if (isMed && isUG()) {
-      italyTests.push(`<strong>IMAT (International Medical Admissions Test)</strong> ${tag('Required for Medicine','red')}<br>
-        Date: September each year | Duration: 100 min, 60 questions<br>
-        Topics: Critical Thinking, Biology, Chemistry, Physics & Maths<br>
-        Register: May–July via Universitaly.it | Fee: ~€150<br>
-        📚 Prep: Cambridge Assessment official materials, imat.it, 6–12 months recommended`);
+      italyTests.push(`<strong>IMAT (International Medical Admissions Test)</strong> ${tag('الزامی برای پزشکی','red')}<br>
+        تاریخ: هر سال سپتامبر | مدت: ۱۰۰ دقیقه، ۶۰ سوال<br>
+        موضوعات: تفکر انتقادی، زیست‌شناسی، شیمی، فیزیک و ریاضیات<br>
+        ثبت‌نام: مه–جولای از طریق Universitaly.it | هزینه: ~۱۵۰ یورو<br>
+        📚 آمادگی: مواد رسمی Cambridge Assessment، imat.it، ۶–۱۲ ماه توصیه می‌شود`);
     }
     if (isEng && isUG()) {
-      italyTests.push(`<strong>TOLC-I</strong> ${tag('Required for Engineering (most universities)','amber')}<br>
-        Topics: Maths, Logic, Basic Sciences | Can be taken online (CISIA platform)<br>
-        Register: cisia.it | Multiple sittings per year`);
+      italyTests.push(`<strong>TOLC-I</strong> ${tag('الزامی برای مهندسی (اکثر دانشگاه‌ها)','amber')}<br>
+        موضوعات: ریاضیات، منطق، علوم پایه | می‌توان آنلاین شرکت کرد (پلتفرم CISIA)<br>
+        ثبت‌نام: cisia.it | چندین نوبت در سال`);
     }
     const engLevel = a.english;
     if (['none','low'].includes(engLevel)) {
-      italyTests.push(`<strong>IELTS / TOEFL</strong> ${tag('Required','red')}<br>
-        Target: IELTS 5.5 (UG English) or 6.0–6.5 (Master's)<br>
-        Book at: britishcouncil.ir / idp.com`);
+      italyTests.push(`<strong>IELTS / TOEFL</strong> ${tag('الزامی','red')}<br>
+        هدف: آیلتس ۵.۵ (کارشناسی انگلیسی) یا ۶.۰–۶.۵ (ارشد)<br>
+        رزرو: britishcouncil.ir / idp.com`);
     }
     if (!['b2','c1'].includes(a.italian) && a.italian !== 'none') {
-      italyTests.push(`<strong>Italian Language Certificate</strong> ${tag('If pursuing Italian-language programme','amber')}<br>
-        Options: CILS, CELI, PLIDA, or DELI — minimum B2 required<br>
-        Institutions: Università per Stranieri di Perugia, Siena`);
+      italyTests.push(`<strong>Italian Language Certificate</strong> ${tag('اگر به دنبال برنامه ایتالیایی‌زبان هستید','amber')}<br>
+        گزینه‌ها: CILS، CELI، PLIDA یا DELI — حداقل B2 لازم است<br>
+        مؤسسات: Università per Stranieri di Perugia، Siena`);
     }
     if (!italyTests.length) {
-      italyTests.push('Your English level meets most Italian programme requirements ✅');
-      italyTests.push('Keep your IELTS certificate valid (2-year validity)');
+      italyTests.push('سطح انگلیسی شما نیاز اکثر برنامه‌های ایتالیایی را برآورده می‌کند ✅');
+      italyTests.push('گواهی آیلتس خود را معتبر نگه دارید (اعتبار ۲ ساله)');
     }
     tests += countryBlock('🇮🇹','ایتالیا — آزمون‌های لازم','italy', ul(italyTests));
   }
 
   if (hasGermany()) {
     let deTests = [];
-    deTests.push(`<strong>APS Certificate</strong> ${tag('MANDATORY for all Iranians','red')}<br>
-      Verifies authenticity of Iranian academic qualifications<br>
-      Apply: Via German Embassy Yerevan (Tehran office closed since Feb 2026)<br>
-      Cost: ~€75 | Processing: 6–10 weeks | Does not expire<br>
-      📋 Bring: Certified translations of all diplomas, passport copy, application form`);
+    deTests.push(`<strong>APS Certificate</strong> ${tag('اجباری برای همه ایرانیان','red')}<br>
+      صحت مدارک تحصیلی ایرانی را تأیید می‌کند<br>
+      درخواست: از طریق سفارت آلمان ایروان (دفتر تهران از فوریه ۲۰۲۶ تعطیل است)<br>
+      هزینه: ~۷۵ یورو | پردازش: ۶–۱۰ هفته | انقضا ندارد<br>
+      📋 بیاورید: ترجمه‌های گواهی‌شده تمام مدارک، کپی پاسپورت، فرم درخواست`);
 
     if (!['good','strong'].includes(a.english) && !['b2','c1','c2'].includes(a.german)) {
-      deTests.push(`<strong>IELTS / TOEFL</strong> ${tag('Required for English programmes','red')}<br>
-        Target: IELTS 6.5+ or TOEFL 88+ for most German Master's<br>
-        Book: britishcouncil.ir / idp.com`);
+      deTests.push(`<strong>IELTS / TOEFL</strong> ${tag('الزامی برای برنامه‌های انگلیسی‌زبان','red')}<br>
+        هدف: آیلتس ۶.۵ یا TOEFL 88 یا بالاتر برای اکثر دوره‌های ارشد آلمان<br>
+        رزرو: britishcouncil.ir / idp.com`);
     }
     if (!['b2','c1','c2'].includes(a.german) && (isUG() || answers.fields.includes('medicine'))) {
-      deTests.push(`<strong>TestDaF or DSH</strong> ${tag('Required for German-language programmes','amber')}<br>
-        Target: TestDaF level 4 in all 4 sections (reading, listening, writing, speaking)<br>
-        Goethe-Institut Tehran: goethe.de/iran | Also offered abroad<br>
-        For Medicine specifically: C1 (DSH-2) is the absolute minimum`);
+      deTests.push(`<strong>TestDaF or DSH</strong> ${tag('الزامی برای برنامه‌های آلمانی‌زبان','amber')}<br>
+        هدف: TestDaF سطح ۴ در تمام ۴ بخش (خواندن، شنیدن، نوشتن، صحبت کردن)<br>
+        گوته‌انستیتوت تهران: goethe.de/iran | در خارج از کشور هم برگزار می‌شود<br>
+        برای پزشکی: C1 (DSH-2) حداقل مطلق است`);
     }
     if (answers.fields.includes('medicine') && isUG()) {
-      deTests.push(`<strong>TMS or HAM-Nat</strong> ${tag('Strongly recommended for Medicine','amber')}<br>
-        Medical aptitude tests that can compensate for a lower NC score<br>
-        TMS: medtest.de | HAM-Nat: offered at specific universities`);
+      deTests.push(`<strong>TMS or HAM-Nat</strong> ${tag('توصیه اکید برای پزشکی','amber')}<br>
+        آزمون‌های استعداد پزشکی که می‌توانند نمره NC پایین‌تر را جبران کنند<br>
+        TMS: medtest.de | HAM-Nat: در دانشگاه‌های خاص برگزار می‌شود`);
     }
-    if (!deTests.length) deTests.push('No additional test gaps identified based on your profile ✅');
+    if (!deTests.length) deTests.push('بر اساس پروفایل شما هیچ شکاف آزمونی شناسایی نشد ✅');
     tests += countryBlock('🇩🇪','آلمان — آزمون‌های لازم','germany', ul(deTests));
   }
 
@@ -1322,50 +1372,50 @@ function buildResults() {
 
   if (hasItaly()) {
     let italySchol = [];
-    italySchol.push(`<strong>MAECI Italian Government Scholarship</strong> ${gpaHigh ? tag('You may qualify','green') : tag('Check criteria','amber')}<br>
-      1,000+ scholarships/year | Covers tuition + €900/month living allowance<br>
-      Apply: universitaly.it | Deadline: usually March–April each year<br>
-      Open to: All levels (UG, Master's, PhD, language courses)`);
-    italySchol.push(`<strong>DSU (Diritto allo Studio Universitario)</strong> ${tag('Income-based','blue')}<br>
-      Monthly grant €300–€600 + free university accommodation<br>
-      Apply after enrolling at your university | Based on family income (ISEE)`);
+    italySchol.push(`<strong>MAECI Italian Government Scholarship</strong> ${gpaHigh ? tag('احتمالاً واجد شرایط هستید','green') : tag('معیارها را بررسی کنید','amber')}<br>
+      بیش از ۱۰۰۰ بورسیه در سال | پوشش شهریه + ۹۰۰ یورو هزینه زندگی در ماه<br>
+      درخواست: universitaly.it | مهلت: معمولاً مارس–آوریل هر سال<br>
+      برای: تمام مقاطع (کارشناسی، ارشد، دکتری، دوره‌های زبان)`);
+    italySchol.push(`<strong>DSU (Diritto allo Studio Universitario)</strong> ${tag('بر اساس درآمد','blue')}<br>
+      کمک‌هزینه ماهانه ۳۰۰–۶۰۰ یورو + خوابگاه رایگان دانشگاهی<br>
+      بعد از ثبت‌نام در دانشگاه درخواست دهید | بر اساس درآمد خانواده (ISEE)`);
     if (isPG()) {
-      italySchol.push(`<strong>PhD Stipend (Dottorato)</strong> ${tag('Fully funded','green')}<br>
-        ~€1,200/month net for 3 years — apply via CINECA (cineca.it)<br>
-        No tuition fees | Most positions are open to international applicants`);
+      italySchol.push(`<strong>PhD Stipend (Dottorato)</strong> ${tag('کاملاً تأمین مالی شده','green')}<br>
+        ~۱۲۰۰ یورو در ماه خالص برای ۳ سال — درخواست از طریق CINECA (cineca.it)<br>
+        بدون شهریه | اکثر موقعیت‌ها برای متقاضیان بین‌المللی باز است`);
     }
     italySchol.push(`<strong>University-Specific Scholarships</strong><br>
-      Bologna: Unibo Study Grants for International Students<br>
-      Politecnico di Milano: Merit-based grants (check polimi.it/en/education/fees-and-scholarships)<br>
-      Padova: Excellence Scholarships for International Students`);
+      بولونیا: کمک‌هزینه‌های مطالعاتی Unibo برای دانشجویان بین‌الملل<br>
+      پولیتکنیکو دی میلانو: کمک‌هزینه‌های شایسته‌سالاری (polimi.it/en/education/fees-and-scholarships)<br>
+      پادوا: بورسیه‌های عالی برای دانشجویان بین‌الملل`);
     schol += countryBlock('🇮🇹','بورسیه‌های ایتالیا','italy', ul(italySchol));
   }
 
   if (hasGermany()) {
     let deSchol = [];
-    deSchol.push(`<strong>DAAD Scholarship</strong> ${gpaHigh ? tag('Strong candidate','green') : tag('Competitive — apply anyway','amber')}<br>
-      Germany's largest scholarship body | Covers Master's, PhD, Postdoc<br>
-      Monthly stipend €850–€1,200 + health insurance + travel allowance<br>
-      Apply: daad.de | Deadlines: Oct–Nov for following year<br>
-      Language: English or German depending on programme`);
+    deSchol.push(`<strong>DAAD Scholarship</strong> ${gpaHigh ? tag('کاندیدای قوی','green') : tag('رقابتی — باز هم درخواست دهید','amber')}<br>
+      بزرگ‌ترین نهاد بورسیه آلمان | پوشش ارشد، دکتری، پست‌دکترا<br>
+      کمک هزینه ماهانه ۸۵۰–۱۲۰۰ یورو + بیمه درمانی + هزینه سفر<br>
+      درخواست: daad.de | مهلت: اکتبر–نوامبر برای سال بعد<br>
+      زبان: انگلیسی یا آلمانی بسته به برنامه`);
 
     if (isPG()) {
-      deSchol.push(`<strong>Political Foundation Scholarships</strong> ${tag('Up to €1,200/month','green')}<br>
-        Konrad Adenauer Stiftung (kas.de) — centre-right values<br>
-        Friedrich Ebert Stiftung (fes.de) — social-democratic<br>
-        Heinrich Böll Stiftung (boell.de) — green/environment<br>
-        Rosa Luxemburg Stiftung — progressive/left<br>
-        All open to international students regardless of political affiliation`);
-      deSchol.push(`<strong>PhD Position as Wissenschaftlicher Mitarbeiter</strong> ${tag('Funded position','green')}<br>
-        Salary €1,500–€2,500/month | No tuition | Health insurance included<br>
-        Apply directly to professors or via university graduate schools`);
+      deSchol.push(`<strong>Political Foundation Scholarships</strong> ${tag('تا ۱۲۰۰ یورو در ماه','green')}<br>
+        Konrad Adenauer Stiftung (kas.de) — ارزش‌های میانه-راست<br>
+        Friedrich Ebert Stiftung (fes.de) — سوسیال دموکرات<br>
+        Heinrich Böll Stiftung (boell.de) — سبز/محیط زیست<br>
+        Rosa Luxemburg Stiftung — پیشرو/چپ<br>
+        همه برای دانشجویان بین‌الملل بدون توجه به گرایش سیاسی باز هستند`);
+      deSchol.push(`<strong>PhD Position as Wissenschaftlicher Mitarbeiter</strong> ${tag('موقعیت با بودجه','green')}<br>
+        حقوق ۱۵۰۰–۲۵۰۰ یورو در ماه | بدون شهریه | بیمه درمانی شامل است<br>
+        مستقیم به استادان درخواست دهید یا از طریق مدارس تحصیلات تکمیلی دانشگاه`);
     }
-    deSchol.push(`<strong>Alexander von Humboldt Foundation</strong> ${isPhD() ? tag('Relevant for you','green') : tag('Postdoc level','blue')}<br>
-      For postdoctoral researchers | Up to €2,670/month + benefits<br>
-      Apply: humboldt-foundation.de`);
-    deSchol.push(`<strong>Blocked Account (Sperrkonto)</strong> ${tag('Not a scholarship — your own money','blue')}<br>
-      €11,208 required for student visa | Providers: Fintiba, Expatrio, Deutsche Bank<br>
-      You withdraw ~€935/month while studying — the money stays yours`);
+    deSchol.push(`<strong>Alexander von Humboldt Foundation</strong> ${isPhD() ? tag('مرتبط با شما','green') : tag('سطح پست‌دکتری','blue')}<br>
+      برای محققان پست‌دکترا | تا ۲۶۷۰ یورو در ماه + مزایا<br>
+      درخواست: humboldt-foundation.de`);
+    deSchol.push(`<strong>Blocked Account (Sperrkonto)</strong> ${tag('بورسیه نیست — پول خودتان است','blue')}<br>
+      ۱۱٬۲۰۸ یورو برای ویزای دانشجویی لازم است | ارائه‌دهندگان: Fintiba، Expatrio، Deutsche Bank<br>
+      ماهانه ~۹۳۵ یورو در حین تحصیل برداشت می‌کنید — پول متعلق به شماست`);
     schol += countryBlock('🇩🇪','بورسیه‌ها و منابع مالی آلمان','germany', ul(deSchol));
   }
 
@@ -1376,23 +1426,23 @@ function buildResults() {
 
   // ── 5. Embassy & Visa ──────────────────────────────────────────────────────
   let visa = '';
-  visa += alert_box('⚠️ <strong>German Embassy Tehran:</strong> Completely closed since February 2026. All German visa processing for Iranians has been officially rerouted to <strong>Yerevan, Armenia</strong>.','amber');
-  visa += alert_box('ℹ️ <strong>Italian Embassy Tehran:</strong> Partially operational (was temporarily suspended June 2025, has since reopened for students). However, the <strong>Italian Embassy in Yerevan</strong> is fully open and is a reliable alternative.','blue');
+  visa += alert_box('⚠️ <strong>سفارت آلمان در تهران:</strong> از فوریه ۲۰۲۶ کاملاً تعطیل است. تمام پردازش ویزای آلمان برای ایرانیان به <strong>ایروان، ارمنستان</strong> منتقل شده است.','amber');
+  visa += alert_box('ℹ️ <strong>سفارت ایتالیا در تهران:</strong> به‌طور جزئی فعال است (در ژوئن ۲۰۲۵ موقتاً تعلیق شد اما برای دانشجویان مجدداً باز شد). با این حال، <strong>سفارت ایتالیا در ایروان</strong> کاملاً باز است.','blue');
 
   visa += `
-  <h4 style="margin:18px 0 10px; color:var(--blue)">🇦🇲 Yerevan, Armenia — Your Visa Hub</h4>
+  <h4 style="margin:18px 0 10px; color:var(--blue)">🇦🇲 ایروان، ارمنستان — مرکز ویزای شما</h4>
   ${ul([
-    '<strong>Iranians enter Armenia VISA-FREE</strong> for up to 90 days — no pre-approval needed, just your passport',
-    'Both the German Embassy and Italian Embassy in Yerevan are fully operational',
-    'German Embassy Yerevan appointment: service2.diplo.de (select Yerevan → National Visa D)',
-    'Italian Embassy Yerevan: amb.jerevan@cert.esteri.it | ambjerevan.esteri.it',
-    'TLScontact VAC Yerevan (German): visas-de.tlscontact.com/en-us/country/am/vac/amEVN2de',
+    '<strong>ایرانیان تا ۹۰ روز بدون ویزا</strong> وارد ارمنستان می‌شوند — بدون نیاز به تأیید قبلی، فقط پاسپورت',
+    'هر دو سفارت آلمان و ایتالیا در ایروان کاملاً فعال هستند',
+    'وقت سفارت آلمان ایروان: service2.diplo.de (ایروان → ویزای ملی D انتخاب کنید)',
+    'سفارت ایتالیا ایروان: amb.jerevan@cert.esteri.it | ambjerevan.esteri.it',
+    'مرکز دریافت ویزا TLScontact ایروان (آلمان): visas-de.tlscontact.com/en-us/country/am/vac/amEVN2de',
   ])}
-  <h4 style="margin:18px 0 10px; color:var(--blue)">✈️ Getting to Yerevan from Iran</h4>
+  <h4 style="margin:18px 0 10px; color:var(--blue)">✈️ رفتن از ایران به ایروان</h4>
   ${ul([
-    '<strong>By Air (~1.5 hrs):</strong> Mahan Air, Flyone Armenia — Tehran (IKA) or Tabriz → Yerevan (EVN). ~$80–200 one-way. Check current schedules as airspace was disrupted in early 2026',
-    '<strong>By Bus (~18–22 hrs from Tehran):</strong> Two daily buses Tehran → Yerevan via Tabriz. ~$30–60. Most reliable option if flights are unavailable',
-    '<strong>By Land via Norduz–Agarak crossing:</strong> Drive or shared taxi to border, then onward taxi to Yerevan. Check current crossing status before travelling',
+    '<strong>هوایی (حدود ۱.۵ ساعت):</strong> ماهان ایر، Flyone Armenia — تهران (IKA) یا تبریز → ایروان (EVN). تقریباً ۸۰–۲۰۰ دلار یک‌طرفه. برنامه‌های فعلی را بررسی کنید',
+    '<strong>اتوبوس (حدود ۱۸–۲۲ ساعت از تهران):</strong> دو اتوبوس روزانه تهران → ایروان از طریق تبریز. تقریباً ۳۰–۶۰ دلار. مطمئن‌ترین گزینه در صورت عدم وجود پرواز',
+    '<strong>زمینی از گذرگاه نوردوز–اگاراک:</strong> رانندگی یا تاکسی مشترک تا مرز، سپس تاکسی به ایروان. وضعیت گذرگاه را قبل از سفر بررسی کنید',
   ])}`;
 
   document.getElementById('res_visa').innerHTML = visa;
@@ -1400,27 +1450,27 @@ function buildResults() {
   // ── 6. Documents ───────────────────────────────────────────────────────────
   let docs = '';
   let commonDocs = [
-    'Valid Iranian passport — minimum 6 months validity beyond your intended stay',
-    'All academic certificates & transcripts — originals + official certified translation (Persian → English/Italian/German) + apostille from Iranian Ministry of Foreign Affairs',
-    'Language test certificate (IELTS/TOEFL and/or TestDaF/DSH)',
-    'Biometric passport photos (white background, recent)',
-    'Health/travel insurance certificate',
-    'Proof of accommodation in destination country',
-    'Statement of Purpose (SoP) / Motivation letter — required by all universities',
-    'CV / Résumé',
-    'Two letters of recommendation (especially for Master\'s and PhD)',
+    'پاسپورت ایرانی معتبر — حداقل ۶ ماه اعتبار بیش از مدت اقامت برنامه‌ریزی‌شده',
+    'تمام مدارک و ریزنمرات تحصیلی — اصل + ترجمه رسمی گواهی‌شده (فارسی → انگلیسی/ایتالیایی/آلمانی) + آپوستیل از وزارت امور خارجه ایران',
+    'گواهی آزمون زبان (IELTS/TOEFL و/یا TestDaF/DSH)',
+    'عکس پاسپورتی بیومتریک (پس‌زمینه سفید، تازه)',
+    'گواهی بیمه درمانی/مسافرتی',
+    'مدرک اقامتگاه در کشور مقصد',
+    'انگیزه‌نامه (SoP) / نامه انگیزشی — مورد نیاز همه دانشگاه‌ها',
+    'رزومه (CV)',
+    'دو نامه توصیه (به‌ویژه برای ارشد و دکتری)',
   ];
 
   if (hasItaly()) {
     const italyDocs = [
       ...commonDocs,
-      'Pre-enrolment confirmation from Universitaly.it — complete this FIRST',
-      'Declaration of Value (DoV) — issued by Italian Embassy (Tehran or Yerevan); request early, takes 4–8 weeks',
-      'Admission letter from Italian university',
-      'Proof of financial means (bank statements or scholarship letter)',
+      'تأییدیه پیش‌ثبت‌نام از Universitaly.it — این را اول انجام دهید',
+      'اعلامیه ارزش (DoV) — صادرشده توسط سفارت ایتالیا (تهران یا ایروان)؛ زودتر درخواست دهید، ۴–۸ هفته طول می‌کشد',
+      'نامه پذیرش از دانشگاه ایتالیایی',
+      'مدرک توان مالی (صورت حساب بانکی یا نامه بورسیه)',
     ];
     if (answers.fields.includes('medicine')) {
-      italyDocs.push('IMAT exam score confirmation');
+      italyDocs.push('تأیید نمره آزمون IMAT');
     }
     docs += countryBlock('🇮🇹','فهرست اسناد ایتالیا','italy', ul(italyDocs));
   }
@@ -1428,19 +1478,19 @@ function buildResults() {
   if (hasGermany()) {
     const deDocs = [
       ...commonDocs,
-      'APS Certificate — <strong>mandatory for all Iranians</strong>; apply via German Embassy Yerevan; takes 6–10 weeks',
-      'University admission letter (Zulassungsbescheid)',
-      'Proof of Blocked Account (Sperrkonto) showing €11,208 — from Fintiba or Expatrio',
-      'German health insurance proof (DAK, TK, Barmer — enrol before arriving)',
-      'Completed visa application form (from German Embassy website)',
+      'گواهی APS — <strong>اجباری برای همه ایرانیان</strong>؛ از طریق سفارت آلمان ایروان درخواست دهید؛ ۶–۱۰ هفته طول می‌کشد',
+      'نامه پذیرش دانشگاه (Zulassungsbescheid)',
+      'مدرک حساب مسدود (Sperrkonto) با ۱۱٬۲۰۸ یورو — از Fintiba یا Expatrio',
+      'مدرک بیمه درمانی آلمان (DAK, TK, Barmer — قبل از ورود ثبت‌نام کنید)',
+      'فرم درخواست ویزای تکمیل‌شده (از وب‌سایت سفارت آلمان)',
     ];
     if (a.level === 'highschool') {
-      deDocs.push('Studienkolleg acceptance (if applicable) or equivalence documentation');
+      deDocs.push('پذیرش Studienkolleg (در صورت لزوم) یا مدرک معادل‌سازی تحصیلی');
     }
     docs += countryBlock('🇩🇪','فهرست اسناد آلمان','germany', ul(deDocs));
   }
 
-  docs += alert_box('📌 <strong>Apostille first:</strong> Before going to any embassy, have your Iranian documents stamped by the Iranian Ministry of Foreign Affairs (Vezarat-e Omur-e Kharejeh) and officially translated by a certified translator. Only then can the embassies accept them.','amber');
+  docs += alert_box('📌 <strong>اول آپوستیل:</strong> قبل از مراجعه به هر سفارتخانه، مدارک ایرانی خود را در وزارت امور خارجه آپوستیل کنید و توسط مترجم رسمی ترجمه نمایید. فقط در این صورت سفارتخانه‌ها آنها را می‌پذیرند.','amber');
   document.getElementById('res_documents').innerHTML = docs;
 
   // ── 7. Timeline ───────────────────────────────────────────────────────────
@@ -1454,79 +1504,79 @@ function buildResults() {
 
   if (!['good','strong'].includes(a.english)) {
     steps.push({
-      title: urgent ? 'NOW — Boost English First' : 'Phase 1 — Language Preparation',
-      body: `Enrol in an intensive IELTS course. Target: IELTS 5.5 (Italy UG) or 6.5 (Germany Master's). Book your test at britishcouncil.ir or IDP.`
+      title: urgent ? 'همین الان — ابتدا انگلیسی را تقویت کنید' : 'مرحله ۱ — آمادگی زبانی',
+      body: `در یک دوره فشرده آیلتس ثبت‌نام کنید. هدف: آیلتس ۵.۵ (کارشناسی ایتالیا) یا ۶.۵ (ارشد آلمان). آزمون را در britishcouncil.ir یا IDP رزرو کنید.`
     });
   }
   if (hasGermany() && !['b2','c1','c2'].includes(a.german) && (isUG() || answers.fields.includes('medicine'))) {
     steps.push({
-      title: 'German Language Preparation',
-      body: `Start German immediately — B2 for most programmes, C1 for medicine. Goethe-Institut Tehran offers A1–C2 courses. Allow 12–18 months to reach B2 from scratch.`
+      title: 'آمادگی زبان آلمانی',
+      body: `همین الان آلمانی را شروع کنید — B2 برای اکثر برنامه‌ها، C1 برای پزشکی. گوته‌انستیتوت تهران دوره‌های A1–C2 دارد. ۱۲–۱۸ ماه برای رسیدن به B2 از صفر حساب کنید.`
     });
   }
 
   steps.push({
-    title: 'Get Your APS Certificate (Germany) / DoV (Italy)',
+    title: 'دریافت گواهی APS (آلمان) / DoV (ایتالیا)',
     body: `
-      ${hasGermany() ? '🇩🇪 Germany: Contact German Embassy Yerevan for APS Certificate — plan your Yerevan trip. Cost: €75. Allow 6–10 weeks.' : ''}
-      ${hasItaly() ? '🇮🇹 Italy: Request Declaration of Value (DoV) from Italian Embassy Yerevan or Tehran — takes 4–8 weeks.' : ''}
+      ${hasGermany() ? '🇩🇪 آلمان: با سفارت آلمان در ایروان برای گواهی APS تماس بگیرید — سفر به ایروان را برنامه‌ریزی کنید. هزینه: ۷۵ یورو. ۶–۱۰ هفته وقت بگذارید.' : ''}
+      ${hasItaly() ? '🇮🇹 ایتالیا: اعلامیه ارزش (DoV) را از سفارت ایتالیا در ایروان یا تهران درخواست دهید — ۴–۸ هفته طول می‌کشد.' : ''}
     `
   });
 
   steps.push({
-    title: 'Apostille & Document Authentication',
-    body: `Have ALL academic documents officially translated and apostilled at the Iranian Ministry of Foreign Affairs. Do this before going to any embassy.`
+    title: 'آپوستیل و احراز هویت مدارک',
+    body: `تمام مدارک تحصیلی را در وزارت امور خارجه ایران به‌طور رسمی ترجمه و آپوستیل کنید. این را قبل از مراجعه به هر سفارتخانه انجام دهید.`
   });
 
   if (hasItaly()) {
     steps.push({
-      title: '🇮🇹 Complete Pre-enrolment on Universitaly.it',
-      body: `Register and submit your pre-enrolment (typically opens April–July for October intake). This is mandatory before applying for an Italian student visa.
-      ${answers.fields.includes('medicine') ? ' | Book IMAT: register May–July, exam in September.' : ''}
-      ${answers.fields.includes('engineering') ? ' | Take TOLC-I: register at cisia.it.' : ''}`
+      title: '🇮🇹 تکمیل پیش‌ثبت‌نام در Universitaly.it',
+      body: `ثبت‌نام و ارسال پیش‌ثبت‌نام خود را انجام دهید (معمولاً آوریل–جولای برای ورودی اکتبر باز می‌شود). این برای ویزای دانشجویی ایتالیا اجباری است.
+      ${answers.fields.includes('medicine') ? ' | رزرو IMAT: ثبت‌نام مه–جولای، آزمون در سپتامبر.' : ''}
+      ${answers.fields.includes('engineering') ? ' | آزمون TOLC-I: ثبت‌نام در cisia.it.' : ''}`
     });
   }
 
   if (hasGermany()) {
     steps.push({
-      title: '🇩🇪 Apply to German Universities',
-      body: `Apply via Uni-Assist (uni-assist.de) or directly through the university portal. Winter semester: apply by May–July. Summer semester: apply by November–January. Many top programmes have rolling admissions.`
+      title: '🇩🇪 ثبت‌نام در دانشگاه‌های آلمان',
+      body: `از طریق Uni-Assist (uni-assist.de) یا مستقیم از پورتال دانشگاه درخواست دهید. نیمسال زمستانی: مه–جولای. نیمسال تابستانی: نوامبر–ژانویه. بسیاری از برنامه‌های برتر پذیرش مداوم دارند.`
     });
   }
 
   if (a.scholarship !== 'self') {
     steps.push({
-      title: 'Apply for Scholarships',
-      body: `DAAD: apply Oct–Nov (daad.de) | MAECI Italy: apply March–April (universitaly.it) | Political foundations: year-round — check individual deadlines. Apply early — competition is high.`
+      title: 'درخواست بورسیه',
+      body: `DAAD: اکتبر–نوامبر (daad.de) | MAECI ایتالیا: مارس–آوریل (universitaly.it) | بنیادهای سیاسی: تمام سال — مهلت‌های فردی را بررسی کنید. زود درخواست دهید — رقابت بالاست.`
     });
   }
 
   steps.push({
-    title: 'Book Embassy Appointment in Yerevan',
+    title: 'رزرو وقت سفارت در ایروان',
     body: `
-      ${hasGermany() ? '🇩🇪 Germany: service2.diplo.de → Yerevan → National Visa D → Student. Slots fill fast — check regularly.' : ''}
-      ${hasItaly() ? '🇮🇹 Italy: Email Italian Embassy Yerevan: amb.jerevan@cert.esteri.it' : ''}
-      Arrange travel to Yerevan (visa-free for Iranians — up to 90 days).
+      ${hasGermany() ? '🇩🇪 آلمان: service2.diplo.de → ایروان → ویزای ملی D → دانشجو. وقت‌ها زود پر می‌شوند — مرتب بررسی کنید.' : ''}
+      ${hasItaly() ? '🇮🇹 ایتالیا: به سفارت ایتالیا ایروان ایمیل بزنید: amb.jerevan@cert.esteri.it' : ''}
+      سفر به ایروان را ترتیب دهید (ورود بدون ویزا برای ایرانیان — تا ۹۰ روز).
     `
   });
 
   if (hasGermany()) {
     steps.push({
-      title: '🇩🇪 Open German Blocked Account (Sperrkonto)',
-      body: `Deposit €11,208 at Fintiba (fintiba.com) or Expatrio (expatrio.com). You get a certificate to present at the visa appointment. Once in Germany, withdraw ~€935/month.`
+      title: '🇩🇪 افتتاح حساب مسدود آلمان (Sperrkonto)',
+      body: `۱۱٬۲۰۸ یورو در Fintiba (fintiba.com) یا Expatrio (expatrio.com) واریز کنید. گواهی برای ارائه در وقت ویزا دریافت می‌کنید. پس از ورود به آلمان، ماهانه ~۹۳۵ یورو برداشت کنید.`
     });
   }
 
   steps.push({
-    title: 'Attend Consular Appointment in Yerevan',
-    body: `Bring ALL documents — originals, translations, apostilles, DoV/APS, admission letter, financial proof, insurance. Visa processed in 4–12 weeks.`
+    title: 'حضور در وقت کنسولی در ایروان',
+    body: `تمام مدارک را بیاورید — اصل، ترجمه، آپوستیل، DoV/APS، نامه پذیرش، مدرک مالی، بیمه. ویزا در ۴–۱۲ هفته پردازش می‌شود.`
   });
 
   steps.push({
-    title: 'Arrival & Settlement',
+    title: 'ورود و اسکان',
     body: `
-      🇮🇹 Italy: Register at university (immatricolazione) → Apply for Permesso di Soggiorno within 8 days of arrival at Post Office (Poste Italiane) → Open bank account.
-      🇩🇪 Germany: Register address (Anmeldung) at Einwohnermeldeamt → Convert entry visa to Aufenthaltserlaubnis at Ausländerbehörde → Enrol in health insurance → Open bank account.
+      🇮🇹 ایتالیا: در دانشگاه ثبت‌نام کنید (immatricolazione) → ظرف ۸ روز از ورود در پست (Poste Italiane) برای Permesso di Soggiorno درخواست دهید → حساب بانکی باز کنید.
+      🇩🇪 آلمان: آدرس را ثبت کنید (Anmeldung) در Einwohnermeldeamt → ویزای ورود را به Aufenthaltserlaubnis در Ausländerbehörde تبدیل کنید → بیمه درمانی ببندید → حساب بانکی باز کنید.
     `
   });
 
@@ -1539,9 +1589,9 @@ function buildResults() {
   </div>`;
 
   if (urgent) {
-    tl = alert_box('⚡ <strong>Urgent timeline (< 9 months):</strong> Focus immediately on language exams, APS/DoV requests, and scholarship deadlines. Some steps must run in parallel.','amber') + tl;
+    tl = alert_box('⚡ <strong>برنامه فوری (کمتر از ۹ ماه):</strong> فوری روی آزمون‌های زبان، درخواست‌های APS/DoV و مهلت بورسیه‌ها تمرکز کنید. برخی مراحل باید موازی انجام شوند.','amber') + tl;
   } else if (relaxed) {
-    tl = alert_box('✅ <strong>Good news:</strong> With 1.5–2 years of preparation time, you can complete all steps at a comfortable pace and be a strong candidate.','green') + tl;
+    tl = alert_box('✅ <strong>خبر خوب:</strong> با ۱.۵–۲ سال وقت آمادگی، می‌توانید همه مراحل را با آرامش طی کنید و کاندیدای قوی باشید.','green') + tl;
   }
 
   document.getElementById('res_timeline').innerHTML = tl;
