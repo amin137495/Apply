@@ -1607,6 +1607,14 @@ showStep(1);
 ═══════════════════════════════════════════════ -->
 <script>
 (async () => {
+  // Fallback: always define showCountryLoader; if D3 unavailable, just call callback
+  window.showCountryLoader = function(sel, cb) { if (cb) cb(); };
+
+  if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
+    console.warn('Globe: D3 or topojson not loaded, skipping animation');
+    return;
+  }
+
   const INK   = '#15140f';
   const LAND  = 'rgba(21, 20, 15, 0.08)';
   const GRAT  = 'rgba(21, 20, 15, 0.18)';
