@@ -906,7 +906,8 @@
           <span>🛂</span> <span>Embassy Status & Visa Route</span>
           <span class="arrow">▼</span>
         </div>
-        <div class="result-section-body" id="res_visa"></div>
+       <div class="result-section-body" id="res_visa"></div>
+<script src="embassy-status-live.js"></script>
       </div>
 
       <!-- 6. Document Checklist -->
@@ -1446,8 +1447,8 @@ function buildResults() {
     '<strong>زمینی از گذرگاه نوردوز–اگاراک:</strong> رانندگی یا تاکسی مشترک تا مرز، سپس تاکسی به ایروان. وضعیت گذرگاه را قبل از سفر بررسی کنید',
   ])}`;
 
-  document.getElementById('res_visa').innerHTML = visa;
-
+renderLiveEmbassyStatus(document.getElementById('res_visa'), answers.country || 'both', 'fa');
+  
   // ── 6. Documents ───────────────────────────────────────────────────────────
   let docs = '';
   let commonDocs = [
