@@ -889,6 +889,7 @@
           <span class="arrow">▼</span>
         </div>
         <div class="result-section-body" id="res_visa"></div>
+<script src="embassy-status-live.js"></script>
       </div>
 
       <!-- 6. Document Checklist -->
@@ -1610,8 +1611,8 @@ function buildResults() {
     '<strong>By Land via Norduz–Agarak crossing:</strong> Drive or shared taxi to border, then onward taxi to Yerevan. Check current crossing status before travelling',
   ])}`;
 
-  document.getElementById('res_visa').innerHTML = visa;
-
+renderLiveEmbassyStatus(document.getElementById('res_visa'), answers.country || 'both', 'en');
+  
   // ── 6. Documents ───────────────────────────────────────────────────────────
   let docs = '';
   let commonDocs = [
